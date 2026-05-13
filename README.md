@@ -165,9 +165,6 @@ docker compose down -v
 docker compose up -d --build
 ```
 
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
 ---
 
 *Built with Grafana, FastAPI, and the official Giro d'Italia data feeds.*
