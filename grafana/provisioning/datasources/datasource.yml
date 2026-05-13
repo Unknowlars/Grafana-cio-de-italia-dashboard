@@ -1,0 +1,18 @@
+apiVersion: 1
+
+datasources:
+  - name: Infinity
+    uid: infinity
+    type: yesoreyeram-infinity-datasource
+    access: proxy
+    isDefault: false
+    jsonData:
+      allowedHosts:
+        - http://giro-data:8080
+        - https://www.giroditalia.it
+        - https://www.procyclingstats.com
+        - https://www.tntsports.co.uk
+        - https://www.cyclingnews.com
+        - https://cyclinguptodate.com
+        - https://enetpulse.com
+        - https://apify.com

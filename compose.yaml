@@ -1,0 +1,107 @@
+name: marco-grafana-demo
+
+x-common-env: &common-env
+  TZ: ${TZ:-Europe/Copenhagen}
+
+x-logging: &default-logging
+  driver: json-file
+  options:
+    max-size: ${LOG_MAX_SIZE:-50m}
+    max-file: ${LOG_MAX_FILE:-3}
+
+services:
+  giro-data:
+    build:
+      context: ./services/giro-data
+    hostname: giro-data
+    restart: unless-stopped
+    init: true
+    environment:
+      <<: *common-env
+      GIRO_BASE: ${GIRO_BASE:-https://www.giroditalia.it/en}
+      GIRO_CACHE_TTL_SEC: ${GIRO_CACHE_TTL_SEC:-45}
+      GIRO_FETCH_TIMEOUT_SEC: ${GIRO_FETCH_TIMEOUT_SEC:-12}
+    ports:
+      - "${GIRO_DATA_PORT:-8088}:8080"
+    cpus: ${GIRO_DATA_CPUS:-0.5}
+    mem_limit: ${GIRO_DATA_MEM_LIMIT:-512m}
+    logging: *default-logging
+    networks:
+      - grafana-demo
+
+  lgtm:
+    image: ${LGTM_IMAGE:-grafana/otel-lgtm:latest}
+    hostname: lgtm
+    restart: unless-stopped
+    init: true
+
+    environment:
+      <<: *common-env
+
+      GF_AUTH_ANONYMOUS_ENABLED: ${GF_AUTH_ANONYMOUS_ENABLED:-false}
+      GF_SECURITY_ADMIN_USER: ${GF_SECURITY_ADMIN_USER:-admin}
+      GF_SECURITY_ADMIN_PASSWORD: ${GF_SECURITY_ADMIN_PASSWORD:-admin}
+
+      GF_ALLOW_EMBEDDING: ${GF_ALLOW_EMBEDDING:-true}
+      GF_PANELS_DISABLE_SANITIZE_HTML: ${GF_PANELS_DISABLE_SANITIZE_HTML:-true}
+      GF_PLUGINS_ENABLE_ALPHA: ${GF_PLUGINS_ENABLE_ALPHA:-false}
+      GF_FEATURE_TOGGLES_ENABLE: ${GF_FEATURE_TOGGLES_ENABLE:-provisioning,kubernetesDashboards}
+      GF_INSTALL_PLUGINS: yesoreyeram-infinity-datasource
+      GF_RENDERING_SERVER_URL: http://renderer:8081/render
+      GF_RENDERING_CALLBACK_URL: http://lgtm:3000/
+      GF_RENDERING_RENDERER_TOKEN: ${RENDERER_TOKEN:?set RENDERER_TOKEN in .env}
+
+      LOKI_ARGS: ${LOKI_ARGS:---pattern-ingester.enabled=true}
+
+    ports:
+      - "${GRAFANA_PORT:-3009}:3000"
+      - "${PROMETHEUS_PORT:-9092}:9090"
+      - "${TEMPO_PORT:-3200}:3200"
+      - "${LOKI_PORT:-3400}:3100"
+      - "${PYROSCOPE_PORT:-3500}:3500"
+      - "${OTLP_GRPC_PORT:-4317}:4317"
+      - "${OTLP_HTTP_PORT:-4318}:4318"
+
+    volumes:
+      - lgtm-data:/data
+      - ./grafana/provisioning/dashboards:/otel-lgtm/grafana/conf/provisioning/dashboards:ro
+      - ./grafana/dashboards:/var/lib/grafana/dashboards:ro
+      - ./loki/loki-config.yaml:/otel-lgtm/loki-config.yaml:ro
+      - ./grafana/provisioning/datasources:/otel-lgtm/grafana/conf/provisioning/datasources:ro 
+
+    depends_on:
+      - giro-data
+      - renderer
+
+    cpus: ${LGTM_CPUS:-4.0}
+    mem_limit: ${LGTM_MEM_LIMIT:-4g}
+    logging: *default-logging
+    networks:
+      - grafana-demo
+
+  renderer:
+    image: ${RENDERER_IMAGE:-grafana/grafana-image-renderer:latest}
+    hostname: renderer
+    restart: unless-stopped
+    init: true
+
+    environment:
+      <<: *common-env
+      AUTH_TOKEN: ${RENDERER_TOKEN:?set RENDERER_TOKEN in .env}
+
+    # Do not publish renderer publicly for the demo.
+    # Grafana reaches it internally on http://renderer:8081.
+    shm_size: ${RENDERER_SHM_SIZE:-256m}
+    cpus: ${RENDERER_CPUS:-1.0}
+    mem_limit: ${RENDERER_MEM_LIMIT:-1g}
+    logging: *default-logging
+    networks:
+      - grafana-demo
+
+volumes:
+  alloy-data:
+  lgtm-data:
+
+networks:
+  grafana-demo:
+    driver: bridge

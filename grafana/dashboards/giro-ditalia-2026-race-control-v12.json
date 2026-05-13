@@ -1,0 +1,3685 @@
+{
+  "apiVersion": "dashboard.grafana.app/v2",
+  "kind": "Dashboard",
+  "metadata": {
+    "name": "giro-race-control-v12",
+    "namespace": "default",
+    "annotations": {
+      "grafana.app/folder": ""
+    }
+  },
+  "spec": {
+    "annotations": [
+      {
+        "kind": "AnnotationQuery",
+        "spec": {
+          "builtIn": true,
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "query": {
+            "datasource": {
+              "name": "-- Grafana --"
+            },
+            "group": "grafana",
+            "kind": "DataQuery",
+            "spec": {},
+            "version": "v0"
+          }
+        }
+      }
+    ],
+    "cursorSync": "Crosshair",
+    "editable": true,
+    "elements": {
+      "panel-1201": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [],
+              "queryOptions": {},
+              "transformations": []
+            }
+          },
+          "description": "Explains the purpose and primary official data sources for the race-control dashboard.",
+          "id": 1201,
+          "links": [],
+          "title": "Dashboard guide",
+          "vizConfig": {
+            "group": "text",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {},
+                "overrides": []
+              },
+              "options": {
+                "code": {
+                  "language": "plaintext",
+                  "showLineNumbers": false,
+                  "showMiniMap": false
+                },
+                "content": "### Giro d'Italia 2026 race control\n\nThis dashboard prioritizes the live race questions: what is happening now, who is up front, how far is left, how fast the race is going, latest official updates, jersey leaders, and Netcompany Ineos status.\n\nPrimary live data comes from official Giro livefeed and headlines JSON. Classification panels use official Giro classification pages through the local `giro-data` normalization service.",
+                "mode": "markdown"
+              }
+            },
+            "version": "13.0.1"
+          }
+        }
+      },
+      "panel-1202": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [],
+              "queryOptions": {},
+              "transformations": []
+            }
+          },
+          "description": "Decorative generated race-control visual. It does not provide race facts.",
+          "id": 1202,
+          "links": [],
+          "title": "Race-control visual",
+          "vizConfig": {
+            "group": "text",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {},
+                "overrides": []
+              },
+              "options": {
+                "code": {
+                  "language": "plaintext",
+                  "showLineNumbers": false,
+                  "showMiniMap": false
+                },
+                "content": "![Generated Giro race-control visual](${giro_public_base}/assets/giro-control-room.svg)\n\nGenerated visual only. Race facts come from official Giro endpoints.",
+                "mode": "markdown"
+              }
+            },
+            "version": "13.0.1"
+          }
+        }
+      },
+      "panel-1203": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "infinity"
+                      },
+                      "group": "yesoreyeram-infinity-datasource",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "columns": [],
+                        "computed_columns": [],
+                        "data": "",
+                        "filters": [],
+                        "format": "table",
+                        "global_query_id": "",
+                        "parser": "uql",
+                        "query_mode": "standard",
+                        "root_selector": "",
+                        "source": "url",
+                        "type": "json",
+                        "uql": "parse-json\n| project \"State\"=\"state_label\", \"Stage\"=\"stage_no\", \"Route\"=\"route\", \"Profile\"=\"profile\", \"Elapsed\"=\"elapsed\", \"Speed\"=\"avg_speed\", \"Done km\"=\"done_km\", \"To go km\"=\"km_to_go\"",
+                        "url": "${giro_api_base}/api/v1/stage/${stage}/race-now",
+                        "url_options": {
+                          "body_content_type": "",
+                          "body_graphql_query": "",
+                          "body_graphql_variables": "",
+                          "body_type": "",
+                          "data": "",
+                          "headers": [
+                            {
+                              "key": "User-Agent",
+                              "value": "Grafana Giro Race Control"
+                            }
+                          ],
+                          "method": "GET",
+                          "params": []
+                        }
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": []
+            }
+          },
+          "description": "Current selected stage state from the normalized official livefeed.",
+          "id": 1203,
+          "links": [],
+          "title": "Race right now",
+          "vizConfig": {
+            "group": "table",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {
+                  "custom": {
+                    "align": "auto",
+                    "cellOptions": {
+                      "type": "auto"
+                    },
+                    "filterable": true,
+                    "footer": {
+                      "reducers": []
+                    },
+                    "inspect": false
+                  },
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": 0
+                      }
+                    ]
+                  }
+                },
+                "overrides": []
+              },
+              "options": {
+                "cellHeight": "md",
+                "footer": {
+                  "show": false,
+                  "reducer": [
+                    "sum"
+                  ],
+                  "fields": ""
+                },
+                "showHeader": true,
+                "sortBy": []
+              }
+            },
+            "version": "13.0.1"
+          }
+        }
+      },
+      "panel-1204": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "infinity"
+                      },
+                      "group": "yesoreyeram-infinity-datasource",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "columns": [],
+                        "computed_columns": [],
+                        "data": "",
+                        "filters": [],
+                        "format": "table",
+                        "global_query_id": "",
+                        "parser": "uql",
+                        "query_mode": "standard",
+                        "root_selector": "",
+                        "source": "url",
+                        "type": "json",
+                        "uql": "parse-json\n| project \"Time\"=\"time\", \"Breaking\"=\"breaking\", \"Title\"=\"title\", \"Summary\"=\"summary\"",
+                        "url": "${giro_api_base}/api/v1/stage/${stage}/updates?limit=1",
+                        "url_options": {
+                          "body_content_type": "",
+                          "body_graphql_query": "",
+                          "body_graphql_variables": "",
+                          "body_type": "",
+                          "data": "",
+                          "headers": [
+                            {
+                              "key": "User-Agent",
+                              "value": "Grafana Giro Race Control"
+                            }
+                          ],
+                          "method": "GET",
+                          "params": []
+                        }
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": []
+            }
+          },
+          "description": "Most recent official headline/update from Giro headlines, cleaned by the local service.",
+          "id": 1204,
+          "links": [],
+          "title": "Latest official situation",
+          "vizConfig": {
+            "group": "table",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {
+                  "custom": {
+                    "align": "auto",
+                    "cellOptions": {
+                      "type": "auto"
+                    },
+                    "filterable": true,
+                    "footer": {
+                      "reducers": []
+                    },
+                    "inspect": false
+                  },
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": 0
+                      }
+                    ]
+                  }
+                },
+                "overrides": []
+              },
+              "options": {
+                "cellHeight": "md",
+                "footer": {
+                  "show": false,
+                  "reducer": [
+                    "sum"
+                  ],
+                  "fields": ""
+                },
+                "showHeader": true,
+                "sortBy": []
+              }
+            },
+            "version": "13.0.1"
+          }
+        }
+      },
+      "panel-1205": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "infinity"
+                      },
+                      "group": "yesoreyeram-infinity-datasource",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "columns": [],
+                        "computed_columns": [],
+                        "data": "",
+                        "filters": [],
+                        "format": "table",
+                        "global_query_id": "",
+                        "parser": "uql",
+                        "query_mode": "standard",
+                        "root_selector": "",
+                        "source": "url",
+                        "type": "json",
+                        "uql": "parse-json\n| project \"Progress\"=\"progress_pct\"",
+                        "url": "${giro_api_base}/api/v1/stage/${stage}/race-now",
+                        "url_options": {
+                          "body_content_type": "",
+                          "body_graphql_query": "",
+                          "body_graphql_variables": "",
+                          "body_type": "",
+                          "data": "",
+                          "headers": [
+                            {
+                              "key": "User-Agent",
+                              "value": "Grafana Giro Race Control"
+                            }
+                          ],
+                          "method": "GET",
+                          "params": []
+                        }
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": []
+            }
+          },
+          "description": "Percent of selected stage distance completed.",
+          "id": 1205,
+          "links": [],
+          "title": "Stage progress",
+          "vizConfig": {
+            "group": "gauge",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "max": 100,
+                  "min": 0,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "red",
+                        "value": 0
+                      },
+                      {
+                        "color": "yellow",
+                        "value": 25
+                      },
+                      {
+                        "color": "green",
+                        "value": 70
+                      }
+                    ]
+                  },
+                  "unit": "percent"
+                },
+                "overrides": []
+              },
+              "options": {
+                "orientation": "auto",
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "showThresholdLabels": false,
+                "showThresholdMarkers": true,
+                "sizing": "auto"
+              }
+            },
+            "version": "13.0.1"
+          }
+        }
+      },
+      "panel-1206": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "infinity"
+                      },
+                      "group": "yesoreyeram-infinity-datasource",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "columns": [],
+                        "computed_columns": [],
+                        "data": "",
+                        "filters": [],
+                        "format": "table",
+                        "global_query_id": "",
+                        "parser": "uql",
+                        "query_mode": "standard",
+                        "root_selector": "",
+                        "source": "url",
+                        "type": "json",
+                        "uql": "parse-json\n| project \"KM to go\"=\"km_to_go\"",
+                        "url": "${giro_api_base}/api/v1/stage/${stage}/race-now",
+                        "url_options": {
+                          "body_content_type": "",
+                          "body_graphql_query": "",
+                          "body_graphql_variables": "",
+                          "body_type": "",
+                          "data": "",
+                          "headers": [
+                            {
+                              "key": "User-Agent",
+                              "value": "Grafana Giro Race Control"
+                            }
+                          ],
+                          "method": "GET",
+                          "params": []
+                        }
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": []
+            }
+          },
+          "description": "Kilometres remaining from the official livefeed.",
+          "id": 1206,
+          "links": [],
+          "title": "KM to go",
+          "vizConfig": {
+            "group": "stat",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "mappings": [
+                    {
+                      "type": "special",
+                      "options": {
+                        "match": "null",
+                        "result": {
+                          "color": "gray",
+                          "text": "No data",
+                          "index": 0
+                        }
+                      }
+                    }
+                  ],
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "red",
+                        "value": 0
+                      }
+                    ]
+                  },
+                  "unit": "km"
+                },
+                "overrides": []
+              },
+              "options": {
+                "colorMode": "background",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "showPercentChange": false,
+                "textMode": "auto",
+                "wideLayout": true
+              }
+            },
+            "version": "13.0.1"
+          }
+        }
+      },
+      "panel-1207": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "infinity"
+                      },
+                      "group": "yesoreyeram-infinity-datasource",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "columns": [],
+                        "computed_columns": [],
+                        "data": "",
+                        "filters": [],
+                        "format": "table",
+                        "global_query_id": "",
+                        "parser": "uql",
+                        "query_mode": "standard",
+                        "root_selector": "",
+                        "source": "url",
+                        "type": "json",
+                        "uql": "parse-json\n| project \"KM done\"=\"done_km\"",
+                        "url": "${giro_api_base}/api/v1/stage/${stage}/race-now",
+                        "url_options": {
+                          "body_content_type": "",
+                          "body_graphql_query": "",
+                          "body_graphql_variables": "",
+                          "body_type": "",
+                          "data": "",
+                          "headers": [
+                            {
+                              "key": "User-Agent",
+                              "value": "Grafana Giro Race Control"
+                            }
+                          ],
+                          "method": "GET",
+                          "params": []
+                        }
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": []
+            }
+          },
+          "description": "Kilometres completed from the official livefeed.",
+          "id": 1207,
+          "links": [],
+          "title": "KM done",
+          "vizConfig": {
+            "group": "stat",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "mappings": [
+                    {
+                      "type": "special",
+                      "options": {
+                        "match": "null",
+                        "result": {
+                          "color": "gray",
+                          "text": "No data",
+                          "index": 0
+                        }
+                      }
+                    }
+                  ],
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": 0
+                      }
+                    ]
+                  },
+                  "unit": "km"
+                },
+                "overrides": []
+              },
+              "options": {
+                "colorMode": "background",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "showPercentChange": false,
+                "textMode": "auto",
+                "wideLayout": true
+              }
+            },
+            "version": "13.0.1"
+          }
+        }
+      },
+      "panel-1208": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "infinity"
+                      },
+                      "group": "yesoreyeram-infinity-datasource",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "columns": [],
+                        "computed_columns": [],
+                        "data": "",
+                        "filters": [],
+                        "format": "table",
+                        "global_query_id": "",
+                        "parser": "uql",
+                        "query_mode": "standard",
+                        "root_selector": "",
+                        "source": "url",
+                        "type": "json",
+                        "uql": "parse-json\n| project \"Avg speed\"=\"avg_speed_kmh\"",
+                        "url": "${giro_api_base}/api/v1/stage/${stage}/race-now",
+                        "url_options": {
+                          "body_content_type": "",
+                          "body_graphql_query": "",
+                          "body_graphql_variables": "",
+                          "body_type": "",
+                          "data": "",
+                          "headers": [
+                            {
+                              "key": "User-Agent",
+                              "value": "Grafana Giro Race Control"
+                            }
+                          ],
+                          "method": "GET",
+                          "params": []
+                        }
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": []
+            }
+          },
+          "description": "Average speed from the official livefeed, normalized to km/h.",
+          "id": 1208,
+          "links": [],
+          "title": "Avg speed",
+          "vizConfig": {
+            "group": "stat",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "mappings": [
+                    {
+                      "type": "special",
+                      "options": {
+                        "match": "null",
+                        "result": {
+                          "color": "gray",
+                          "text": "No data",
+                          "index": 0
+                        }
+                      }
+                    }
+                  ],
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "blue",
+                        "value": 0
+                      }
+                    ]
+                  },
+                  "unit": "velocitykmh"
+                },
+                "overrides": []
+              },
+              "options": {
+                "colorMode": "background",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "showPercentChange": false,
+                "textMode": "auto",
+                "wideLayout": true
+              }
+            },
+            "version": "13.0.1"
+          }
+        }
+      },
+      "panel-1209": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "infinity"
+                      },
+                      "group": "yesoreyeram-infinity-datasource",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "columns": [],
+                        "computed_columns": [],
+                        "data": "",
+                        "filters": [],
+                        "format": "table",
+                        "global_query_id": "",
+                        "parser": "uql",
+                        "query_mode": "standard",
+                        "root_selector": "",
+                        "source": "url",
+                        "type": "json",
+                        "uql": "parse-json\n| project \"Elapsed min\"=\"elapsed_minutes\"",
+                        "url": "${giro_api_base}/api/v1/stage/${stage}/race-now",
+                        "url_options": {
+                          "body_content_type": "",
+                          "body_graphql_query": "",
+                          "body_graphql_variables": "",
+                          "body_type": "",
+                          "data": "",
+                          "headers": [
+                            {
+                              "key": "User-Agent",
+                              "value": "Grafana Giro Race Control"
+                            }
+                          ],
+                          "method": "GET",
+                          "params": []
+                        }
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": []
+            }
+          },
+          "description": "Elapsed stage time converted to minutes for a reliable numeric stat.",
+          "id": 1209,
+          "links": [],
+          "title": "Elapsed",
+          "vizConfig": {
+            "group": "stat",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "mappings": [
+                    {
+                      "type": "special",
+                      "options": {
+                        "match": "null",
+                        "result": {
+                          "color": "gray",
+                          "text": "No data",
+                          "index": 0
+                        }
+                      }
+                    }
+                  ],
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "purple",
+                        "value": 0
+                      }
+                    ]
+                  },
+                  "unit": "m"
+                },
+                "overrides": []
+              },
+              "options": {
+                "colorMode": "background",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "showPercentChange": false,
+                "textMode": "auto",
+                "wideLayout": true
+              }
+            },
+            "version": "13.0.1"
+          }
+        }
+      },
+      "panel-1210": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "infinity"
+                      },
+                      "group": "yesoreyeram-infinity-datasource",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "columns": [],
+                        "computed_columns": [],
+                        "data": "",
+                        "filters": [],
+                        "format": "table",
+                        "global_query_id": "",
+                        "parser": "uql",
+                        "query_mode": "standard",
+                        "root_selector": "",
+                        "source": "url",
+                        "type": "json",
+                        "uql": "parse-json\n| project \"Refresh sec\"=\"feed_refresh_sec\"",
+                        "url": "${giro_api_base}/api/v1/stage/${stage}/race-now",
+                        "url_options": {
+                          "body_content_type": "",
+                          "body_graphql_query": "",
+                          "body_graphql_variables": "",
+                          "body_type": "",
+                          "data": "",
+                          "headers": [
+                            {
+                              "key": "User-Agent",
+                              "value": "Grafana Giro Race Control"
+                            }
+                          ],
+                          "method": "GET",
+                          "params": []
+                        }
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": []
+            }
+          },
+          "description": "Official livefeed refresh interval in seconds.",
+          "id": 1210,
+          "links": [],
+          "title": "Feed refresh",
+          "vizConfig": {
+            "group": "stat",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "mappings": [
+                    {
+                      "type": "special",
+                      "options": {
+                        "match": "null",
+                        "result": {
+                          "color": "gray",
+                          "text": "No data",
+                          "index": 0
+                        }
+                      }
+                    }
+                  ],
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "orange",
+                        "value": 0
+                      }
+                    ]
+                  },
+                  "unit": "s"
+                },
+                "overrides": []
+              },
+              "options": {
+                "colorMode": "background",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "showPercentChange": false,
+                "textMode": "auto",
+                "wideLayout": true
+              }
+            },
+            "version": "13.0.1"
+          }
+        }
+      },
+      "panel-1301": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "infinity"
+                      },
+                      "group": "yesoreyeram-infinity-datasource",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "columns": [],
+                        "computed_columns": [],
+                        "data": "",
+                        "filters": [],
+                        "format": "table",
+                        "global_query_id": "",
+                        "parser": "uql",
+                        "query_mode": "standard",
+                        "root_selector": "",
+                        "source": "url",
+                        "type": "json",
+                        "uql": "parse-json\n| project \"Order\"=\"order\", \"Group\"=\"group_type\", \"KM\"=\"km\", \"Gap\"=\"gap\", \"Riders\"=\"rider_count\", \"Names\"=\"riders\"",
+                        "url": "${giro_api_base}/api/v1/stage/${stage}/front-groups",
+                        "url_options": {
+                          "body_content_type": "",
+                          "body_graphql_query": "",
+                          "body_graphql_variables": "",
+                          "body_type": "",
+                          "data": "",
+                          "headers": [
+                            {
+                              "key": "User-Agent",
+                              "value": "Grafana Giro Race Control"
+                            }
+                          ],
+                          "method": "GET",
+                          "params": []
+                        }
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": []
+            }
+          },
+          "description": "Current race groups, gaps and rider counts from the official livefeed.",
+          "id": 1301,
+          "links": [],
+          "title": "Current race groups",
+          "vizConfig": {
+            "group": "table",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {
+                  "custom": {
+                    "align": "auto",
+                    "cellOptions": {
+                      "type": "auto"
+                    },
+                    "filterable": true,
+                    "footer": {
+                      "reducers": []
+                    },
+                    "inspect": false
+                  },
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": 0
+                      }
+                    ]
+                  }
+                },
+                "overrides": []
+              },
+              "options": {
+                "cellHeight": "sm",
+                "footer": {
+                  "show": false,
+                  "reducer": [
+                    "sum"
+                  ],
+                  "fields": ""
+                },
+                "showHeader": true,
+                "sortBy": [
+                  {
+                    "desc": false,
+                    "displayName": "Order"
+                  }
+                ]
+              }
+            },
+            "version": "13.0.1"
+          }
+        }
+      },
+      "panel-1302": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "infinity"
+                      },
+                      "group": "yesoreyeram-infinity-datasource",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "columns": [],
+                        "computed_columns": [],
+                        "data": "",
+                        "filters": [],
+                        "format": "table",
+                        "global_query_id": "",
+                        "parser": "uql",
+                        "query_mode": "standard",
+                        "root_selector": "",
+                        "source": "url",
+                        "type": "json",
+                        "uql": "parse-json\n| project \"Group\"=\"group_type\", \"Gap\"=\"gap\", \"Rider\"=\"rider\", \"Team\"=\"team_code\", \"Front?\"=\"is_front\"",
+                        "url": "${giro_api_base}/api/v1/stage/${stage}/front-riders",
+                        "url_options": {
+                          "body_content_type": "",
+                          "body_graphql_query": "",
+                          "body_graphql_variables": "",
+                          "body_type": "",
+                          "data": "",
+                          "headers": [
+                            {
+                              "key": "User-Agent",
+                              "value": "Grafana Giro Race Control"
+                            }
+                          ],
+                          "method": "GET",
+                          "params": []
+                        }
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": []
+            }
+          },
+          "description": "Riders in live groups, ordered by group. The front group appears first.",
+          "id": 1302,
+          "links": [],
+          "title": "Riders at the front",
+          "vizConfig": {
+            "group": "table",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {
+                  "custom": {
+                    "align": "auto",
+                    "cellOptions": {
+                      "type": "auto"
+                    },
+                    "filterable": true,
+                    "footer": {
+                      "reducers": []
+                    },
+                    "inspect": false
+                  },
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": 0
+                      }
+                    ]
+                  }
+                },
+                "overrides": []
+              },
+              "options": {
+                "cellHeight": "sm",
+                "footer": {
+                  "show": false,
+                  "reducer": [
+                    "sum"
+                  ],
+                  "fields": ""
+                },
+                "showHeader": true,
+                "sortBy": []
+              }
+            },
+            "version": "13.0.1"
+          }
+        }
+      },
+      "panel-1303": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "infinity"
+                      },
+                      "group": "yesoreyeram-infinity-datasource",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "columns": [],
+                        "computed_columns": [],
+                        "data": "",
+                        "filters": [],
+                        "format": "table",
+                        "global_query_id": "",
+                        "parser": "uql",
+                        "query_mode": "standard",
+                        "root_selector": "",
+                        "source": "url",
+                        "type": "json",
+                        "uql": "parse-json\n| project \"Metric\"=\"metric\", \"Value\"=\"value\", \"Source\"=\"source\"",
+                        "url": "${giro_api_base}/api/v1/stage/${stage}/ineos?team=${watched_team_code}",
+                        "url_options": {
+                          "body_content_type": "",
+                          "body_graphql_query": "",
+                          "body_graphql_variables": "",
+                          "body_type": "",
+                          "data": "",
+                          "headers": [
+                            {
+                              "key": "User-Agent",
+                              "value": "Grafana Giro Race Control"
+                            }
+                          ],
+                          "method": "GET",
+                          "params": []
+                        }
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": []
+            }
+          },
+          "description": "Compact Netcompany Ineos metrics from livefeed, headlines and official classifications.",
+          "id": 1303,
+          "links": [],
+          "title": "INEOS watch badge",
+          "vizConfig": {
+            "group": "table",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {
+                  "custom": {
+                    "align": "auto",
+                    "cellOptions": {
+                      "type": "auto"
+                    },
+                    "filterable": true,
+                    "footer": {
+                      "reducers": []
+                    },
+                    "inspect": false
+                  },
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": 0
+                      }
+                    ]
+                  }
+                },
+                "overrides": []
+              },
+              "options": {
+                "cellHeight": "sm",
+                "footer": {
+                  "show": false,
+                  "reducer": [
+                    "sum"
+                  ],
+                  "fields": ""
+                },
+                "showHeader": true,
+                "sortBy": []
+              }
+            },
+            "version": "13.0.1"
+          }
+        }
+      },
+      "panel-1304": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "infinity"
+                      },
+                      "group": "yesoreyeram-infinity-datasource",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "columns": [],
+                        "computed_columns": [],
+                        "data": "",
+                        "filters": [],
+                        "format": "table",
+                        "global_query_id": "",
+                        "parser": "uql",
+                        "query_mode": "standard",
+                        "root_selector": "",
+                        "source": "url",
+                        "type": "json",
+                        "uql": "parse-json\n| project \"Time\"=\"time\", \"Breaking\"=\"breaking\", \"Title\"=\"title\", \"Summary\"=\"summary\", \"Link\"=\"link\"",
+                        "url": "${giro_api_base}/api/v1/stage/${stage}/updates?limit=5",
+                        "url_options": {
+                          "body_content_type": "",
+                          "body_graphql_query": "",
+                          "body_graphql_variables": "",
+                          "body_type": "",
+                          "data": "",
+                          "headers": [
+                            {
+                              "key": "User-Agent",
+                              "value": "Grafana Giro Race Control"
+                            }
+                          ],
+                          "method": "GET",
+                          "params": []
+                        }
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": []
+            }
+          },
+          "description": "Latest five official updates/headlines with HTML stripped by the local service.",
+          "id": 1304,
+          "links": [],
+          "title": "Latest official updates",
+          "vizConfig": {
+            "group": "table",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {
+                  "custom": {
+                    "align": "auto",
+                    "cellOptions": {
+                      "type": "auto"
+                    },
+                    "filterable": true,
+                    "footer": {
+                      "reducers": []
+                    },
+                    "inspect": false
+                  },
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": 0
+                      }
+                    ]
+                  }
+                },
+                "overrides": []
+              },
+              "options": {
+                "cellHeight": "md",
+                "footer": {
+                  "show": false,
+                  "reducer": [
+                    "sum"
+                  ],
+                  "fields": ""
+                },
+                "showHeader": true,
+                "sortBy": []
+              }
+            },
+            "version": "13.0.1"
+          }
+        }
+      },
+      "panel-1401": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "infinity"
+                      },
+                      "group": "yesoreyeram-infinity-datasource",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "columns": [],
+                        "computed_columns": [],
+                        "data": "",
+                        "filters": [],
+                        "format": "table",
+                        "global_query_id": "",
+                        "parser": "uql",
+                        "query_mode": "standard",
+                        "root_selector": "",
+                        "source": "url",
+                        "type": "json",
+                        "uql": "parse-json\n| project \"Group\"=\"group_type\", \"Gap\"=\"gap\", \"Rider\"=\"rider\", \"Team\"=\"team_code\", \"KM\"=\"km\"",
+                        "url": "${giro_api_base}/api/v1/stage/${stage}/ineos?team=${watched_team_code}&view=riders",
+                        "url_options": {
+                          "body_content_type": "",
+                          "body_graphql_query": "",
+                          "body_graphql_variables": "",
+                          "body_type": "",
+                          "data": "",
+                          "headers": [
+                            {
+                              "key": "User-Agent",
+                              "value": "Grafana Giro Race Control"
+                            }
+                          ],
+                          "method": "GET",
+                          "params": []
+                        }
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": []
+            }
+          },
+          "description": "Netcompany Ineos riders currently visible in official livefeed groups.",
+          "id": 1401,
+          "links": [],
+          "title": "INEOS riders visible live",
+          "vizConfig": {
+            "group": "table",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {
+                  "custom": {
+                    "align": "auto",
+                    "cellOptions": {
+                      "type": "auto"
+                    },
+                    "filterable": true,
+                    "footer": {
+                      "reducers": []
+                    },
+                    "inspect": false
+                  },
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": 0
+                      }
+                    ]
+                  }
+                },
+                "overrides": []
+              },
+              "options": {
+                "cellHeight": "sm",
+                "footer": {
+                  "show": false,
+                  "reducer": [
+                    "sum"
+                  ],
+                  "fields": ""
+                },
+                "showHeader": true,
+                "sortBy": []
+              }
+            },
+            "version": "13.0.1"
+          }
+        }
+      },
+      "panel-1402": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "infinity"
+                      },
+                      "group": "yesoreyeram-infinity-datasource",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "columns": [],
+                        "computed_columns": [],
+                        "data": "",
+                        "filters": [],
+                        "format": "table",
+                        "global_query_id": "",
+                        "parser": "uql",
+                        "query_mode": "standard",
+                        "root_selector": "",
+                        "source": "url",
+                        "type": "json",
+                        "uql": "parse-json\n| project \"Group\"=\"group_type\", \"Gap\"=\"gap\", \"Rider\"=\"rider\", \"Team\"=\"team_code\", \"KM\"=\"km\"",
+                        "url": "${giro_api_base}/api/v1/stage/${stage}/ineos?team=${watched_team_code}&view=front",
+                        "url_options": {
+                          "body_content_type": "",
+                          "body_graphql_query": "",
+                          "body_graphql_variables": "",
+                          "body_type": "",
+                          "data": "",
+                          "headers": [
+                            {
+                              "key": "User-Agent",
+                              "value": "Grafana Giro Race Control"
+                            }
+                          ],
+                          "method": "GET",
+                          "params": []
+                        }
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": []
+            }
+          },
+          "description": "Netcompany Ineos riders in the first livefeed group, if any.",
+          "id": 1402,
+          "links": [],
+          "title": "INEOS riders in front group",
+          "vizConfig": {
+            "group": "table",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {
+                  "custom": {
+                    "align": "auto",
+                    "cellOptions": {
+                      "type": "auto"
+                    },
+                    "filterable": true,
+                    "footer": {
+                      "reducers": []
+                    },
+                    "inspect": false
+                  },
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": 0
+                      }
+                    ]
+                  }
+                },
+                "overrides": []
+              },
+              "options": {
+                "cellHeight": "sm",
+                "footer": {
+                  "show": false,
+                  "reducer": [
+                    "sum"
+                  ],
+                  "fields": ""
+                },
+                "showHeader": true,
+                "sortBy": []
+              }
+            },
+            "version": "13.0.1"
+          }
+        }
+      },
+      "panel-1403": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "infinity"
+                      },
+                      "group": "yesoreyeram-infinity-datasource",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "columns": [],
+                        "computed_columns": [],
+                        "data": "",
+                        "filters": [],
+                        "format": "table",
+                        "global_query_id": "",
+                        "parser": "uql",
+                        "query_mode": "standard",
+                        "root_selector": "",
+                        "source": "url",
+                        "type": "json",
+                        "uql": "parse-json\n| project \"Time\"=\"time\", \"Title\"=\"title\", \"Summary\"=\"summary\", \"Source\"=\"source\"",
+                        "url": "${giro_api_base}/api/v1/stage/${stage}/ineos?team=${watched_team_code}&view=mentions",
+                        "url_options": {
+                          "body_content_type": "",
+                          "body_graphql_query": "",
+                          "body_graphql_variables": "",
+                          "body_type": "",
+                          "data": "",
+                          "headers": [
+                            {
+                              "key": "User-Agent",
+                              "value": "Grafana Giro Race Control"
+                            }
+                          ],
+                          "method": "GET",
+                          "params": []
+                        }
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": []
+            }
+          },
+          "description": "Official updates/headlines mentioning INEOS or Netcompany.",
+          "id": 1403,
+          "links": [],
+          "title": "INEOS official-update mentions",
+          "vizConfig": {
+            "group": "table",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {
+                  "custom": {
+                    "align": "auto",
+                    "cellOptions": {
+                      "type": "auto"
+                    },
+                    "filterable": true,
+                    "footer": {
+                      "reducers": []
+                    },
+                    "inspect": false
+                  },
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": 0
+                      }
+                    ]
+                  }
+                },
+                "overrides": []
+              },
+              "options": {
+                "cellHeight": "sm",
+                "footer": {
+                  "show": false,
+                  "reducer": [
+                    "sum"
+                  ],
+                  "fields": ""
+                },
+                "showHeader": true,
+                "sortBy": []
+              }
+            },
+            "version": "13.0.1"
+          }
+        }
+      },
+      "panel-1404": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "infinity"
+                      },
+                      "group": "yesoreyeram-infinity-datasource",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "columns": [],
+                        "computed_columns": [],
+                        "data": "",
+                        "filters": [],
+                        "format": "table",
+                        "global_query_id": "",
+                        "parser": "uql",
+                        "query_mode": "standard",
+                        "root_selector": "",
+                        "source": "url",
+                        "type": "json",
+                        "uql": "parse-json\n| project \"Rank\"=\"rank\", \"Rider\"=\"rider\", \"Team\"=\"team\", \"Time\"=\"time\", \"Gap\"=\"gap\", \"Source\"=\"source\"",
+                        "url": "${giro_api_base}/api/v1/stage/${stage}/ineos?team=${watched_team_code}&view=gc",
+                        "url_options": {
+                          "body_content_type": "",
+                          "body_graphql_query": "",
+                          "body_graphql_variables": "",
+                          "body_type": "",
+                          "data": "",
+                          "headers": [
+                            {
+                              "key": "User-Agent",
+                              "value": "Grafana Giro Race Control"
+                            }
+                          ],
+                          "method": "GET",
+                          "params": []
+                        }
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": []
+            }
+          },
+          "description": "Netcompany Ineos riders found in the official GC classification parser.",
+          "id": 1404,
+          "links": [],
+          "title": "INEOS in official GC",
+          "vizConfig": {
+            "group": "table",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {
+                  "custom": {
+                    "align": "auto",
+                    "cellOptions": {
+                      "type": "auto"
+                    },
+                    "filterable": true,
+                    "footer": {
+                      "reducers": []
+                    },
+                    "inspect": false
+                  },
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": 0
+                      }
+                    ]
+                  }
+                },
+                "overrides": []
+              },
+              "options": {
+                "cellHeight": "sm",
+                "footer": {
+                  "show": false,
+                  "reducer": [
+                    "sum"
+                  ],
+                  "fields": ""
+                },
+                "showHeader": true,
+                "sortBy": []
+              }
+            },
+            "version": "13.0.1"
+          }
+        }
+      },
+      "panel-1501": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "infinity"
+                      },
+                      "group": "yesoreyeram-infinity-datasource",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "columns": [],
+                        "computed_columns": [],
+                        "data": "",
+                        "filters": [],
+                        "format": "table",
+                        "global_query_id": "",
+                        "parser": "uql",
+                        "query_mode": "standard",
+                        "root_selector": "",
+                        "source": "url",
+                        "type": "json",
+                        "uql": "parse-json\n| project \"Rank\"=\"rank\", \"Rider\"=\"rider\", \"Team\"=\"team\", \"Value\"=\"value\", \"Gap\"=\"gap\", \"Source\"=\"source\", \"Status\"=\"status\", \"Message\"=\"message\"",
+                        "url": "${giro_api_base}/api/v1/standings/gc?limit=5",
+                        "url_options": {
+                          "body_content_type": "",
+                          "body_graphql_query": "",
+                          "body_graphql_variables": "",
+                          "body_type": "",
+                          "data": "",
+                          "headers": [
+                            {
+                              "key": "User-Agent",
+                              "value": "Grafana Giro Race Control"
+                            }
+                          ],
+                          "method": "GET",
+                          "params": []
+                        }
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": []
+            }
+          },
+          "description": "Official general classification top five.",
+          "id": 1501,
+          "links": [],
+          "title": "GC top 5",
+          "vizConfig": {
+            "group": "table",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {
+                  "custom": {
+                    "align": "auto",
+                    "cellOptions": {
+                      "type": "auto"
+                    },
+                    "filterable": true,
+                    "footer": {
+                      "reducers": []
+                    },
+                    "inspect": false
+                  },
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": 0
+                      }
+                    ]
+                  }
+                },
+                "overrides": []
+              },
+              "options": {
+                "cellHeight": "sm",
+                "footer": {
+                  "show": false,
+                  "reducer": [
+                    "sum"
+                  ],
+                  "fields": ""
+                },
+                "showHeader": true,
+                "sortBy": [
+                  {
+                    "desc": false,
+                    "displayName": "Rank"
+                  }
+                ]
+              }
+            },
+            "version": "13.0.1"
+          }
+        }
+      },
+      "panel-1502": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "infinity"
+                      },
+                      "group": "yesoreyeram-infinity-datasource",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "columns": [],
+                        "computed_columns": [],
+                        "data": "",
+                        "filters": [],
+                        "format": "table",
+                        "global_query_id": "",
+                        "parser": "uql",
+                        "query_mode": "standard",
+                        "root_selector": "",
+                        "source": "url",
+                        "type": "json",
+                        "uql": "parse-json\n| project \"Rank\"=\"rank\", \"Rider\"=\"rider\", \"Team\"=\"team\", \"Value\"=\"value\", \"Gap\"=\"gap\", \"Source\"=\"source\", \"Status\"=\"status\", \"Message\"=\"message\"",
+                        "url": "${giro_api_base}/api/v1/standings/points?limit=5",
+                        "url_options": {
+                          "body_content_type": "",
+                          "body_graphql_query": "",
+                          "body_graphql_variables": "",
+                          "body_type": "",
+                          "data": "",
+                          "headers": [
+                            {
+                              "key": "User-Agent",
+                              "value": "Grafana Giro Race Control"
+                            }
+                          ],
+                          "method": "GET",
+                          "params": []
+                        }
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": []
+            }
+          },
+          "description": "Official points classification top five.",
+          "id": 1502,
+          "links": [],
+          "title": "Points top 5",
+          "vizConfig": {
+            "group": "table",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {
+                  "custom": {
+                    "align": "auto",
+                    "cellOptions": {
+                      "type": "auto"
+                    },
+                    "filterable": true,
+                    "footer": {
+                      "reducers": []
+                    },
+                    "inspect": false
+                  },
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": 0
+                      }
+                    ]
+                  }
+                },
+                "overrides": []
+              },
+              "options": {
+                "cellHeight": "sm",
+                "footer": {
+                  "show": false,
+                  "reducer": [
+                    "sum"
+                  ],
+                  "fields": ""
+                },
+                "showHeader": true,
+                "sortBy": [
+                  {
+                    "desc": false,
+                    "displayName": "Rank"
+                  }
+                ]
+              }
+            },
+            "version": "13.0.1"
+          }
+        }
+      },
+      "panel-1503": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "infinity"
+                      },
+                      "group": "yesoreyeram-infinity-datasource",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "columns": [],
+                        "computed_columns": [],
+                        "data": "",
+                        "filters": [],
+                        "format": "table",
+                        "global_query_id": "",
+                        "parser": "uql",
+                        "query_mode": "standard",
+                        "root_selector": "",
+                        "source": "url",
+                        "type": "json",
+                        "uql": "parse-json\n| project \"Rank\"=\"rank\", \"Rider\"=\"rider\", \"Team\"=\"team\", \"Value\"=\"value\", \"Gap\"=\"gap\", \"Source\"=\"source\", \"Status\"=\"status\", \"Message\"=\"message\"",
+                        "url": "${giro_api_base}/api/v1/standings/mountains?limit=5",
+                        "url_options": {
+                          "body_content_type": "",
+                          "body_graphql_query": "",
+                          "body_graphql_variables": "",
+                          "body_type": "",
+                          "data": "",
+                          "headers": [
+                            {
+                              "key": "User-Agent",
+                              "value": "Grafana Giro Race Control"
+                            }
+                          ],
+                          "method": "GET",
+                          "params": []
+                        }
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": []
+            }
+          },
+          "description": "Official mountains classification top five.",
+          "id": 1503,
+          "links": [],
+          "title": "Mountains top 5",
+          "vizConfig": {
+            "group": "table",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {
+                  "custom": {
+                    "align": "auto",
+                    "cellOptions": {
+                      "type": "auto"
+                    },
+                    "filterable": true,
+                    "footer": {
+                      "reducers": []
+                    },
+                    "inspect": false
+                  },
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": 0
+                      }
+                    ]
+                  }
+                },
+                "overrides": []
+              },
+              "options": {
+                "cellHeight": "sm",
+                "footer": {
+                  "show": false,
+                  "reducer": [
+                    "sum"
+                  ],
+                  "fields": ""
+                },
+                "showHeader": true,
+                "sortBy": [
+                  {
+                    "desc": false,
+                    "displayName": "Rank"
+                  }
+                ]
+              }
+            },
+            "version": "13.0.1"
+          }
+        }
+      },
+      "panel-1504": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "infinity"
+                      },
+                      "group": "yesoreyeram-infinity-datasource",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "columns": [],
+                        "computed_columns": [],
+                        "data": "",
+                        "filters": [],
+                        "format": "table",
+                        "global_query_id": "",
+                        "parser": "uql",
+                        "query_mode": "standard",
+                        "root_selector": "",
+                        "source": "url",
+                        "type": "json",
+                        "uql": "parse-json\n| project \"Rank\"=\"rank\", \"Rider\"=\"rider\", \"Team\"=\"team\", \"Value\"=\"value\", \"Gap\"=\"gap\", \"Source\"=\"source\", \"Status\"=\"status\", \"Message\"=\"message\"",
+                        "url": "${giro_api_base}/api/v1/standings/youth?limit=5",
+                        "url_options": {
+                          "body_content_type": "",
+                          "body_graphql_query": "",
+                          "body_graphql_variables": "",
+                          "body_type": "",
+                          "data": "",
+                          "headers": [
+                            {
+                              "key": "User-Agent",
+                              "value": "Grafana Giro Race Control"
+                            }
+                          ],
+                          "method": "GET",
+                          "params": []
+                        }
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": []
+            }
+          },
+          "description": "Official youth classification top five.",
+          "id": 1504,
+          "links": [],
+          "title": "Youth top 5",
+          "vizConfig": {
+            "group": "table",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {
+                  "custom": {
+                    "align": "auto",
+                    "cellOptions": {
+                      "type": "auto"
+                    },
+                    "filterable": true,
+                    "footer": {
+                      "reducers": []
+                    },
+                    "inspect": false
+                  },
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": 0
+                      }
+                    ]
+                  }
+                },
+                "overrides": []
+              },
+              "options": {
+                "cellHeight": "sm",
+                "footer": {
+                  "show": false,
+                  "reducer": [
+                    "sum"
+                  ],
+                  "fields": ""
+                },
+                "showHeader": true,
+                "sortBy": [
+                  {
+                    "desc": false,
+                    "displayName": "Rank"
+                  }
+                ]
+              }
+            },
+            "version": "13.0.1"
+          }
+        }
+      },
+      "panel-1505": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "infinity"
+                      },
+                      "group": "yesoreyeram-infinity-datasource",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "columns": [],
+                        "computed_columns": [],
+                        "data": "",
+                        "filters": [],
+                        "format": "table",
+                        "global_query_id": "",
+                        "parser": "uql",
+                        "query_mode": "standard",
+                        "root_selector": "",
+                        "source": "url",
+                        "type": "json",
+                        "uql": "parse-json\n| project \"Rank\"=\"rank\", \"Rider\"=\"rider\", \"Team\"=\"team\", \"Value\"=\"value\", \"Gap\"=\"gap\", \"Source\"=\"source\", \"Status\"=\"status\", \"Message\"=\"message\"",
+                        "url": "${giro_api_base}/api/v1/standings/team?limit=5",
+                        "url_options": {
+                          "body_content_type": "",
+                          "body_graphql_query": "",
+                          "body_graphql_variables": "",
+                          "body_type": "",
+                          "data": "",
+                          "headers": [
+                            {
+                              "key": "User-Agent",
+                              "value": "Grafana Giro Race Control"
+                            }
+                          ],
+                          "method": "GET",
+                          "params": []
+                        }
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": []
+            }
+          },
+          "description": "Official Super Team classification top five.",
+          "id": 1505,
+          "links": [],
+          "title": "Team top 5",
+          "vizConfig": {
+            "group": "table",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {
+                  "custom": {
+                    "align": "auto",
+                    "cellOptions": {
+                      "type": "auto"
+                    },
+                    "filterable": true,
+                    "footer": {
+                      "reducers": []
+                    },
+                    "inspect": false
+                  },
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": 0
+                      }
+                    ]
+                  }
+                },
+                "overrides": []
+              },
+              "options": {
+                "cellHeight": "sm",
+                "footer": {
+                  "show": false,
+                  "reducer": [
+                    "sum"
+                  ],
+                  "fields": ""
+                },
+                "showHeader": true,
+                "sortBy": [
+                  {
+                    "desc": false,
+                    "displayName": "Rank"
+                  }
+                ]
+              }
+            },
+            "version": "13.0.1"
+          }
+        }
+      },
+      "panel-1601": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "infinity"
+                      },
+                      "group": "yesoreyeram-infinity-datasource",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "columns": [],
+                        "computed_columns": [],
+                        "data": "",
+                        "filters": [],
+                        "format": "table",
+                        "global_query_id": "",
+                        "parser": "uql",
+                        "query_mode": "standard",
+                        "root_selector": "",
+                        "source": "url",
+                        "type": "json",
+                        "uql": "parse-json\n| project \"Source\"=\"source\", \"OK\"=\"ok\", \"URL\"=\"url\", \"Error\"=\"error\", \"Checked ms\"=\"checked_at_ms\"",
+                        "url": "${giro_api_base}/api/v1/sources",
+                        "url_options": {
+                          "body_content_type": "",
+                          "body_graphql_query": "",
+                          "body_graphql_variables": "",
+                          "body_type": "",
+                          "data": "",
+                          "headers": [
+                            {
+                              "key": "User-Agent",
+                              "value": "Grafana Giro Race Control"
+                            }
+                          ],
+                          "method": "GET",
+                          "params": []
+                        }
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": []
+            }
+          },
+          "description": "Health and last-check status for the local service and official Giro sources.",
+          "id": 1601,
+          "links": [],
+          "title": "Source health",
+          "vizConfig": {
+            "group": "table",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {
+                  "custom": {
+                    "align": "auto",
+                    "cellOptions": {
+                      "type": "auto"
+                    },
+                    "filterable": true,
+                    "footer": {
+                      "reducers": []
+                    },
+                    "inspect": false
+                  },
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": 0
+                      }
+                    ]
+                  }
+                },
+                "overrides": []
+              },
+              "options": {
+                "cellHeight": "sm",
+                "footer": {
+                  "show": false,
+                  "reducer": [
+                    "sum"
+                  ],
+                  "fields": ""
+                },
+                "showHeader": true,
+                "sortBy": []
+              }
+            },
+            "version": "13.0.1"
+          }
+        }
+      },
+      "panel-1602": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "infinity"
+                      },
+                      "group": "yesoreyeram-infinity-datasource",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "columns": [],
+                        "computed_columns": [],
+                        "data": "",
+                        "filters": [],
+                        "format": "table",
+                        "global_query_id": "",
+                        "parser": "uql",
+                        "query_mode": "standard",
+                        "root_selector": "",
+                        "source": "url",
+                        "type": "json",
+                        "uql": "parse-json\n| project \"KM\"=\"km\", \"Location\"=\"location\", \"Description\"=\"description\", \"Temperature\"=\"temperature\", \"Wind\"=\"wind\"",
+                        "url": "${giro_api_base}/api/v1/stage/${stage}/weather",
+                        "url_options": {
+                          "body_content_type": "",
+                          "body_graphql_query": "",
+                          "body_graphql_variables": "",
+                          "body_type": "",
+                          "data": "",
+                          "headers": [
+                            {
+                              "key": "User-Agent",
+                              "value": "Grafana Giro Race Control"
+                            }
+                          ],
+                          "method": "GET",
+                          "params": []
+                        }
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": []
+            }
+          },
+          "description": "Weather checkpoints from the official livefeed for the selected stage.",
+          "id": 1602,
+          "links": [],
+          "title": "Weather checkpoints",
+          "vizConfig": {
+            "group": "table",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {
+                  "custom": {
+                    "align": "auto",
+                    "cellOptions": {
+                      "type": "auto"
+                    },
+                    "filterable": true,
+                    "footer": {
+                      "reducers": []
+                    },
+                    "inspect": false
+                  },
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": 0
+                      }
+                    ]
+                  }
+                },
+                "overrides": []
+              },
+              "options": {
+                "cellHeight": "sm",
+                "footer": {
+                  "show": false,
+                  "reducer": [
+                    "sum"
+                  ],
+                  "fields": ""
+                },
+                "showHeader": true,
+                "sortBy": []
+              }
+            },
+            "version": "13.0.1"
+          }
+        }
+      },
+      "panel-1603": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "infinity"
+                      },
+                      "group": "yesoreyeram-infinity-datasource",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "columns": [],
+                        "computed_columns": [],
+                        "data": "",
+                        "filters": [],
+                        "format": "table",
+                        "global_query_id": "",
+                        "parser": "uql",
+                        "query_mode": "standard",
+                        "root_selector": "",
+                        "source": "url",
+                        "type": "json",
+                        "uql": "parse-json\n| project \"Group order\"=\"group_order\", \"Group\"=\"group_type\", \"Gap\"=\"gap\", \"Rider\"=\"rider\", \"Team\"=\"team_code\", \"Front?\"=\"is_front\", \"KM\"=\"km\"",
+                        "url": "${giro_api_base}/api/v1/stage/${stage}/front-riders",
+                        "url_options": {
+                          "body_content_type": "",
+                          "body_graphql_query": "",
+                          "body_graphql_variables": "",
+                          "body_type": "",
+                          "data": "",
+                          "headers": [
+                            {
+                              "key": "User-Agent",
+                              "value": "Grafana Giro Race Control"
+                            }
+                          ],
+                          "method": "GET",
+                          "params": []
+                        }
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": []
+            }
+          },
+          "description": "Full normalized rider/group feed for source inspection and troubleshooting.",
+          "id": 1603,
+          "links": [],
+          "title": "Full front-rider feed",
+          "vizConfig": {
+            "group": "table",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {
+                  "custom": {
+                    "align": "auto",
+                    "cellOptions": {
+                      "type": "auto"
+                    },
+                    "filterable": true,
+                    "footer": {
+                      "reducers": []
+                    },
+                    "inspect": false
+                  },
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": 0
+                      }
+                    ]
+                  }
+                },
+                "overrides": []
+              },
+              "options": {
+                "cellHeight": "sm",
+                "footer": {
+                  "show": false,
+                  "reducer": [
+                    "sum"
+                  ],
+                  "fields": ""
+                },
+                "showHeader": true,
+                "sortBy": []
+              }
+            },
+            "version": "13.0.1"
+          }
+        }
+      },
+      "panel-1604": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "infinity"
+                      },
+                      "group": "yesoreyeram-infinity-datasource",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "columns": [],
+                        "computed_columns": [],
+                        "data": "",
+                        "filters": [],
+                        "format": "table",
+                        "global_query_id": "",
+                        "parser": "uql",
+                        "query_mode": "standard",
+                        "root_selector": "",
+                        "source": "url",
+                        "type": "json",
+                        "uql": "parse-json\n| project \"Stage\"=\"stage\", \"Route\"=\"route\", \"Profile\"=\"profile\", \"Hero SVG\"=\"hero_svg\", \"Official route\"=\"official_route_url\", \"Note\"=\"note\"",
+                        "url": "${giro_api_base}/api/v1/stage/${stage}/visuals",
+                        "url_options": {
+                          "body_content_type": "",
+                          "body_graphql_query": "",
+                          "body_graphql_variables": "",
+                          "body_type": "",
+                          "data": "",
+                          "headers": [
+                            {
+                              "key": "User-Agent",
+                              "value": "Grafana Giro Race Control"
+                            }
+                          ],
+                          "method": "GET",
+                          "params": []
+                        }
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": []
+            }
+          },
+          "description": "Route and visual metadata for the selected stage.",
+          "id": 1604,
+          "links": [],
+          "title": "Route/visual source notes",
+          "vizConfig": {
+            "group": "table",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {
+                  "custom": {
+                    "align": "auto",
+                    "cellOptions": {
+                      "type": "auto"
+                    },
+                    "filterable": true,
+                    "footer": {
+                      "reducers": []
+                    },
+                    "inspect": false
+                  },
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": 0
+                      }
+                    ]
+                  }
+                },
+                "overrides": []
+              },
+              "options": {
+                "cellHeight": "md",
+                "footer": {
+                  "show": false,
+                  "reducer": [
+                    "sum"
+                  ],
+                  "fields": ""
+                },
+                "showHeader": true,
+                "sortBy": []
+              }
+            },
+            "version": "13.0.1"
+          }
+        }
+      },
+      "panel-1605": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "infinity"
+                      },
+                      "group": "yesoreyeram-infinity-datasource",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "columns": [],
+                        "computed_columns": [],
+                        "data": "",
+                        "filters": [],
+                        "format": "table",
+                        "global_query_id": "",
+                        "parser": "uql",
+                        "query_mode": "standard",
+                        "root_selector": "",
+                        "source": "url",
+                        "type": "json",
+                        "uql": "parse-json\n| project \"Time\"=\"time\", \"Breaking\"=\"breaking\", \"Title\"=\"title\", \"Summary\"=\"summary\", \"Link\"=\"link\"",
+                        "url": "${giro_api_base}/api/v1/stage/${stage}/updates?limit=25",
+                        "url_options": {
+                          "body_content_type": "",
+                          "body_graphql_query": "",
+                          "body_graphql_variables": "",
+                          "body_type": "",
+                          "data": "",
+                          "headers": [
+                            {
+                              "key": "User-Agent",
+                              "value": "Grafana Giro Race Control"
+                            }
+                          ],
+                          "method": "GET",
+                          "params": []
+                        }
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": []
+            }
+          },
+          "description": "More official updates/headlines for debugging and source inspection.",
+          "id": 1605,
+          "links": [],
+          "title": "All official updates",
+          "vizConfig": {
+            "group": "table",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {
+                  "custom": {
+                    "align": "auto",
+                    "cellOptions": {
+                      "type": "auto"
+                    },
+                    "filterable": true,
+                    "footer": {
+                      "reducers": []
+                    },
+                    "inspect": false
+                  },
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": 0
+                      }
+                    ]
+                  }
+                },
+                "overrides": []
+              },
+              "options": {
+                "cellHeight": "sm",
+                "footer": {
+                  "show": false,
+                  "reducer": [
+                    "sum"
+                  ],
+                  "fields": ""
+                },
+                "showHeader": true,
+                "sortBy": []
+              }
+            },
+            "version": "13.0.1"
+          }
+        }
+      }
+    },
+    "layout": {
+      "kind": "RowsLayout",
+      "spec": {
+        "rows": [
+          {
+            "kind": "RowsLayoutRow",
+            "spec": {
+              "collapse": false,
+              "collapsed": false,
+              "layout": {
+                "kind": "GridLayout",
+                "spec": {
+                  "items": [
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-1201"
+                        },
+                        "x": 0,
+                        "y": 0,
+                        "width": 24,
+                        "height": 3
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-1202"
+                        },
+                        "x": 0,
+                        "y": 3,
+                        "width": 8,
+                        "height": 7
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-1203"
+                        },
+                        "x": 8,
+                        "y": 3,
+                        "width": 16,
+                        "height": 3
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-1204"
+                        },
+                        "x": 8,
+                        "y": 6,
+                        "width": 16,
+                        "height": 4
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-1205"
+                        },
+                        "x": 0,
+                        "y": 10,
+                        "width": 4,
+                        "height": 4
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-1206"
+                        },
+                        "x": 4,
+                        "y": 10,
+                        "width": 4,
+                        "height": 4
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-1207"
+                        },
+                        "x": 8,
+                        "y": 10,
+                        "width": 4,
+                        "height": 4
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-1208"
+                        },
+                        "x": 12,
+                        "y": 10,
+                        "width": 4,
+                        "height": 4
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-1209"
+                        },
+                        "x": 16,
+                        "y": 10,
+                        "width": 4,
+                        "height": 4
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-1210"
+                        },
+                        "x": 20,
+                        "y": 10,
+                        "width": 4,
+                        "height": 4
+                      }
+                    }
+                  ]
+                }
+              },
+              "title": "Race right now"
+            }
+          },
+          {
+            "kind": "RowsLayoutRow",
+            "spec": {
+              "collapse": false,
+              "collapsed": false,
+              "layout": {
+                "kind": "GridLayout",
+                "spec": {
+                  "items": [
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-1301"
+                        },
+                        "x": 0,
+                        "y": 0,
+                        "width": 8,
+                        "height": 8
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-1302"
+                        },
+                        "x": 8,
+                        "y": 0,
+                        "width": 10,
+                        "height": 8
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-1303"
+                        },
+                        "x": 18,
+                        "y": 0,
+                        "width": 6,
+                        "height": 8
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-1304"
+                        },
+                        "x": 0,
+                        "y": 8,
+                        "width": 24,
+                        "height": 7
+                      }
+                    }
+                  ]
+                }
+              },
+              "title": "Front of race"
+            }
+          },
+          {
+            "kind": "RowsLayoutRow",
+            "spec": {
+              "collapse": false,
+              "collapsed": false,
+              "layout": {
+                "kind": "GridLayout",
+                "spec": {
+                  "items": [
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-1401"
+                        },
+                        "x": 0,
+                        "y": 0,
+                        "width": 8,
+                        "height": 7
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-1402"
+                        },
+                        "x": 8,
+                        "y": 0,
+                        "width": 8,
+                        "height": 7
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-1403"
+                        },
+                        "x": 16,
+                        "y": 0,
+                        "width": 8,
+                        "height": 7
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-1404"
+                        },
+                        "x": 0,
+                        "y": 7,
+                        "width": 24,
+                        "height": 7
+                      }
+                    }
+                  ]
+                }
+              },
+              "title": "INEOS watch"
+            }
+          },
+          {
+            "kind": "RowsLayoutRow",
+            "spec": {
+              "collapse": false,
+              "collapsed": false,
+              "layout": {
+                "kind": "GridLayout",
+                "spec": {
+                  "items": [
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-1501"
+                        },
+                        "x": 0,
+                        "y": 0,
+                        "width": 12,
+                        "height": 8
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-1502"
+                        },
+                        "x": 12,
+                        "y": 0,
+                        "width": 12,
+                        "height": 8
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-1503"
+                        },
+                        "x": 0,
+                        "y": 8,
+                        "width": 12,
+                        "height": 8
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-1504"
+                        },
+                        "x": 12,
+                        "y": 8,
+                        "width": 12,
+                        "height": 8
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-1505"
+                        },
+                        "x": 0,
+                        "y": 16,
+                        "width": 24,
+                        "height": 8
+                      }
+                    }
+                  ]
+                }
+              },
+              "title": "GC & jerseys"
+            }
+          },
+          {
+            "kind": "RowsLayoutRow",
+            "spec": {
+              "collapse": true,
+              "collapsed": true,
+              "layout": {
+                "kind": "GridLayout",
+                "spec": {
+                  "items": [
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-1601"
+                        },
+                        "x": 0,
+                        "y": 0,
+                        "width": 24,
+                        "height": 7
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-1602"
+                        },
+                        "x": 0,
+                        "y": 7,
+                        "width": 12,
+                        "height": 8
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-1603"
+                        },
+                        "x": 12,
+                        "y": 7,
+                        "width": 12,
+                        "height": 8
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-1604"
+                        },
+                        "x": 0,
+                        "y": 15,
+                        "width": 24,
+                        "height": 5
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-1605"
+                        },
+                        "x": 0,
+                        "y": 20,
+                        "width": 24,
+                        "height": 9
+                      }
+                    }
+                  ]
+                }
+              },
+              "title": "Details / Debug / Sources"
+            }
+          }
+        ]
+      }
+    },
+    "links": [
+      {
+        "asDropdown": false,
+        "icon": "external link",
+        "includeVars": true,
+        "keepTime": true,
+        "tags": [],
+        "targetBlank": true,
+        "title": "Official livefeed",
+        "type": "link",
+        "url": "${giro_base}/livefeed/tappa/${stage}/"
+      },
+      {
+        "asDropdown": false,
+        "icon": "external link",
+        "includeVars": false,
+        "keepTime": true,
+        "tags": [],
+        "targetBlank": true,
+        "title": "Official classifications",
+        "type": "link",
+        "url": "${giro_base}/classifiche/"
+      }
+    ],
+    "liveNow": true,
+    "preload": false,
+    "tags": [
+      "giro-ditalia",
+      "race-control",
+      "infinity",
+      "generated"
+    ],
+    "timeSettings": {
+      "autoRefresh": "30s",
+      "autoRefreshIntervals": [
+        "10s",
+        "30s",
+        "1m",
+        "5m",
+        "15m"
+      ],
+      "from": "now-6h",
+      "hideTimepicker": false,
+      "timezone": "browser",
+      "to": "now"
+    },
+    "title": "Giro d'Italia 2026 - Race Control v12",
+    "variables": [
+      {
+        "kind": "DatasourceVariable",
+        "spec": {
+          "allowCustomValue": true,
+          "current": {
+            "text": "Infinity",
+            "value": "infinity"
+          },
+          "hide": "dontHide",
+          "includeAll": false,
+          "label": "Infinity datasource",
+          "multi": false,
+          "name": "DS_INFINITY",
+          "options": [],
+          "pluginId": "yesoreyeram-infinity-datasource",
+          "refresh": "onDashboardLoad",
+          "regex": "",
+          "skipUrlSync": false
+        }
+      },
+      {
+        "kind": "CustomVariable",
+        "spec": {
+          "allowCustomValue": true,
+          "current": {
+            "text": "5",
+            "value": "5"
+          },
+          "hide": "dontHide",
+          "includeAll": false,
+          "label": "Stage",
+          "multi": false,
+          "name": "stage",
+          "options": [
+            {
+              "selected": false,
+              "text": "1",
+              "value": "1"
+            },
+            {
+              "selected": false,
+              "text": "2",
+              "value": "2"
+            },
+            {
+              "selected": false,
+              "text": "3",
+              "value": "3"
+            },
+            {
+              "selected": false,
+              "text": "4",
+              "value": "4"
+            },
+            {
+              "selected": true,
+              "text": "5",
+              "value": "5"
+            },
+            {
+              "selected": false,
+              "text": "6",
+              "value": "6"
+            },
+            {
+              "selected": false,
+              "text": "7",
+              "value": "7"
+            },
+            {
+              "selected": false,
+              "text": "8",
+              "value": "8"
+            },
+            {
+              "selected": false,
+              "text": "9",
+              "value": "9"
+            },
+            {
+              "selected": false,
+              "text": "10",
+              "value": "10"
+            },
+            {
+              "selected": false,
+              "text": "11",
+              "value": "11"
+            },
+            {
+              "selected": false,
+              "text": "12",
+              "value": "12"
+            },
+            {
+              "selected": false,
+              "text": "13",
+              "value": "13"
+            },
+            {
+              "selected": false,
+              "text": "14",
+              "value": "14"
+            },
+            {
+              "selected": false,
+              "text": "15",
+              "value": "15"
+            },
+            {
+              "selected": false,
+              "text": "16",
+              "value": "16"
+            },
+            {
+              "selected": false,
+              "text": "17",
+              "value": "17"
+            },
+            {
+              "selected": false,
+              "text": "18",
+              "value": "18"
+            },
+            {
+              "selected": false,
+              "text": "19",
+              "value": "19"
+            },
+            {
+              "selected": false,
+              "text": "20",
+              "value": "20"
+            },
+            {
+              "selected": false,
+              "text": "21",
+              "value": "21"
+            }
+          ],
+          "query": "1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21",
+          "skipUrlSync": false,
+          "valuesFormat": "csv"
+        }
+      },
+      {
+        "kind": "CustomVariable",
+        "spec": {
+          "allowCustomValue": true,
+          "current": {
+            "text": "NCI - Netcompany Ineos",
+            "value": "NCI"
+          },
+          "hide": "dontHide",
+          "includeAll": false,
+          "label": "Watched team code",
+          "multi": false,
+          "name": "watched_team_code",
+          "options": [
+            {
+              "selected": true,
+              "text": "NCI - Netcompany Ineos",
+              "value": "NCI"
+            }
+          ],
+          "query": "NCI : NCI - Netcompany Ineos",
+          "skipUrlSync": false,
+          "valuesFormat": "csv"
+        }
+      },
+      {
+        "kind": "ConstantVariable",
+        "spec": {
+          "current": {
+            "text": "http://giro-data:8080",
+            "value": "http://giro-data:8080"
+          },
+          "hide": "hideVariable",
+          "label": "Giro data service URL",
+          "name": "giro_api_base",
+          "query": "http://giro-data:8080",
+          "skipUrlSync": true
+        }
+      },
+      {
+        "kind": "ConstantVariable",
+        "spec": {
+          "current": {
+            "text": "http://localhost:8088",
+            "value": "http://localhost:8088"
+          },
+          "hide": "dontHide",
+          "label": "Giro public asset URL",
+          "name": "giro_public_base",
+          "query": "http://localhost:8088",
+          "skipUrlSync": true
+        }
+      },
+      {
+        "kind": "ConstantVariable",
+        "spec": {
+          "current": {
+            "text": "https://www.giroditalia.it/en",
+            "value": "https://www.giroditalia.it/en"
+          },
+          "hide": "hideVariable",
+          "label": "Official Giro base URL",
+          "name": "giro_base",
+          "query": "https://www.giroditalia.it/en",
+          "skipUrlSync": true
+        }
+      }
+    ]
+  }
+}

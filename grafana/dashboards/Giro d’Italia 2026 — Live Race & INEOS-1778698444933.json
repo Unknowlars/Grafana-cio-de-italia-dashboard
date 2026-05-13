@@ -1,0 +1,4852 @@
+{
+  "annotations": [
+    {
+      "kind": "AnnotationQuery",
+      "spec": {
+        "builtIn": true,
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "query": {
+          "datasource": {
+            "name": "-- Grafana --"
+          },
+          "group": "grafana",
+          "kind": "DataQuery",
+          "spec": {},
+          "version": "v0"
+        }
+      }
+    }
+  ],
+  "cursorSync": "Crosshair",
+  "editable": true,
+  "elements": {
+    "panel-10": {
+      "kind": "Panel",
+      "spec": {
+        "data": {
+          "kind": "QueryGroup",
+          "spec": {
+            "queries": [
+              {
+                "kind": "PanelQuery",
+                "spec": {
+                  "hidden": false,
+                  "query": {
+                    "datasource": {
+                      "name": "infinity"
+                    },
+                    "group": "yesoreyeram-infinity-datasource",
+                    "kind": "DataQuery",
+                    "spec": {
+                      "columns": [],
+                      "computed_columns": [],
+                      "data": "",
+                      "filters": [],
+                      "format": "table",
+                      "global_query_id": "",
+                      "parser": "uql",
+                      "query_mode": "standard",
+                      "root_selector": "",
+                      "source": "url",
+                      "type": "json",
+                      "uql": "parse-json\n| project \"done\"=\"timeline.dati_tecnici.percorsi\", \"total\"=\"timeline.dati_tecnici.lunghezza_km\"\n| extend \"done\"=tonumber(\"done\")\n| extend \"total\"=tonumber(\"total\")\n| extend \"Progress\"=div(\"done\",\"total\")",
+                      "url": "${giro_base}/livefeed/tappa/${stage}/",
+                      "url_options": {
+                        "body_content_type": "",
+                        "body_graphql_query": "",
+                        "body_graphql_variables": "",
+                        "body_type": "",
+                        "data": "",
+                        "headers": [
+                          {
+                            "key": "User-Agent",
+                            "value": "Grafana Infinity dashboard"
+                          }
+                        ],
+                        "method": "GET",
+                        "params": []
+                      }
+                    },
+                    "version": "v0"
+                  },
+                  "refId": "A"
+                }
+              }
+            ],
+            "queryOptions": {},
+            "transformations": [
+              {
+                "group": "extractFields",
+                "kind": "Transformation",
+                "spec": {
+                  "options": {
+                    "delimiter": ",",
+                    "format": "json",
+                    "source": "result"
+                  }
+                }
+              },
+              {
+                "group": "calculateField",
+                "kind": "Transformation",
+                "spec": {
+                  "options": {
+                    "binary": {
+                      "left": {
+                        "matcher": {
+                          "id": "byName",
+                          "options": "done"
+                        }
+                      },
+                      "operator": "/",
+                      "right": {
+                        "matcher": {
+                          "id": "byName",
+                          "options": "total"
+                        }
+                      }
+                    },
+                    "mode": "binary",
+                    "reduce": {
+                      "reducer": "sum"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "description": "Live progress based on official livefeed km done divided by stage distance.",
+        "id": 10,
+        "links": [],
+        "title": "Stage progress",
+        "transparent": true,
+        "vizConfig": {
+          "group": "gauge",
+          "kind": "VizConfig",
+          "spec": {
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "max": 1,
+                "min": 0,
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "red",
+                      "value": 0
+                    },
+                    {
+                      "color": "yellow",
+                      "value": 0.35
+                    },
+                    {
+                      "color": "green",
+                      "value": 0.55
+                    }
+                  ]
+                },
+                "unit": "percentunit"
+              },
+              "overrides": []
+            },
+            "options": {
+              "barShape": "flat",
+              "barWidthFactor": 0.5,
+              "effects": {
+                "barGlow": false,
+                "centerGlow": false,
+                "gradient": false
+              },
+              "endpointMarker": "point",
+              "minVizHeight": 75,
+              "minVizWidth": 75,
+              "orientation": "auto",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": true
+              },
+              "segmentCount": 1,
+              "segmentSpacing": 0.3,
+              "shape": "gauge",
+              "showThresholdLabels": false,
+              "showThresholdMarkers": true,
+              "sizing": "auto",
+              "sparkline": false,
+              "textMode": "auto"
+            }
+          },
+          "version": "13.0.1"
+        }
+      }
+    },
+    "panel-101": {
+      "kind": "Panel",
+      "spec": {
+        "data": {
+          "kind": "QueryGroup",
+          "spec": {
+            "queries": [
+              {
+                "kind": "PanelQuery",
+                "spec": {
+                  "hidden": false,
+                  "query": {
+                    "datasource": {
+                      "name": "infinity"
+                    },
+                    "group": "yesoreyeram-infinity-datasource",
+                    "kind": "DataQuery",
+                    "spec": {
+                      "columns": [
+                        {
+                          "selector": "value",
+                          "text": "value",
+                          "type": "number"
+                        }
+                      ],
+                      "computed_columns": [],
+                      "data": "[{\"value\": 1}]",
+                      "filters": [],
+                      "format": "table",
+                      "global_query_id": "",
+                      "parser": "backend",
+                      "query_mode": "standard",
+                      "root_selector": "",
+                      "source": "inline",
+                      "type": "json",
+                      "url": "",
+                      "url_options": {
+                        "body_content_type": "",
+                        "body_graphql_query": "",
+                        "body_graphql_variables": "",
+                        "body_type": "",
+                        "data": "",
+                        "headers": [],
+                        "method": "GET",
+                        "params": []
+                      }
+                    },
+                    "version": "v0"
+                  },
+                  "refId": "A"
+                }
+              }
+            ],
+            "queryOptions": {},
+            "transformations": []
+          }
+        },
+        "description": "Current general classification leader from official classification snapshot.",
+        "id": 101,
+        "links": [],
+        "title": "GC leader",
+        "vizConfig": {
+          "group": "stat",
+          "kind": "VizConfig",
+          "spec": {
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [
+                  {
+                    "options": {
+                      "1": {
+                        "color": "red",
+                        "index": 0,
+                        "text": "Giulio CICCONE"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "red",
+                      "value": 0
+                    }
+                  ]
+                },
+                "unit": "short"
+              },
+              "overrides": []
+            },
+            "options": {
+              "colorMode": "background",
+              "graphMode": "none",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "percentChangeColorMode": "standard",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "showPercentChange": false,
+              "textMode": "auto",
+              "wideLayout": true
+            }
+          },
+          "version": "13.0.1"
+        }
+      }
+    },
+    "panel-102": {
+      "kind": "Panel",
+      "spec": {
+        "data": {
+          "kind": "QueryGroup",
+          "spec": {
+            "queries": [
+              {
+                "kind": "PanelQuery",
+                "spec": {
+                  "hidden": false,
+                  "query": {
+                    "datasource": {
+                      "name": "infinity"
+                    },
+                    "group": "yesoreyeram-infinity-datasource",
+                    "kind": "DataQuery",
+                    "spec": {
+                      "columns": [
+                        {
+                          "selector": "seconds",
+                          "text": "seconds",
+                          "type": "number"
+                        }
+                      ],
+                      "computed_columns": [],
+                      "data": "[{\"seconds\": 4}]",
+                      "filters": [],
+                      "format": "table",
+                      "global_query_id": "",
+                      "parser": "backend",
+                      "query_mode": "standard",
+                      "root_selector": "",
+                      "source": "inline",
+                      "type": "json",
+                      "url": "",
+                      "url_options": {
+                        "body_content_type": "",
+                        "body_graphql_query": "",
+                        "body_graphql_variables": "",
+                        "body_type": "",
+                        "data": "",
+                        "headers": [],
+                        "method": "GET",
+                        "params": []
+                      }
+                    },
+                    "version": "v0"
+                  },
+                  "refId": "A"
+                }
+              }
+            ],
+            "queryOptions": {},
+            "transformations": []
+          }
+        },
+        "description": "Gap from GC leader to second place.",
+        "id": 102,
+        "links": [],
+        "title": "Gap to 2nd",
+        "vizConfig": {
+          "group": "stat",
+          "kind": "VizConfig",
+          "spec": {
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    },
+                    {
+                      "color": "yellow",
+                      "value": 30
+                    },
+                    {
+                      "color": "red",
+                      "value": 120
+                    }
+                  ]
+                },
+                "unit": "s"
+              },
+              "overrides": []
+            },
+            "options": {
+              "colorMode": "background",
+              "graphMode": "none",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "percentChangeColorMode": "standard",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "showPercentChange": false,
+              "textMode": "auto",
+              "wideLayout": true
+            }
+          },
+          "version": "13.0.1"
+        }
+      }
+    },
+    "panel-103": {
+      "kind": "Panel",
+      "spec": {
+        "data": {
+          "kind": "QueryGroup",
+          "spec": {
+            "queries": [
+              {
+                "kind": "PanelQuery",
+                "spec": {
+                  "hidden": false,
+                  "query": {
+                    "datasource": {
+                      "name": "infinity"
+                    },
+                    "group": "yesoreyeram-infinity-datasource",
+                    "kind": "DataQuery",
+                    "spec": {
+                      "columns": [
+                        {
+                          "selector": "value",
+                          "text": "value",
+                          "type": "number"
+                        }
+                      ],
+                      "computed_columns": [],
+                      "data": "[{\"value\": 1}]",
+                      "filters": [],
+                      "format": "table",
+                      "global_query_id": "",
+                      "parser": "backend",
+                      "query_mode": "standard",
+                      "root_selector": "",
+                      "source": "inline",
+                      "type": "json",
+                      "url": "",
+                      "url_options": {
+                        "body_content_type": "",
+                        "body_graphql_query": "",
+                        "body_graphql_variables": "",
+                        "body_type": "",
+                        "data": "",
+                        "headers": [],
+                        "method": "GET",
+                        "params": []
+                      }
+                    },
+                    "version": "v0"
+                  },
+                  "refId": "A"
+                }
+              }
+            ],
+            "queryOptions": {},
+            "transformations": []
+          }
+        },
+        "description": "Team classification leader.",
+        "id": 103,
+        "links": [],
+        "title": "Team leader",
+        "vizConfig": {
+          "group": "stat",
+          "kind": "VizConfig",
+          "spec": {
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [
+                  {
+                    "options": {
+                      "1": {
+                        "color": "blue",
+                        "index": 0,
+                        "text": "EF EDUCATION - EASYPOST"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "blue",
+                      "value": 0
+                    }
+                  ]
+                },
+                "unit": "short"
+              },
+              "overrides": []
+            },
+            "options": {
+              "colorMode": "background",
+              "graphMode": "none",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "percentChangeColorMode": "standard",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "showPercentChange": false,
+              "textMode": "auto",
+              "wideLayout": true
+            }
+          },
+          "version": "13.0.1"
+        }
+      }
+    },
+    "panel-104": {
+      "kind": "Panel",
+      "spec": {
+        "data": {
+          "kind": "QueryGroup",
+          "spec": {
+            "queries": [
+              {
+                "kind": "PanelQuery",
+                "spec": {
+                  "hidden": false,
+                  "query": {
+                    "datasource": {
+                      "name": "infinity"
+                    },
+                    "group": "yesoreyeram-infinity-datasource",
+                    "kind": "DataQuery",
+                    "spec": {
+                      "columns": [
+                        {
+                          "selector": "value",
+                          "text": "value",
+                          "type": "number"
+                        }
+                      ],
+                      "computed_columns": [],
+                      "data": "[{\"value\": 1}]",
+                      "filters": [],
+                      "format": "table",
+                      "global_query_id": "",
+                      "parser": "backend",
+                      "query_mode": "standard",
+                      "root_selector": "",
+                      "source": "inline",
+                      "type": "json",
+                      "url": "",
+                      "url_options": {
+                        "body_content_type": "",
+                        "body_graphql_query": "",
+                        "body_graphql_variables": "",
+                        "body_type": "",
+                        "data": "",
+                        "headers": [],
+                        "method": "GET",
+                        "params": []
+                      }
+                    },
+                    "version": "v0"
+                  },
+                  "refId": "A"
+                }
+              }
+            ],
+            "queryOptions": {},
+            "transformations": []
+          }
+        },
+        "description": "Maglia Ciclamino / points classification leader.",
+        "id": 104,
+        "links": [],
+        "title": "Points leader",
+        "vizConfig": {
+          "group": "stat",
+          "kind": "VizConfig",
+          "spec": {
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [
+                  {
+                    "options": {
+                      "1": {
+                        "color": "purple",
+                        "index": 0,
+                        "text": "Paul MAGNIER"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "purple",
+                      "value": 0
+                    }
+                  ]
+                },
+                "unit": "short"
+              },
+              "overrides": []
+            },
+            "options": {
+              "colorMode": "background",
+              "graphMode": "none",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "percentChangeColorMode": "standard",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "showPercentChange": false,
+              "textMode": "auto",
+              "wideLayout": true
+            }
+          },
+          "version": "13.0.1"
+        }
+      }
+    },
+    "panel-105": {
+      "kind": "Panel",
+      "spec": {
+        "data": {
+          "kind": "QueryGroup",
+          "spec": {
+            "queries": [
+              {
+                "kind": "PanelQuery",
+                "spec": {
+                  "hidden": false,
+                  "query": {
+                    "datasource": {
+                      "name": "infinity"
+                    },
+                    "group": "yesoreyeram-infinity-datasource",
+                    "kind": "DataQuery",
+                    "spec": {
+                      "columns": [
+                        {
+                          "selector": "value",
+                          "text": "value",
+                          "type": "number"
+                        }
+                      ],
+                      "computed_columns": [],
+                      "data": "[{\"value\": 1}]",
+                      "filters": [],
+                      "format": "table",
+                      "global_query_id": "",
+                      "parser": "backend",
+                      "query_mode": "standard",
+                      "root_selector": "",
+                      "source": "inline",
+                      "type": "json",
+                      "url": "",
+                      "url_options": {
+                        "body_content_type": "",
+                        "body_graphql_query": "",
+                        "body_graphql_variables": "",
+                        "body_type": "",
+                        "data": "",
+                        "headers": [],
+                        "method": "GET",
+                        "params": []
+                      }
+                    },
+                    "version": "v0"
+                  },
+                  "refId": "A"
+                }
+              }
+            ],
+            "queryOptions": {},
+            "transformations": []
+          }
+        },
+        "description": "Maglia Azzurra / mountains classification leader.",
+        "id": 105,
+        "links": [],
+        "title": "Mountains leader",
+        "vizConfig": {
+          "group": "stat",
+          "kind": "VizConfig",
+          "spec": {
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [
+                  {
+                    "options": {
+                      "1": {
+                        "color": "blue",
+                        "index": 0,
+                        "text": "Diego Pablo SEVILLA"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "blue",
+                      "value": 0
+                    }
+                  ]
+                },
+                "unit": "short"
+              },
+              "overrides": []
+            },
+            "options": {
+              "colorMode": "background",
+              "graphMode": "none",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "percentChangeColorMode": "standard",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "showPercentChange": false,
+              "textMode": "auto",
+              "wideLayout": true
+            }
+          },
+          "version": "13.0.1"
+        }
+      }
+    },
+    "panel-106": {
+      "kind": "Panel",
+      "spec": {
+        "data": {
+          "kind": "QueryGroup",
+          "spec": {
+            "queries": [
+              {
+                "kind": "PanelQuery",
+                "spec": {
+                  "hidden": false,
+                  "query": {
+                    "datasource": {
+                      "name": "infinity"
+                    },
+                    "group": "yesoreyeram-infinity-datasource",
+                    "kind": "DataQuery",
+                    "spec": {
+                      "columns": [
+                        {
+                          "selector": "value",
+                          "text": "value",
+                          "type": "number"
+                        }
+                      ],
+                      "computed_columns": [],
+                      "data": "[{\"value\": 1}]",
+                      "filters": [],
+                      "format": "table",
+                      "global_query_id": "",
+                      "parser": "backend",
+                      "query_mode": "standard",
+                      "root_selector": "",
+                      "source": "inline",
+                      "type": "json",
+                      "url": "",
+                      "url_options": {
+                        "body_content_type": "",
+                        "body_graphql_query": "",
+                        "body_graphql_variables": "",
+                        "body_type": "",
+                        "data": "",
+                        "headers": [],
+                        "method": "GET",
+                        "params": []
+                      }
+                    },
+                    "version": "v0"
+                  },
+                  "refId": "A"
+                }
+              }
+            ],
+            "queryOptions": {},
+            "transformations": []
+          }
+        },
+        "description": "Best Netcompany Ineos rider in the GC snapshot.",
+        "id": 106,
+        "links": [],
+        "title": "Best INEOS GC",
+        "vizConfig": {
+          "group": "stat",
+          "kind": "VizConfig",
+          "spec": {
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [
+                  {
+                    "options": {
+                      "1": {
+                        "color": "green",
+                        "index": 0,
+                        "text": "Egan BERNAL #4"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    }
+                  ]
+                },
+                "unit": "short"
+              },
+              "overrides": []
+            },
+            "options": {
+              "colorMode": "background",
+              "graphMode": "none",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "percentChangeColorMode": "standard",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "showPercentChange": false,
+              "textMode": "auto",
+              "wideLayout": true
+            }
+          },
+          "version": "13.0.1"
+        }
+      }
+    },
+    "panel-107": {
+      "kind": "Panel",
+      "spec": {
+        "data": {
+          "kind": "QueryGroup",
+          "spec": {
+            "queries": [
+              {
+                "kind": "PanelQuery",
+                "spec": {
+                  "hidden": false,
+                  "query": {
+                    "datasource": {
+                      "name": "infinity"
+                    },
+                    "group": "yesoreyeram-infinity-datasource",
+                    "kind": "DataQuery",
+                    "spec": {
+                      "columns": [
+                        {
+                          "selector": "rank",
+                          "text": "Rank",
+                          "type": "number"
+                        },
+                        {
+                          "selector": "rider",
+                          "text": "Rider",
+                          "type": "string"
+                        },
+                        {
+                          "selector": "team",
+                          "text": "Team",
+                          "type": "string"
+                        },
+                        {
+                          "selector": "time",
+                          "text": "Time",
+                          "type": "string"
+                        },
+                        {
+                          "selector": "gap",
+                          "text": "Gap",
+                          "type": "string"
+                        }
+                      ],
+                      "computed_columns": [],
+                      "data": "[{\"rank\": 1, \"rider\": \"Giulio CICCONE\", \"team\": \"LIDL-TREK\", \"time\": \"16:18:51\", \"gap\": \"0:00\", \"source\": \"Official Giro classifications\"}, {\"rank\": 2, \"rider\": \"Jan CHRISTEN\", \"team\": \"UAE TEAM EMIRATES XRG\", \"time\": \"16:18:55\", \"gap\": \"0:04\", \"source\": \"Official Giro classifications\"}, {\"rank\": 3, \"rider\": \"Florian STORK\", \"team\": \"TUDOR PRO CYCLING TEAM\", \"time\": \"16:18:55\", \"gap\": \"0:04\", \"source\": \"Official Giro classifications\"}, {\"rank\": 4, \"rider\": \"Egan BERNAL\", \"team\": \"NETCOMPANY INEOS\", \"time\": \"16:18:55\", \"gap\": \"0:04\", \"source\": \"Official Giro classifications\"}, {\"rank\": 5, \"rider\": \"Thymen ARENSMAN\", \"team\": \"NETCOMPANY INEOS\", \"time\": \"16:18:57\", \"gap\": \"0:06\", \"source\": \"Official Giro classifications\"}]",
+                      "filters": [],
+                      "format": "table",
+                      "global_query_id": "",
+                      "parser": "backend",
+                      "query_mode": "standard",
+                      "root_selector": "",
+                      "source": "inline",
+                      "type": "json",
+                      "url": "",
+                      "url_options": {
+                        "body_content_type": "",
+                        "body_graphql_query": "",
+                        "body_graphql_variables": "",
+                        "body_type": "",
+                        "data": "",
+                        "headers": [],
+                        "method": "GET",
+                        "params": []
+                      }
+                    },
+                    "version": "v0"
+                  },
+                  "refId": "A"
+                }
+              }
+            ],
+            "queryOptions": {},
+            "transformations": []
+          }
+        },
+        "description": "Top five riders in general classification.",
+        "id": 107,
+        "links": [],
+        "title": "GC top 5",
+        "vizConfig": {
+          "group": "table",
+          "kind": "VizConfig",
+          "spec": {
+            "fieldConfig": {
+              "defaults": {
+                "custom": {
+                  "align": "auto",
+                  "cellOptions": {
+                    "type": "auto"
+                  },
+                  "filterable": true,
+                  "footer": {
+                    "reducers": []
+                  },
+                  "inspect": false
+                },
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "options": {
+              "cellHeight": "sm",
+              "showHeader": true,
+              "sortBy": []
+            }
+          },
+          "version": "13.0.1"
+        }
+      }
+    },
+    "panel-108": {
+      "kind": "Panel",
+      "spec": {
+        "data": {
+          "kind": "QueryGroup",
+          "spec": {
+            "queries": [
+              {
+                "kind": "PanelQuery",
+                "spec": {
+                  "hidden": false,
+                  "query": {
+                    "datasource": {
+                      "name": "infinity"
+                    },
+                    "group": "yesoreyeram-infinity-datasource",
+                    "kind": "DataQuery",
+                    "spec": {
+                      "columns": [
+                        {
+                          "selector": "jersey",
+                          "text": "Classification",
+                          "type": "string"
+                        },
+                        {
+                          "selector": "leader",
+                          "text": "Leader",
+                          "type": "string"
+                        },
+                        {
+                          "selector": "team",
+                          "text": "Team",
+                          "type": "string"
+                        },
+                        {
+                          "selector": "gap_or_points",
+                          "text": "Gap / Points",
+                          "type": "string"
+                        },
+                        {
+                          "selector": "value",
+                          "text": "Value",
+                          "type": "string"
+                        }
+                      ],
+                      "computed_columns": [],
+                      "data": "[{\"jersey\": \"Maglia Rosa / GC\", \"leader\": \"Giulio CICCONE\", \"team\": \"LIDL-TREK\", \"value\": \"16:18:51\", \"gap_or_points\": \"0:00\"}, {\"jersey\": \"Maglia Ciclamino / Points\", \"leader\": \"Paul MAGNIER\", \"team\": \"SOUDAL QUICK-STEP\", \"value\": \"105\", \"gap_or_points\": \"points\"}, {\"jersey\": \"Maglia Azzurra / Mountains\", \"leader\": \"Diego Pablo SEVILLA\", \"team\": \"TEAM POLTI VISITMALTA\", \"value\": \"42\", \"gap_or_points\": \"points\"}, {\"jersey\": \"Maglia Bianca / Youth\", \"leader\": \"Jan CHRISTEN\", \"team\": \"UAE TEAM EMIRATES XRG\", \"value\": \"16:18:55\", \"gap_or_points\": \"0:00\"}, {\"jersey\": \"Red Bull KM\", \"leader\": \"Manuele TAROZZI\", \"team\": \"BARDIANI CSF 7 SABER\", \"value\": \"30\", \"gap_or_points\": \"points\"}, {\"jersey\": \"Intermediate Sprint\", \"leader\": \"Diego Pablo SEVILLA\", \"team\": \"TEAM POLTI VISITMALTA\", \"value\": \"28\", \"gap_or_points\": \"points\"}, {\"jersey\": \"Fuga\", \"leader\": \"Diego Pablo SEVILLA\", \"team\": \"TEAM POLTI VISITMALTA\", \"value\": \"493\", \"gap_or_points\": \"points\"}, {\"jersey\": \"Combativity\", \"leader\": \"Jan CHRISTEN\", \"team\": \"UAE TEAM EMIRATES XRG\", \"value\": \"Stage 1\", \"gap_or_points\": \"winner\"}]",
+                      "filters": [],
+                      "format": "table",
+                      "global_query_id": "",
+                      "parser": "backend",
+                      "query_mode": "standard",
+                      "root_selector": "",
+                      "source": "inline",
+                      "type": "json",
+                      "url": "",
+                      "url_options": {
+                        "body_content_type": "",
+                        "body_graphql_query": "",
+                        "body_graphql_variables": "",
+                        "body_type": "",
+                        "data": "",
+                        "headers": [],
+                        "method": "GET",
+                        "params": []
+                      }
+                    },
+                    "version": "v0"
+                  },
+                  "refId": "A"
+                }
+              }
+            ],
+            "queryOptions": {},
+            "transformations": []
+          }
+        },
+        "description": "Current jersey and special classification leaders.",
+        "id": 108,
+        "links": [],
+        "title": "Jersey leaders",
+        "vizConfig": {
+          "group": "table",
+          "kind": "VizConfig",
+          "spec": {
+            "fieldConfig": {
+              "defaults": {
+                "custom": {
+                  "align": "auto",
+                  "cellOptions": {
+                    "type": "auto"
+                  },
+                  "filterable": true,
+                  "footer": {
+                    "reducers": []
+                  },
+                  "inspect": false
+                },
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "options": {
+              "cellHeight": "sm",
+              "showHeader": true,
+              "sortBy": []
+            }
+          },
+          "version": "13.0.1"
+        }
+      }
+    },
+    "panel-11": {
+      "kind": "Panel",
+      "spec": {
+        "data": {
+          "kind": "QueryGroup",
+          "spec": {
+            "queries": [
+              {
+                "kind": "PanelQuery",
+                "spec": {
+                  "hidden": false,
+                  "query": {
+                    "datasource": {
+                      "name": "infinity"
+                    },
+                    "group": "yesoreyeram-infinity-datasource",
+                    "kind": "DataQuery",
+                    "spec": {
+                      "columns": [],
+                      "computed_columns": [],
+                      "data": "",
+                      "filters": [],
+                      "format": "table",
+                      "global_query_id": "",
+                      "parser": "uql",
+                      "query_mode": "standard",
+                      "root_selector": "",
+                      "source": "url",
+                      "type": "json",
+                      "uql": "parse-json\n| project \"KM done\"=\"timeline.dati_tecnici.percorsi\"\n| extend \"KM done\"=tonumber(\"KM done\")\n| project \"KM done\"",
+                      "url": "${giro_base}/livefeed/tappa/${stage}/",
+                      "url_options": {
+                        "body_content_type": "",
+                        "body_graphql_query": "",
+                        "body_graphql_variables": "",
+                        "body_type": "",
+                        "data": "",
+                        "headers": [
+                          {
+                            "key": "User-Agent",
+                            "value": "Grafana Infinity dashboard"
+                          }
+                        ],
+                        "method": "GET",
+                        "params": []
+                      }
+                    },
+                    "version": "v0"
+                  },
+                  "refId": "A"
+                }
+              }
+            ],
+            "queryOptions": {},
+            "transformations": []
+          }
+        },
+        "description": "Kilometres completed from official Giro livefeed.",
+        "id": 11,
+        "links": [],
+        "title": "KM done",
+        "vizConfig": {
+          "group": "stat",
+          "kind": "VizConfig",
+          "spec": {
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "blue",
+                      "value": 0
+                    }
+                  ]
+                },
+                "unit": "km"
+              },
+              "overrides": []
+            },
+            "options": {
+              "colorMode": "background",
+              "graphMode": "none",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "percentChangeColorMode": "standard",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "/^result$/",
+                "values": false
+              },
+              "showPercentChange": false,
+              "textMode": "auto",
+              "wideLayout": true
+            }
+          },
+          "version": "13.0.1"
+        }
+      }
+    },
+    "panel-12": {
+      "kind": "Panel",
+      "spec": {
+        "data": {
+          "kind": "QueryGroup",
+          "spec": {
+            "queries": [
+              {
+                "kind": "PanelQuery",
+                "spec": {
+                  "hidden": false,
+                  "query": {
+                    "datasource": {
+                      "name": "infinity"
+                    },
+                    "group": "yesoreyeram-infinity-datasource",
+                    "kind": "DataQuery",
+                    "spec": {
+                      "columns": [],
+                      "computed_columns": [],
+                      "data": "",
+                      "filters": [],
+                      "format": "table",
+                      "global_query_id": "",
+                      "parser": "uql",
+                      "query_mode": "standard",
+                      "root_selector": "",
+                      "source": "url",
+                      "type": "json",
+                      "uql": "parse-json\n| project \"raw\"=\"timeline.linea.box_testa_corsa.distanza_arrivo\"\n| extend \"raw\"=replace_string(\"raw\",'-','')\n| extend \"raw\"=replace_string(\"raw\",' Km','')\n| extend \"KM to go\"=tonumber(\"raw\")\n| project \"KM to go\"",
+                      "url": "${giro_base}/livefeed/tappa/${stage}/",
+                      "url_options": {
+                        "body_content_type": "",
+                        "body_graphql_query": "",
+                        "body_graphql_variables": "",
+                        "body_type": "",
+                        "data": "",
+                        "headers": [
+                          {
+                            "key": "User-Agent",
+                            "value": "Grafana Infinity dashboard"
+                          }
+                        ],
+                        "method": "GET",
+                        "params": []
+                      }
+                    },
+                    "version": "v0"
+                  },
+                  "refId": "A"
+                }
+              }
+            ],
+            "queryOptions": {},
+            "transformations": []
+          }
+        },
+        "description": "Distance to finish parsed from the official livefeed.",
+        "id": 12,
+        "links": [],
+        "title": "KM to go",
+        "vizConfig": {
+          "group": "stat",
+          "kind": "VizConfig",
+          "spec": {
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "blue",
+                      "value": 0
+                    }
+                  ]
+                },
+                "unit": "km"
+              },
+              "overrides": []
+            },
+            "options": {
+              "colorMode": "background",
+              "graphMode": "none",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "percentChangeColorMode": "standard",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "/^result$/",
+                "values": false
+              },
+              "showPercentChange": false,
+              "textMode": "auto",
+              "wideLayout": true
+            }
+          },
+          "version": "13.0.1"
+        }
+      }
+    },
+    "panel-13": {
+      "kind": "Panel",
+      "spec": {
+        "data": {
+          "kind": "QueryGroup",
+          "spec": {
+            "queries": [
+              {
+                "kind": "PanelQuery",
+                "spec": {
+                  "hidden": false,
+                  "query": {
+                    "datasource": {
+                      "name": "infinity"
+                    },
+                    "group": "yesoreyeram-infinity-datasource",
+                    "kind": "DataQuery",
+                    "spec": {
+                      "columns": [],
+                      "computed_columns": [],
+                      "data": "",
+                      "filters": [],
+                      "format": "table",
+                      "global_query_id": "",
+                      "parser": "uql",
+                      "query_mode": "standard",
+                      "root_selector": "",
+                      "source": "url",
+                      "type": "json",
+                      "uql": "parse-json\n| project \"raw\"=\"timeline.dati_tappa.velocita_media\"\n| extend \"raw\"=replace_string(\"raw\",',','.')\n| extend \"raw\"=replace_string(\"raw\",' Km/h','')\n| extend \"Average speed\"=tonumber(\"raw\")\n| project \"Average speed\"",
+                      "url": "${giro_base}/livefeed/tappa/${stage}/",
+                      "url_options": {
+                        "body_content_type": "",
+                        "body_graphql_query": "",
+                        "body_graphql_variables": "",
+                        "body_type": "",
+                        "data": "",
+                        "headers": [
+                          {
+                            "key": "User-Agent",
+                            "value": "Grafana Infinity dashboard"
+                          }
+                        ],
+                        "method": "GET",
+                        "params": []
+                      }
+                    },
+                    "version": "v0"
+                  },
+                  "refId": "A"
+                }
+              }
+            ],
+            "queryOptions": {},
+            "transformations": []
+          }
+        },
+        "description": "Average race speed parsed from the official livefeed.",
+        "id": 13,
+        "links": [],
+        "title": "Avg speed",
+        "vizConfig": {
+          "group": "stat",
+          "kind": "VizConfig",
+          "spec": {
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    },
+                    {
+                      "color": "yellow",
+                      "value": 45
+                    },
+                    {
+                      "color": "red",
+                      "value": 55
+                    }
+                  ]
+                },
+                "unit": "velocitykmh"
+              },
+              "overrides": []
+            },
+            "options": {
+              "colorMode": "background",
+              "graphMode": "none",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "percentChangeColorMode": "standard",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "/^result$/",
+                "values": false
+              },
+              "showPercentChange": false,
+              "textMode": "auto",
+              "wideLayout": true
+            }
+          },
+          "version": "13.0.1"
+        }
+      }
+    },
+    "panel-14": {
+      "kind": "Panel",
+      "spec": {
+        "data": {
+          "kind": "QueryGroup",
+          "spec": {
+            "queries": [
+              {
+                "kind": "PanelQuery",
+                "spec": {
+                  "hidden": false,
+                  "query": {
+                    "datasource": {
+                      "name": "infinity"
+                    },
+                    "group": "yesoreyeram-infinity-datasource",
+                    "kind": "DataQuery",
+                    "spec": {
+                      "columns": [],
+                      "computed_columns": [],
+                      "data": "",
+                      "filters": [],
+                      "format": "table",
+                      "global_query_id": "",
+                      "parser": "uql",
+                      "query_mode": "standard",
+                      "root_selector": "",
+                      "source": "url",
+                      "type": "json",
+                      "uql": "parse-json\n| scope \"timeline.linea.gruppi\"\n| limit 1\n| mv-expand \"rider\"=\"corridori\"\n| count",
+                      "url": "${giro_base}/livefeed/tappa/${stage}/",
+                      "url_options": {
+                        "body_content_type": "",
+                        "body_graphql_query": "",
+                        "body_graphql_variables": "",
+                        "body_type": "",
+                        "data": "",
+                        "headers": [
+                          {
+                            "key": "User-Agent",
+                            "value": "Grafana Infinity dashboard"
+                          }
+                        ],
+                        "method": "GET",
+                        "params": []
+                      }
+                    },
+                    "version": "v0"
+                  },
+                  "refId": "A"
+                }
+              }
+            ],
+            "queryOptions": {},
+            "transformations": []
+          }
+        },
+        "description": "Number of riders in the first livefeed race group.",
+        "id": 14,
+        "links": [],
+        "title": "Front group size",
+        "vizConfig": {
+          "group": "stat",
+          "kind": "VizConfig",
+          "spec": {
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    },
+                    {
+                      "color": "yellow",
+                      "value": 8
+                    },
+                    {
+                      "color": "red",
+                      "value": 15
+                    }
+                  ]
+                },
+                "unit": "short"
+              },
+              "overrides": []
+            },
+            "options": {
+              "colorMode": "background",
+              "graphMode": "none",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "percentChangeColorMode": "standard",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "showPercentChange": false,
+              "textMode": "auto",
+              "wideLayout": true
+            }
+          },
+          "version": "13.0.1"
+        }
+      }
+    },
+    "panel-15": {
+      "kind": "Panel",
+      "spec": {
+        "data": {
+          "kind": "QueryGroup",
+          "spec": {
+            "queries": [
+              {
+                "kind": "PanelQuery",
+                "spec": {
+                  "hidden": false,
+                  "query": {
+                    "datasource": {
+                      "name": "infinity"
+                    },
+                    "group": "yesoreyeram-infinity-datasource",
+                    "kind": "DataQuery",
+                    "spec": {
+                      "columns": [],
+                      "computed_columns": [],
+                      "data": "",
+                      "filters": [],
+                      "format": "table",
+                      "global_query_id": "",
+                      "parser": "uql",
+                      "query_mode": "standard",
+                      "root_selector": "",
+                      "source": "url",
+                      "type": "json",
+                      "uql": "parse-json\n| project \"raw\"=\"header.time_refresh\"\n| extend \"Refresh sec\"=div(\"raw\",1000)\n| project \"Refresh sec\"",
+                      "url": "${giro_base}/livefeed/tappa/${stage}/",
+                      "url_options": {
+                        "body_content_type": "",
+                        "body_graphql_query": "",
+                        "body_graphql_variables": "",
+                        "body_type": "",
+                        "data": "",
+                        "headers": [
+                          {
+                            "key": "User-Agent",
+                            "value": "Grafana Infinity dashboard"
+                          }
+                        ],
+                        "method": "GET",
+                        "params": []
+                      }
+                    },
+                    "version": "v0"
+                  },
+                  "refId": "A"
+                }
+              }
+            ],
+            "queryOptions": {},
+            "transformations": []
+          }
+        },
+        "description": "Refresh interval requested by the official livefeed header.",
+        "id": 15,
+        "links": [],
+        "title": "Feed refresh",
+        "vizConfig": {
+          "group": "stat",
+          "kind": "VizConfig",
+          "spec": {
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    },
+                    {
+                      "color": "yellow",
+                      "value": 120
+                    },
+                    {
+                      "color": "red",
+                      "value": 300
+                    }
+                  ]
+                },
+                "unit": "s"
+              },
+              "overrides": []
+            },
+            "options": {
+              "colorMode": "background",
+              "graphMode": "none",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "percentChangeColorMode": "standard",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "/^result$/",
+                "values": false
+              },
+              "showPercentChange": false,
+              "textMode": "auto",
+              "wideLayout": true
+            }
+          },
+          "version": "13.0.1"
+        }
+      }
+    },
+    "panel-16": {
+      "kind": "Panel",
+      "spec": {
+        "data": {
+          "kind": "QueryGroup",
+          "spec": {
+            "queries": [
+              {
+                "kind": "PanelQuery",
+                "spec": {
+                  "hidden": false,
+                  "query": {
+                    "datasource": {
+                      "name": "infinity"
+                    },
+                    "group": "yesoreyeram-infinity-datasource",
+                    "kind": "DataQuery",
+                    "spec": {
+                      "columns": [],
+                      "computed_columns": [],
+                      "data": "",
+                      "filters": [],
+                      "format": "table",
+                      "global_query_id": "",
+                      "groq": "*",
+                      "parser": "uql",
+                      "query_mode": "standard",
+                      "root_selector": "",
+                      "source": "url",
+                      "type": "json",
+                      "uql": "parse-json\n| project \"Stage no.\"=\"timeline.dati_tappa.numero\", \"Route\"=\"timeline.dati_tappa.nome\", \"Date\"=\"timeline.dati_tappa.data\", \"Distance / profile\"=\"timeline.dati_tappa.caratteristiche\", \"Elapsed\"=\"timeline.dati_tappa.tempo_trascorso\", \"Average speed\"=\"timeline.dati_tappa.velocita_media\", \"Done km\"=\"timeline.dati_tecnici.percorsi\", \"To go\"=\"timeline.linea.box_testa_corsa.distanza_arrivo\"",
+                      "url": "${giro_base}/livefeed/tappa/${stage}/",
+                      "url_options": {
+                        "body_content_type": "",
+                        "body_graphql_query": "",
+                        "body_graphql_variables": "",
+                        "body_type": "",
+                        "data": "",
+                        "headers": [
+                          {
+                            "key": "User-Agent",
+                            "value": "Grafana Infinity dashboard"
+                          }
+                        ],
+                        "method": "GET",
+                        "params": []
+                      }
+                    },
+                    "version": "v0"
+                  },
+                  "refId": "A"
+                }
+              }
+            ],
+            "queryOptions": {},
+            "transformations": [
+              {
+                "group": "extractFields",
+                "kind": "Transformation",
+                "spec": {
+                  "options": {
+                    "delimiter": ",",
+                    "format": "kvp",
+                    "replace": true,
+                    "source": "result"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "description": "Stable one-row table from the official livefeed JSON. This intentionally uses direct UQL projection only, because computed fields can return null/dropped columns depending on Infinity/UQL version.",
+        "id": 16,
+        "links": [],
+        "title": "Stage status",
+        "vizConfig": {
+          "group": "table",
+          "kind": "VizConfig",
+          "spec": {
+            "fieldConfig": {
+              "defaults": {
+                "custom": {
+                  "align": "auto",
+                  "cellOptions": {
+                    "type": "auto"
+                  },
+                  "filterable": false,
+                  "footer": {
+                    "reducers": []
+                  },
+                  "inspect": false
+                },
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    }
+                  ]
+                }
+              },
+              "overrides": [
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Stage no."
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.width",
+                      "value": 80
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Route"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.width",
+                      "value": 177
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Date"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.width",
+                      "value": 190
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Distance / profile"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.width",
+                      "value": 230
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Elapsed"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.width",
+                      "value": 120
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Average speed"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.width",
+                      "value": 130
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Done km"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.width",
+                      "value": 90
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "To go"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.width",
+                      "value": 90
+                    }
+                  ]
+                }
+              ]
+            },
+            "options": {
+              "cellHeight": "md",
+              "showHeader": true,
+              "sortBy": []
+            }
+          },
+          "version": "13.0.1"
+        }
+      }
+    },
+    "panel-17": {
+      "kind": "Panel",
+      "spec": {
+        "data": {
+          "kind": "QueryGroup",
+          "spec": {
+            "queries": [
+              {
+                "kind": "PanelQuery",
+                "spec": {
+                  "hidden": false,
+                  "query": {
+                    "datasource": {
+                      "name": "infinity"
+                    },
+                    "group": "yesoreyeram-infinity-datasource",
+                    "kind": "DataQuery",
+                    "spec": {
+                      "columns": [],
+                      "computed_columns": [],
+                      "data": "",
+                      "filters": [],
+                      "format": "table",
+                      "global_query_id": "",
+                      "parser": "uql",
+                      "query_mode": "standard",
+                      "root_selector": "",
+                      "source": "url",
+                      "type": "json",
+                      "uql": "parse-json\n| scope \"timeline.linea.gruppi\"\n| project \"Group\"=\"tipo\", \"KM\"=\"km\", \"Gap\"=\"distacco\"\n",
+                      "url": "${giro_base}/livefeed/tappa/${stage}/",
+                      "url_options": {
+                        "body_content_type": "",
+                        "body_graphql_query": "",
+                        "body_graphql_variables": "",
+                        "body_type": "",
+                        "data": "",
+                        "headers": [
+                          {
+                            "key": "User-Agent",
+                            "value": "Grafana Infinity dashboard"
+                          }
+                        ],
+                        "method": "GET",
+                        "params": []
+                      }
+                    },
+                    "version": "v0"
+                  },
+                  "refId": "A"
+                }
+              }
+            ],
+            "queryOptions": {},
+            "transformations": []
+          }
+        },
+        "description": "Current race groups and gaps from official Giro livefeed.",
+        "id": 17,
+        "links": [],
+        "title": "Race groups",
+        "vizConfig": {
+          "group": "table",
+          "kind": "VizConfig",
+          "spec": {
+            "fieldConfig": {
+              "defaults": {
+                "custom": {
+                  "align": "auto",
+                  "cellOptions": {
+                    "type": "auto"
+                  },
+                  "filterable": true,
+                  "footer": {
+                    "reducers": []
+                  },
+                  "inspect": false
+                },
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    }
+                  ]
+                }
+              },
+              "overrides": [
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Group"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.width",
+                      "value": 179
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "KM"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.width",
+                      "value": 70
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Gap"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.width",
+                      "value": 175
+                    }
+                  ]
+                }
+              ]
+            },
+            "options": {
+              "cellHeight": "sm",
+              "showHeader": true,
+              "sortBy": []
+            }
+          },
+          "version": "13.0.1"
+        }
+      }
+    },
+    "panel-201": {
+      "kind": "Panel",
+      "spec": {
+        "data": {
+          "kind": "QueryGroup",
+          "spec": {
+            "queries": [],
+            "queryOptions": {},
+            "transformations": []
+          }
+        },
+        "description": "",
+        "id": 201,
+        "links": [],
+        "title": "INEOS focus guide",
+        "vizConfig": {
+          "group": "text",
+          "kind": "VizConfig",
+          "spec": {
+            "fieldConfig": {
+              "defaults": {},
+              "overrides": []
+            },
+            "options": {
+              "code": {
+                "language": "plaintext",
+                "showLineNumbers": false,
+                "showMiniMap": false
+              },
+              "content": "### Netcompany Ineos watch\n\nThis section answers: **Is an INEOS rider up the road? Who is best placed on GC? How many INEOS riders are in the top positions?**",
+              "mode": "markdown"
+            }
+          },
+          "version": "13.0.1"
+        }
+      }
+    },
+    "panel-202": {
+      "kind": "Panel",
+      "spec": {
+        "data": {
+          "kind": "QueryGroup",
+          "spec": {
+            "queries": [
+              {
+                "kind": "PanelQuery",
+                "spec": {
+                  "hidden": false,
+                  "query": {
+                    "datasource": {
+                      "name": "infinity"
+                    },
+                    "group": "yesoreyeram-infinity-datasource",
+                    "kind": "DataQuery",
+                    "spec": {
+                      "columns": [
+                        {
+                          "selector": "value",
+                          "text": "value",
+                          "type": "number"
+                        }
+                      ],
+                      "computed_columns": [],
+                      "data": "[{\"value\": 1}]",
+                      "filters": [],
+                      "format": "table",
+                      "global_query_id": "",
+                      "parser": "backend",
+                      "query_mode": "standard",
+                      "root_selector": "",
+                      "source": "inline",
+                      "type": "json",
+                      "url": "",
+                      "url_options": {
+                        "body_content_type": "",
+                        "body_graphql_query": "",
+                        "body_graphql_variables": "",
+                        "body_type": "",
+                        "data": "",
+                        "headers": [],
+                        "method": "GET",
+                        "params": []
+                      }
+                    },
+                    "version": "v0"
+                  },
+                  "refId": "A"
+                }
+              }
+            ],
+            "queryOptions": {},
+            "transformations": []
+          }
+        },
+        "description": "Best Netcompany Ineos rider in the GC top five snapshot.",
+        "id": 202,
+        "links": [],
+        "title": "Best INEOS rider",
+        "vizConfig": {
+          "group": "stat",
+          "kind": "VizConfig",
+          "spec": {
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [
+                  {
+                    "options": {
+                      "1": {
+                        "color": "green",
+                        "index": 0,
+                        "text": "Egan BERNAL"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    }
+                  ]
+                },
+                "unit": "short"
+              },
+              "overrides": []
+            },
+            "options": {
+              "colorMode": "background",
+              "graphMode": "none",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "percentChangeColorMode": "standard",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "showPercentChange": false,
+              "textMode": "auto",
+              "wideLayout": true
+            }
+          },
+          "version": "13.0.1"
+        }
+      }
+    },
+    "panel-203": {
+      "kind": "Panel",
+      "spec": {
+        "data": {
+          "kind": "QueryGroup",
+          "spec": {
+            "queries": [
+              {
+                "kind": "PanelQuery",
+                "spec": {
+                  "hidden": false,
+                  "query": {
+                    "datasource": {
+                      "name": "infinity"
+                    },
+                    "group": "yesoreyeram-infinity-datasource",
+                    "kind": "DataQuery",
+                    "spec": {
+                      "columns": [
+                        {
+                          "selector": "rank",
+                          "text": "rank",
+                          "type": "number"
+                        }
+                      ],
+                      "computed_columns": [],
+                      "data": "[{\"rank\": 4}]",
+                      "filters": [],
+                      "format": "table",
+                      "global_query_id": "",
+                      "parser": "backend",
+                      "query_mode": "standard",
+                      "root_selector": "",
+                      "source": "inline",
+                      "type": "json",
+                      "url": "",
+                      "url_options": {
+                        "body_content_type": "",
+                        "body_graphql_query": "",
+                        "body_graphql_variables": "",
+                        "body_type": "",
+                        "data": "",
+                        "headers": [],
+                        "method": "GET",
+                        "params": []
+                      }
+                    },
+                    "version": "v0"
+                  },
+                  "refId": "A"
+                }
+              }
+            ],
+            "queryOptions": {},
+            "transformations": []
+          }
+        },
+        "description": "GC rank of the best Netcompany Ineos rider.",
+        "id": 203,
+        "links": [],
+        "title": "Best INEOS GC rank",
+        "vizConfig": {
+          "group": "stat",
+          "kind": "VizConfig",
+          "spec": {
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    },
+                    {
+                      "color": "yellow",
+                      "value": 6
+                    },
+                    {
+                      "color": "red",
+                      "value": 11
+                    }
+                  ]
+                },
+                "unit": "short"
+              },
+              "overrides": []
+            },
+            "options": {
+              "colorMode": "background",
+              "graphMode": "none",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "percentChangeColorMode": "standard",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "showPercentChange": false,
+              "textMode": "auto",
+              "wideLayout": true
+            }
+          },
+          "version": "13.0.1"
+        }
+      }
+    },
+    "panel-204": {
+      "kind": "Panel",
+      "spec": {
+        "data": {
+          "kind": "QueryGroup",
+          "spec": {
+            "queries": [
+              {
+                "kind": "PanelQuery",
+                "spec": {
+                  "hidden": false,
+                  "query": {
+                    "datasource": {
+                      "name": "infinity"
+                    },
+                    "group": "yesoreyeram-infinity-datasource",
+                    "kind": "DataQuery",
+                    "spec": {
+                      "columns": [
+                        {
+                          "selector": "count",
+                          "text": "count",
+                          "type": "number"
+                        }
+                      ],
+                      "computed_columns": [],
+                      "data": "[{\"count\": 2}]",
+                      "filters": [],
+                      "format": "table",
+                      "global_query_id": "",
+                      "parser": "backend",
+                      "query_mode": "standard",
+                      "root_selector": "",
+                      "source": "inline",
+                      "type": "json",
+                      "url": "",
+                      "url_options": {
+                        "body_content_type": "",
+                        "body_graphql_query": "",
+                        "body_graphql_variables": "",
+                        "body_type": "",
+                        "data": "",
+                        "headers": [],
+                        "method": "GET",
+                        "params": []
+                      }
+                    },
+                    "version": "v0"
+                  },
+                  "refId": "A"
+                }
+              }
+            ],
+            "queryOptions": {},
+            "transformations": []
+          }
+        },
+        "description": "Number of Netcompany Ineos riders in current GC top five.",
+        "id": 204,
+        "links": [],
+        "title": "INEOS in GC top 5",
+        "vizConfig": {
+          "group": "stat",
+          "kind": "VizConfig",
+          "spec": {
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "red",
+                      "value": 0
+                    },
+                    {
+                      "color": "yellow",
+                      "value": 1
+                    },
+                    {
+                      "color": "green",
+                      "value": 2
+                    }
+                  ]
+                },
+                "unit": "short"
+              },
+              "overrides": []
+            },
+            "options": {
+              "colorMode": "background",
+              "graphMode": "none",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "percentChangeColorMode": "standard",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "showPercentChange": false,
+              "textMode": "auto",
+              "wideLayout": true
+            }
+          },
+          "version": "13.0.1"
+        }
+      }
+    },
+    "panel-205": {
+      "kind": "Panel",
+      "spec": {
+        "data": {
+          "kind": "QueryGroup",
+          "spec": {
+            "queries": [
+              {
+                "kind": "PanelQuery",
+                "spec": {
+                  "hidden": false,
+                  "query": {
+                    "datasource": {
+                      "name": "infinity"
+                    },
+                    "group": "yesoreyeram-infinity-datasource",
+                    "kind": "DataQuery",
+                    "spec": {
+                      "columns": [],
+                      "computed_columns": [],
+                      "data": "",
+                      "filters": [],
+                      "format": "table",
+                      "global_query_id": "",
+                      "parser": "uql",
+                      "query_mode": "standard",
+                      "root_selector": "",
+                      "source": "url",
+                      "type": "json",
+                      "uql": "parse-json\n| scope \"timeline.linea.gruppi\"\n| mv-expand \"rider\"=\"corridori\"\n| where \"rider.team\" == '${watched_team_code}'\n| count\n",
+                      "url": "${giro_base}/livefeed/tappa/${stage}/",
+                      "url_options": {
+                        "body_content_type": "",
+                        "body_graphql_query": "",
+                        "body_graphql_variables": "",
+                        "body_type": "",
+                        "data": "",
+                        "headers": [
+                          {
+                            "key": "User-Agent",
+                            "value": "Grafana Infinity dashboard"
+                          }
+                        ],
+                        "method": "GET",
+                        "params": []
+                      }
+                    },
+                    "version": "v0"
+                  },
+                  "refId": "A"
+                }
+              }
+            ],
+            "queryOptions": {},
+            "transformations": []
+          }
+        },
+        "description": "Count of watched-team riders currently visible in the official livefeed race groups.",
+        "id": 205,
+        "links": [],
+        "title": "INEOS in live groups",
+        "vizConfig": {
+          "group": "stat",
+          "kind": "VizConfig",
+          "spec": {
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "red",
+                      "value": 0
+                    },
+                    {
+                      "color": "green",
+                      "value": 1
+                    }
+                  ]
+                },
+                "unit": "short"
+              },
+              "overrides": []
+            },
+            "options": {
+              "colorMode": "background",
+              "graphMode": "none",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "percentChangeColorMode": "standard",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "showPercentChange": false,
+              "textMode": "auto",
+              "wideLayout": true
+            }
+          },
+          "version": "13.0.1"
+        }
+      }
+    },
+    "panel-206": {
+      "kind": "Panel",
+      "spec": {
+        "data": {
+          "kind": "QueryGroup",
+          "spec": {
+            "queries": [
+              {
+                "kind": "PanelQuery",
+                "spec": {
+                  "hidden": false,
+                  "query": {
+                    "datasource": {
+                      "name": "infinity"
+                    },
+                    "group": "yesoreyeram-infinity-datasource",
+                    "kind": "DataQuery",
+                    "spec": {
+                      "columns": [
+                        {
+                          "selector": "value",
+                          "text": "value",
+                          "type": "number"
+                        }
+                      ],
+                      "computed_columns": [],
+                      "data": "[{\"value\": 1}]",
+                      "filters": [],
+                      "format": "table",
+                      "global_query_id": "",
+                      "parser": "backend",
+                      "query_mode": "standard",
+                      "root_selector": "",
+                      "source": "inline",
+                      "type": "json",
+                      "url": "",
+                      "url_options": {
+                        "body_content_type": "",
+                        "body_graphql_query": "",
+                        "body_graphql_variables": "",
+                        "body_type": "",
+                        "data": "",
+                        "headers": [],
+                        "method": "GET",
+                        "params": []
+                      }
+                    },
+                    "version": "v0"
+                  },
+                  "refId": "A"
+                }
+              }
+            ],
+            "queryOptions": {},
+            "transformations": []
+          }
+        },
+        "description": "Team abbreviation used by the official livefeed for Netcompany Ineos.",
+        "id": 206,
+        "links": [],
+        "title": "Watched team code",
+        "vizConfig": {
+          "group": "stat",
+          "kind": "VizConfig",
+          "spec": {
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [
+                  {
+                    "options": {
+                      "1": {
+                        "color": "blue",
+                        "index": 0,
+                        "text": "NCI"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "blue",
+                      "value": 0
+                    }
+                  ]
+                },
+                "unit": "short"
+              },
+              "overrides": []
+            },
+            "options": {
+              "colorMode": "background",
+              "graphMode": "none",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "percentChangeColorMode": "standard",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "showPercentChange": false,
+              "textMode": "auto",
+              "wideLayout": true
+            }
+          },
+          "version": "13.0.1"
+        }
+      }
+    },
+    "panel-207": {
+      "kind": "Panel",
+      "spec": {
+        "data": {
+          "kind": "QueryGroup",
+          "spec": {
+            "queries": [
+              {
+                "kind": "PanelQuery",
+                "spec": {
+                  "hidden": false,
+                  "query": {
+                    "datasource": {
+                      "name": "infinity"
+                    },
+                    "group": "yesoreyeram-infinity-datasource",
+                    "kind": "DataQuery",
+                    "spec": {
+                      "columns": [],
+                      "computed_columns": [],
+                      "data": "[{\"stage\": 1, \"day\": \"Fri\", \"date\": \"2026-05-08\", \"route\": \"Nessebar / Несебър – Burgas / Бургас\", \"distance_km\": 147.0, \"imatra_coin\": 7.24, \"official_url\": \"https://www.giroditalia.it/en/the-route/\", \"stage_label\": \"Stage 1 — Nessebar / Несебър – Burgas / Бургас\", \"livehub_url\": \"https://www.giroditalia.it/en/livehub/tappa/1/\", \"stage_result_url\": \"https://www.giroditalia.it/en/classifiche/di-tappa/1/\", \"route_url\": \"https://www.giroditalia.it/en/the-route/\"}, {\"stage\": 2, \"day\": \"Sat\", \"date\": \"2026-05-09\", \"route\": \"Burgas / Бургас – Veliko Tarnovo / Велико Търново\", \"distance_km\": 221.0, \"imatra_coin\": 11.78, \"official_url\": \"https://www.giroditalia.it/en/the-route/\", \"stage_label\": \"Stage 2 — Burgas / Бургас – Veliko Tarnovo / Велико Търново\", \"livehub_url\": \"https://www.giroditalia.it/en/livehub/tappa/2/\", \"stage_result_url\": \"https://www.giroditalia.it/en/classifiche/di-tappa/2/\", \"route_url\": \"https://www.giroditalia.it/en/the-route/\"}, {\"stage\": 3, \"day\": \"Sun\", \"date\": \"2026-05-10\", \"route\": \"Plovdiv / Пловдив – Sofia / София\", \"distance_km\": 175.0, \"imatra_coin\": 9.58, \"official_url\": \"https://www.giroditalia.it/en/the-route/\", \"stage_label\": \"Stage 3 — Plovdiv / Пловдив – Sofia / София\", \"livehub_url\": \"https://www.giroditalia.it/en/livehub/tappa/3/\", \"stage_result_url\": \"https://www.giroditalia.it/en/classifiche/di-tappa/3/\", \"route_url\": \"https://www.giroditalia.it/en/the-route/\"}, {\"stage\": 4, \"day\": \"Tue\", \"date\": \"2026-05-12\", \"route\": \"Catanzaro – Cosenza\", \"distance_km\": 138.0, \"imatra_coin\": 8.61, \"official_url\": \"https://www.giroditalia.it/en/the-route/\", \"stage_label\": \"Stage 4 — Catanzaro – Cosenza\", \"livehub_url\": \"https://www.giroditalia.it/en/livehub/tappa/4/\", \"stage_result_url\": \"https://www.giroditalia.it/en/classifiche/di-tappa/4/\", \"route_url\": \"https://www.giroditalia.it/en/the-route/\"}, {\"stage\": 5, \"day\": \"Wed\", \"date\": \"2026-05-13\", \"route\": \"Praia a Mare – Potenza\", \"distance_km\": 203.0, \"imatra_coin\": 11.93, \"official_url\": \"https://www.giroditalia.it/en/the-route/\", \"stage_label\": \"Stage 5 — Praia a Mare – Potenza\", \"livehub_url\": \"https://www.giroditalia.it/en/livehub/tappa/5/\", \"stage_result_url\": \"https://www.giroditalia.it/en/classifiche/di-tappa/5/\", \"route_url\": \"https://www.giroditalia.it/en/the-route/\"}, {\"stage\": 6, \"day\": \"Thu\", \"date\": \"2026-05-14\", \"route\": \"Paestum – Napoli\", \"distance_km\": 142.0, \"imatra_coin\": 7.05, \"official_url\": \"https://www.giroditalia.it/en/the-route/\", \"stage_label\": \"Stage 6 — Paestum – Napoli\", \"livehub_url\": \"https://www.giroditalia.it/en/livehub/tappa/6/\", \"stage_result_url\": \"https://www.giroditalia.it/en/classifiche/di-tappa/6/\", \"route_url\": \"https://www.giroditalia.it/en/the-route/\"}, {\"stage\": 7, \"day\": \"Fri\", \"date\": \"2026-05-15\", \"route\": \"Formia – Blockhaus\", \"distance_km\": 244.0, \"imatra_coin\": 13.45, \"official_url\": \"https://www.giroditalia.it/en/the-route/\", \"stage_label\": \"Stage 7 — Formia – Blockhaus\", \"livehub_url\": \"https://www.giroditalia.it/en/livehub/tappa/7/\", \"stage_result_url\": \"https://www.giroditalia.it/en/classifiche/di-tappa/7/\", \"route_url\": \"https://www.giroditalia.it/en/the-route/\"}, {\"stage\": 8, \"day\": \"Sat\", \"date\": \"2026-05-16\", \"route\": \"Chieti – Fermo\", \"distance_km\": 156.0, \"imatra_coin\": 9.23, \"official_url\": \"https://www.giroditalia.it/en/the-route/\", \"stage_label\": \"Stage 8 — Chieti – Fermo\", \"livehub_url\": \"https://www.giroditalia.it/en/livehub/tappa/8/\", \"stage_result_url\": \"https://www.giroditalia.it/en/classifiche/di-tappa/8/\", \"route_url\": \"https://www.giroditalia.it/en/the-route/\"}, {\"stage\": 9, \"day\": \"Sun\", \"date\": \"2026-05-17\", \"route\": \"Cervia – Corno alle Scale\", \"distance_km\": 184.0, \"imatra_coin\": 10.45, \"official_url\": \"https://www.giroditalia.it/en/the-route/\", \"stage_label\": \"Stage 9 — Cervia – Corno alle Scale\", \"livehub_url\": \"https://www.giroditalia.it/en/livehub/tappa/9/\", \"stage_result_url\": \"https://www.giroditalia.it/en/classifiche/di-tappa/9/\", \"route_url\": \"https://www.giroditalia.it/en/the-route/\"}, {\"stage\": 10, \"day\": \"Tue\", \"date\": \"2026-05-19\", \"route\": \"Viareggio – Massa TUDOR ITT\", \"distance_km\": 42.0, \"imatra_coin\": 1.9, \"official_url\": \"https://www.giroditalia.it/en/the-route/\", \"stage_label\": \"Stage 10 — Viareggio – Massa TUDOR ITT\", \"livehub_url\": \"https://www.giroditalia.it/en/livehub/tappa/10/\", \"stage_result_url\": \"https://www.giroditalia.it/en/classifiche/di-tappa/10/\", \"route_url\": \"https://www.giroditalia.it/en/the-route/\"}, {\"stage\": 11, \"day\": \"Wed\", \"date\": \"2026-05-20\", \"route\": \"Porcari (Paper District) – Chiavari\", \"distance_km\": 195.0, \"imatra_coin\": 11.07, \"official_url\": \"https://www.giroditalia.it/en/the-route/\", \"stage_label\": \"Stage 11 — Porcari (Paper District) – Chiavari\", \"livehub_url\": \"https://www.giroditalia.it/en/livehub/tappa/11/\", \"stage_result_url\": \"https://www.giroditalia.it/en/classifiche/di-tappa/11/\", \"route_url\": \"https://www.giroditalia.it/en/the-route/\"}, {\"stage\": 12, \"day\": \"Thu\", \"date\": \"2026-05-21\", \"route\": \"Imperia – Novi Ligure\", \"distance_km\": 175.0, \"imatra_coin\": 10.07, \"official_url\": \"https://www.giroditalia.it/en/the-route/\", \"stage_label\": \"Stage 12 — Imperia – Novi Ligure\", \"livehub_url\": \"https://www.giroditalia.it/en/livehub/tappa/12/\", \"stage_result_url\": \"https://www.giroditalia.it/en/classifiche/di-tappa/12/\", \"route_url\": \"https://www.giroditalia.it/en/the-route/\"}, {\"stage\": 13, \"day\": \"Fri\", \"date\": \"2026-05-22\", \"route\": \"Alessandria – Verbania\", \"distance_km\": 189.0, \"imatra_coin\": 9.86, \"official_url\": \"https://www.giroditalia.it/en/the-route/\", \"stage_label\": \"Stage 13 — Alessandria – Verbania\", \"livehub_url\": \"https://www.giroditalia.it/en/livehub/tappa/13/\", \"stage_result_url\": \"https://www.giroditalia.it/en/classifiche/di-tappa/13/\", \"route_url\": \"https://www.giroditalia.it/en/the-route/\"}, {\"stage\": 14, \"day\": \"Sat\", \"date\": \"2026-05-23\", \"route\": \"Aosta – Pila (Gressan)\", \"distance_km\": 133.0, \"imatra_coin\": 10.12, \"official_url\": \"https://www.giroditalia.it/en/the-route/\", \"stage_label\": \"Stage 14 — Aosta – Pila (Gressan)\", \"livehub_url\": \"https://www.giroditalia.it/en/livehub/tappa/14/\", \"stage_result_url\": \"https://www.giroditalia.it/en/classifiche/di-tappa/14/\", \"route_url\": \"https://www.giroditalia.it/en/the-route/\"}, {\"stage\": 15, \"day\": \"Sun\", \"date\": \"2026-05-24\", \"route\": \"Voghera – Milano\", \"distance_km\": 157.0, \"imatra_coin\": 6.57, \"official_url\": \"https://www.giroditalia.it/en/the-route/\", \"stage_label\": \"Stage 15 — Voghera – Milano\", \"livehub_url\": \"https://www.giroditalia.it/en/livehub/tappa/15/\", \"stage_result_url\": \"https://www.giroditalia.it/en/classifiche/di-tappa/15/\", \"route_url\": \"https://www.giroditalia.it/en/the-route/\"}, {\"stage\": 16, \"day\": \"Tue\", \"date\": \"2026-05-26\", \"route\": \"Bellinzona – Carì\", \"distance_km\": 113.0, \"imatra_coin\": 8.86, \"official_url\": \"https://www.giroditalia.it/en/the-route/\", \"stage_label\": \"Stage 16 — Bellinzona – Carì\", \"livehub_url\": \"https://www.giroditalia.it/en/livehub/tappa/16/\", \"stage_result_url\": \"https://www.giroditalia.it/en/classifiche/di-tappa/16/\", \"route_url\": \"https://www.giroditalia.it/en/the-route/\"}, {\"stage\": 17, \"day\": \"Wed\", \"date\": \"2026-05-27\", \"route\": \"Cassano d'Adda – Andalo\", \"distance_km\": 202.0, \"imatra_coin\": 11.53, \"official_url\": \"https://www.giroditalia.it/en/the-route/\", \"stage_label\": \"Stage 17 — Cassano d'Adda – Andalo\", \"livehub_url\": \"https://www.giroditalia.it/en/livehub/tappa/17/\", \"stage_result_url\": \"https://www.giroditalia.it/en/classifiche/di-tappa/17/\", \"route_url\": \"https://www.giroditalia.it/en/the-route/\"}, {\"stage\": 18, \"day\": \"Thu\", \"date\": \"2026-05-28\", \"route\": \"Fai della Paganella – Pieve di Soligo\", \"distance_km\": 171.0, \"imatra_coin\": 9.8, \"official_url\": \"https://www.giroditalia.it/en/the-route/\", \"stage_label\": \"Stage 18 — Fai della Paganella – Pieve di Soligo\", \"livehub_url\": \"https://www.giroditalia.it/en/livehub/tappa/18/\", \"stage_result_url\": \"https://www.giroditalia.it/en/classifiche/di-tappa/18/\", \"route_url\": \"https://www.giroditalia.it/en/the-route/\"}, {\"stage\": 19, \"day\": \"Fri\", \"date\": \"2026-05-29\", \"route\": \"Feltre – Alleghe (Piani di Pezzè)\", \"distance_km\": 151.0, \"imatra_coin\": 10.86, \"official_url\": \"https://www.giroditalia.it/en/the-route/\", \"stage_label\": \"Stage 19 — Feltre – Alleghe (Piani di Pezzè)\", \"livehub_url\": \"https://www.giroditalia.it/en/livehub/tappa/19/\", \"stage_result_url\": \"https://www.giroditalia.it/en/classifiche/di-tappa/19/\", \"route_url\": \"https://www.giroditalia.it/en/the-route/\"}, {\"stage\": 20, \"day\": \"Sat\", \"date\": \"2026-05-30\", \"route\": \"Gemona del Friuli 1976-2026 – Piancavallo\", \"distance_km\": 200.0, \"imatra_coin\": 11.68, \"official_url\": \"https://www.giroditalia.it/en/the-route/\", \"stage_label\": \"Stage 20 — Gemona del Friuli 1976-2026 – Piancavallo\", \"livehub_url\": \"https://www.giroditalia.it/en/livehub/tappa/20/\", \"stage_result_url\": \"https://www.giroditalia.it/en/classifiche/di-tappa/20/\", \"route_url\": \"https://www.giroditalia.it/en/the-route/\"}, {\"stage\": 21, \"day\": \"Sun\", \"date\": \"2026-05-31\", \"route\": \"Roma – Roma\", \"distance_km\": 131.0, \"imatra_coin\": 6.73, \"official_url\": \"https://www.giroditalia.it/en/the-route/\", \"stage_label\": \"Stage 21 — Roma – Roma\", \"livehub_url\": \"https://www.giroditalia.it/en/livehub/tappa/21/\", \"stage_result_url\": \"https://www.giroditalia.it/en/classifiche/di-tappa/21/\", \"route_url\": \"https://www.giroditalia.it/en/the-route/\"}]",
+                      "filters": [],
+                      "format": "table",
+                      "global_query_id": "",
+                      "parser": "uql",
+                      "query_mode": "standard",
+                      "root_selector": "",
+                      "source": "inline",
+                      "type": "json",
+                      "uql": "parse-json\n| where \"stage\" == ${stage}\n| project \"Distance km\"=\"distance_km\"",
+                      "url": "",
+                      "url_options": {
+                        "body_content_type": "",
+                        "body_graphql_query": "",
+                        "body_graphql_variables": "",
+                        "body_type": "",
+                        "data": "",
+                        "headers": [],
+                        "method": "GET",
+                        "params": []
+                      }
+                    },
+                    "version": "v0"
+                  },
+                  "refId": "A"
+                }
+              }
+            ],
+            "queryOptions": {},
+            "transformations": []
+          }
+        },
+        "description": "Selected stage distance from the route schedule.",
+        "id": 207,
+        "links": [],
+        "title": "Stage distance",
+        "vizConfig": {
+          "group": "stat",
+          "kind": "VizConfig",
+          "spec": {
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "blue",
+                      "value": 0
+                    }
+                  ]
+                },
+                "unit": "km"
+              },
+              "overrides": []
+            },
+            "options": {
+              "colorMode": "background",
+              "graphMode": "none",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "percentChangeColorMode": "standard",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "showPercentChange": false,
+              "textMode": "auto",
+              "wideLayout": true
+            }
+          },
+          "version": "13.0.1"
+        }
+      }
+    },
+    "panel-208": {
+      "kind": "Panel",
+      "spec": {
+        "data": {
+          "kind": "QueryGroup",
+          "spec": {
+            "queries": [
+              {
+                "kind": "PanelQuery",
+                "spec": {
+                  "hidden": false,
+                  "query": {
+                    "datasource": {
+                      "name": "infinity"
+                    },
+                    "group": "yesoreyeram-infinity-datasource",
+                    "kind": "DataQuery",
+                    "spec": {
+                      "columns": [
+                        {
+                          "selector": "rank",
+                          "text": "Rank",
+                          "type": "number"
+                        },
+                        {
+                          "selector": "rider",
+                          "text": "Rider",
+                          "type": "string"
+                        },
+                        {
+                          "selector": "team",
+                          "text": "Team",
+                          "type": "string"
+                        },
+                        {
+                          "selector": "time",
+                          "text": "Time",
+                          "type": "string"
+                        },
+                        {
+                          "selector": "gap",
+                          "text": "Gap",
+                          "type": "string"
+                        }
+                      ],
+                      "computed_columns": [],
+                      "data": "[{\"rank\": 4, \"rider\": \"Egan BERNAL\", \"team\": \"NETCOMPANY INEOS\", \"time\": \"16:18:55\", \"gap\": \"0:04\", \"source\": \"Official Giro classifications\"}, {\"rank\": 5, \"rider\": \"Thymen ARENSMAN\", \"team\": \"NETCOMPANY INEOS\", \"time\": \"16:18:57\", \"gap\": \"0:06\", \"source\": \"Official Giro classifications\"}]",
+                      "filters": [],
+                      "format": "table",
+                      "global_query_id": "",
+                      "parser": "backend",
+                      "query_mode": "standard",
+                      "root_selector": "",
+                      "source": "inline",
+                      "type": "json",
+                      "url": "",
+                      "url_options": {
+                        "body_content_type": "",
+                        "body_graphql_query": "",
+                        "body_graphql_variables": "",
+                        "body_type": "",
+                        "data": "",
+                        "headers": [],
+                        "method": "GET",
+                        "params": []
+                      }
+                    },
+                    "version": "v0"
+                  },
+                  "refId": "A"
+                }
+              }
+            ],
+            "queryOptions": {},
+            "transformations": []
+          }
+        },
+        "description": "Netcompany Ineos riders currently in the GC top five snapshot.",
+        "id": 208,
+        "links": [],
+        "title": "INEOS riders in GC top 5",
+        "vizConfig": {
+          "group": "table",
+          "kind": "VizConfig",
+          "spec": {
+            "fieldConfig": {
+              "defaults": {
+                "custom": {
+                  "align": "auto",
+                  "cellOptions": {
+                    "type": "auto"
+                  },
+                  "filterable": true,
+                  "footer": {
+                    "reducers": []
+                  },
+                  "inspect": false
+                },
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "options": {
+              "cellHeight": "sm",
+              "showHeader": true,
+              "sortBy": []
+            }
+          },
+          "version": "13.0.1"
+        }
+      }
+    },
+    "panel-209": {
+      "kind": "Panel",
+      "spec": {
+        "data": {
+          "kind": "QueryGroup",
+          "spec": {
+            "queries": [
+              {
+                "kind": "PanelQuery",
+                "spec": {
+                  "hidden": false,
+                  "query": {
+                    "datasource": {
+                      "name": "infinity"
+                    },
+                    "group": "yesoreyeram-infinity-datasource",
+                    "kind": "DataQuery",
+                    "spec": {
+                      "columns": [],
+                      "computed_columns": [],
+                      "data": "",
+                      "filters": [],
+                      "format": "table",
+                      "global_query_id": "",
+                      "parser": "uql",
+                      "query_mode": "standard",
+                      "root_selector": "",
+                      "source": "url",
+                      "type": "json",
+                      "uql": "parse-json\n| scope \"timeline.linea.gruppi\"\n| mv-expand \"rider\"=\"corridori\"\n| where \"rider.team\" == '${watched_team_code}'\n| project \"Group\"=\"tipo\", \"KM\"=\"km\", \"Gap\"=\"distacco\", \"First name\"=\"rider.nome\", \"Last name\"=\"rider.cognome\", \"Team code\"=\"rider.team\"\n",
+                      "url": "${giro_base}/livefeed/tappa/${stage}/",
+                      "url_options": {
+                        "body_content_type": "",
+                        "body_graphql_query": "",
+                        "body_graphql_variables": "",
+                        "body_type": "",
+                        "data": "",
+                        "headers": [
+                          {
+                            "key": "User-Agent",
+                            "value": "Grafana Infinity dashboard"
+                          }
+                        ],
+                        "method": "GET",
+                        "params": []
+                      }
+                    },
+                    "version": "v0"
+                  },
+                  "refId": "A"
+                }
+              }
+            ],
+            "queryOptions": {},
+            "transformations": []
+          }
+        },
+        "description": "Live check for Netcompany Ineos riders visible in the official livefeed groups.",
+        "id": 209,
+        "links": [],
+        "title": "INEOS riders in live race groups",
+        "vizConfig": {
+          "group": "table",
+          "kind": "VizConfig",
+          "spec": {
+            "fieldConfig": {
+              "defaults": {
+                "custom": {
+                  "align": "auto",
+                  "cellOptions": {
+                    "type": "auto"
+                  },
+                  "filterable": true,
+                  "footer": {
+                    "reducers": []
+                  },
+                  "inspect": false
+                },
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "options": {
+              "cellHeight": "sm",
+              "showHeader": true,
+              "sortBy": []
+            }
+          },
+          "version": "13.0.1"
+        }
+      }
+    },
+    "panel-210": {
+      "kind": "Panel",
+      "spec": {
+        "data": {
+          "kind": "QueryGroup",
+          "spec": {
+            "queries": [
+              {
+                "kind": "PanelQuery",
+                "spec": {
+                  "hidden": false,
+                  "query": {
+                    "datasource": {
+                      "name": "infinity"
+                    },
+                    "group": "yesoreyeram-infinity-datasource",
+                    "kind": "DataQuery",
+                    "spec": {
+                      "columns": [
+                        {
+                          "selector": "Metric",
+                          "text": "Metric",
+                          "type": "string"
+                        },
+                        {
+                          "selector": "Value",
+                          "text": "Value",
+                          "type": "string"
+                        }
+                      ],
+                      "computed_columns": [],
+                      "data": "[{\"Metric\": \"Best GC rider\", \"Value\": \"Egan BERNAL — #4, 0:04 behind\"}, {\"Metric\": \"INEOS riders in GC top 5\", \"Value\": \"2\"}, {\"Metric\": \"Riders in GC top 5\", \"Value\": \"Egan BERNAL, Thymen ARENSMAN\"}, {\"Metric\": \"Watched team code in livefeed\", \"Value\": \"NCI\"}]",
+                      "filters": [],
+                      "format": "table",
+                      "global_query_id": "",
+                      "parser": "backend",
+                      "query_mode": "standard",
+                      "root_selector": "",
+                      "source": "inline",
+                      "type": "json",
+                      "url": "",
+                      "url_options": {
+                        "body_content_type": "",
+                        "body_graphql_query": "",
+                        "body_graphql_variables": "",
+                        "body_type": "",
+                        "data": "",
+                        "headers": [],
+                        "method": "GET",
+                        "params": []
+                      }
+                    },
+                    "version": "v0"
+                  },
+                  "refId": "A"
+                }
+              }
+            ],
+            "queryOptions": {},
+            "transformations": []
+          }
+        },
+        "description": "Compact summary of the current Netcompany Ineos position.",
+        "id": 210,
+        "links": [],
+        "title": "INEOS summary",
+        "vizConfig": {
+          "group": "table",
+          "kind": "VizConfig",
+          "spec": {
+            "fieldConfig": {
+              "defaults": {
+                "custom": {
+                  "align": "auto",
+                  "cellOptions": {
+                    "type": "auto"
+                  },
+                  "filterable": true,
+                  "footer": {
+                    "reducers": []
+                  },
+                  "inspect": false
+                },
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "options": {
+              "cellHeight": "sm",
+              "showHeader": true,
+              "sortBy": []
+            }
+          },
+          "version": "13.0.1"
+        }
+      }
+    },
+    "panel-301": {
+      "kind": "Panel",
+      "spec": {
+        "data": {
+          "kind": "QueryGroup",
+          "spec": {
+            "queries": [
+              {
+                "kind": "PanelQuery",
+                "spec": {
+                  "hidden": false,
+                  "query": {
+                    "datasource": {
+                      "name": "infinity"
+                    },
+                    "group": "yesoreyeram-infinity-datasource",
+                    "kind": "DataQuery",
+                    "spec": {
+                      "columns": [],
+                      "computed_columns": [],
+                      "data": "[{\"stage\": 1, \"day\": \"Fri\", \"date\": \"2026-05-08\", \"route\": \"Nessebar / Несебър – Burgas / Бургас\", \"distance_km\": 147.0, \"imatra_coin\": 7.24, \"official_url\": \"https://www.giroditalia.it/en/the-route/\", \"stage_label\": \"Stage 1 — Nessebar / Несебър – Burgas / Бургас\", \"livehub_url\": \"https://www.giroditalia.it/en/livehub/tappa/1/\", \"stage_result_url\": \"https://www.giroditalia.it/en/classifiche/di-tappa/1/\", \"route_url\": \"https://www.giroditalia.it/en/the-route/\"}, {\"stage\": 2, \"day\": \"Sat\", \"date\": \"2026-05-09\", \"route\": \"Burgas / Бургас – Veliko Tarnovo / Велико Търново\", \"distance_km\": 221.0, \"imatra_coin\": 11.78, \"official_url\": \"https://www.giroditalia.it/en/the-route/\", \"stage_label\": \"Stage 2 — Burgas / Бургас – Veliko Tarnovo / Велико Търново\", \"livehub_url\": \"https://www.giroditalia.it/en/livehub/tappa/2/\", \"stage_result_url\": \"https://www.giroditalia.it/en/classifiche/di-tappa/2/\", \"route_url\": \"https://www.giroditalia.it/en/the-route/\"}, {\"stage\": 3, \"day\": \"Sun\", \"date\": \"2026-05-10\", \"route\": \"Plovdiv / Пловдив – Sofia / София\", \"distance_km\": 175.0, \"imatra_coin\": 9.58, \"official_url\": \"https://www.giroditalia.it/en/the-route/\", \"stage_label\": \"Stage 3 — Plovdiv / Пловдив – Sofia / София\", \"livehub_url\": \"https://www.giroditalia.it/en/livehub/tappa/3/\", \"stage_result_url\": \"https://www.giroditalia.it/en/classifiche/di-tappa/3/\", \"route_url\": \"https://www.giroditalia.it/en/the-route/\"}, {\"stage\": 4, \"day\": \"Tue\", \"date\": \"2026-05-12\", \"route\": \"Catanzaro – Cosenza\", \"distance_km\": 138.0, \"imatra_coin\": 8.61, \"official_url\": \"https://www.giroditalia.it/en/the-route/\", \"stage_label\": \"Stage 4 — Catanzaro – Cosenza\", \"livehub_url\": \"https://www.giroditalia.it/en/livehub/tappa/4/\", \"stage_result_url\": \"https://www.giroditalia.it/en/classifiche/di-tappa/4/\", \"route_url\": \"https://www.giroditalia.it/en/the-route/\"}, {\"stage\": 5, \"day\": \"Wed\", \"date\": \"2026-05-13\", \"route\": \"Praia a Mare – Potenza\", \"distance_km\": 203.0, \"imatra_coin\": 11.93, \"official_url\": \"https://www.giroditalia.it/en/the-route/\", \"stage_label\": \"Stage 5 — Praia a Mare – Potenza\", \"livehub_url\": \"https://www.giroditalia.it/en/livehub/tappa/5/\", \"stage_result_url\": \"https://www.giroditalia.it/en/classifiche/di-tappa/5/\", \"route_url\": \"https://www.giroditalia.it/en/the-route/\"}, {\"stage\": 6, \"day\": \"Thu\", \"date\": \"2026-05-14\", \"route\": \"Paestum – Napoli\", \"distance_km\": 142.0, \"imatra_coin\": 7.05, \"official_url\": \"https://www.giroditalia.it/en/the-route/\", \"stage_label\": \"Stage 6 — Paestum – Napoli\", \"livehub_url\": \"https://www.giroditalia.it/en/livehub/tappa/6/\", \"stage_result_url\": \"https://www.giroditalia.it/en/classifiche/di-tappa/6/\", \"route_url\": \"https://www.giroditalia.it/en/the-route/\"}, {\"stage\": 7, \"day\": \"Fri\", \"date\": \"2026-05-15\", \"route\": \"Formia – Blockhaus\", \"distance_km\": 244.0, \"imatra_coin\": 13.45, \"official_url\": \"https://www.giroditalia.it/en/the-route/\", \"stage_label\": \"Stage 7 — Formia – Blockhaus\", \"livehub_url\": \"https://www.giroditalia.it/en/livehub/tappa/7/\", \"stage_result_url\": \"https://www.giroditalia.it/en/classifiche/di-tappa/7/\", \"route_url\": \"https://www.giroditalia.it/en/the-route/\"}, {\"stage\": 8, \"day\": \"Sat\", \"date\": \"2026-05-16\", \"route\": \"Chieti – Fermo\", \"distance_km\": 156.0, \"imatra_coin\": 9.23, \"official_url\": \"https://www.giroditalia.it/en/the-route/\", \"stage_label\": \"Stage 8 — Chieti – Fermo\", \"livehub_url\": \"https://www.giroditalia.it/en/livehub/tappa/8/\", \"stage_result_url\": \"https://www.giroditalia.it/en/classifiche/di-tappa/8/\", \"route_url\": \"https://www.giroditalia.it/en/the-route/\"}, {\"stage\": 9, \"day\": \"Sun\", \"date\": \"2026-05-17\", \"route\": \"Cervia – Corno alle Scale\", \"distance_km\": 184.0, \"imatra_coin\": 10.45, \"official_url\": \"https://www.giroditalia.it/en/the-route/\", \"stage_label\": \"Stage 9 — Cervia – Corno alle Scale\", \"livehub_url\": \"https://www.giroditalia.it/en/livehub/tappa/9/\", \"stage_result_url\": \"https://www.giroditalia.it/en/classifiche/di-tappa/9/\", \"route_url\": \"https://www.giroditalia.it/en/the-route/\"}, {\"stage\": 10, \"day\": \"Tue\", \"date\": \"2026-05-19\", \"route\": \"Viareggio – Massa TUDOR ITT\", \"distance_km\": 42.0, \"imatra_coin\": 1.9, \"official_url\": \"https://www.giroditalia.it/en/the-route/\", \"stage_label\": \"Stage 10 — Viareggio – Massa TUDOR ITT\", \"livehub_url\": \"https://www.giroditalia.it/en/livehub/tappa/10/\", \"stage_result_url\": \"https://www.giroditalia.it/en/classifiche/di-tappa/10/\", \"route_url\": \"https://www.giroditalia.it/en/the-route/\"}, {\"stage\": 11, \"day\": \"Wed\", \"date\": \"2026-05-20\", \"route\": \"Porcari (Paper District) – Chiavari\", \"distance_km\": 195.0, \"imatra_coin\": 11.07, \"official_url\": \"https://www.giroditalia.it/en/the-route/\", \"stage_label\": \"Stage 11 — Porcari (Paper District) – Chiavari\", \"livehub_url\": \"https://www.giroditalia.it/en/livehub/tappa/11/\", \"stage_result_url\": \"https://www.giroditalia.it/en/classifiche/di-tappa/11/\", \"route_url\": \"https://www.giroditalia.it/en/the-route/\"}, {\"stage\": 12, \"day\": \"Thu\", \"date\": \"2026-05-21\", \"route\": \"Imperia – Novi Ligure\", \"distance_km\": 175.0, \"imatra_coin\": 10.07, \"official_url\": \"https://www.giroditalia.it/en/the-route/\", \"stage_label\": \"Stage 12 — Imperia – Novi Ligure\", \"livehub_url\": \"https://www.giroditalia.it/en/livehub/tappa/12/\", \"stage_result_url\": \"https://www.giroditalia.it/en/classifiche/di-tappa/12/\", \"route_url\": \"https://www.giroditalia.it/en/the-route/\"}, {\"stage\": 13, \"day\": \"Fri\", \"date\": \"2026-05-22\", \"route\": \"Alessandria – Verbania\", \"distance_km\": 189.0, \"imatra_coin\": 9.86, \"official_url\": \"https://www.giroditalia.it/en/the-route/\", \"stage_label\": \"Stage 13 — Alessandria – Verbania\", \"livehub_url\": \"https://www.giroditalia.it/en/livehub/tappa/13/\", \"stage_result_url\": \"https://www.giroditalia.it/en/classifiche/di-tappa/13/\", \"route_url\": \"https://www.giroditalia.it/en/the-route/\"}, {\"stage\": 14, \"day\": \"Sat\", \"date\": \"2026-05-23\", \"route\": \"Aosta – Pila (Gressan)\", \"distance_km\": 133.0, \"imatra_coin\": 10.12, \"official_url\": \"https://www.giroditalia.it/en/the-route/\", \"stage_label\": \"Stage 14 — Aosta – Pila (Gressan)\", \"livehub_url\": \"https://www.giroditalia.it/en/livehub/tappa/14/\", \"stage_result_url\": \"https://www.giroditalia.it/en/classifiche/di-tappa/14/\", \"route_url\": \"https://www.giroditalia.it/en/the-route/\"}, {\"stage\": 15, \"day\": \"Sun\", \"date\": \"2026-05-24\", \"route\": \"Voghera – Milano\", \"distance_km\": 157.0, \"imatra_coin\": 6.57, \"official_url\": \"https://www.giroditalia.it/en/the-route/\", \"stage_label\": \"Stage 15 — Voghera – Milano\", \"livehub_url\": \"https://www.giroditalia.it/en/livehub/tappa/15/\", \"stage_result_url\": \"https://www.giroditalia.it/en/classifiche/di-tappa/15/\", \"route_url\": \"https://www.giroditalia.it/en/the-route/\"}, {\"stage\": 16, \"day\": \"Tue\", \"date\": \"2026-05-26\", \"route\": \"Bellinzona – Carì\", \"distance_km\": 113.0, \"imatra_coin\": 8.86, \"official_url\": \"https://www.giroditalia.it/en/the-route/\", \"stage_label\": \"Stage 16 — Bellinzona – Carì\", \"livehub_url\": \"https://www.giroditalia.it/en/livehub/tappa/16/\", \"stage_result_url\": \"https://www.giroditalia.it/en/classifiche/di-tappa/16/\", \"route_url\": \"https://www.giroditalia.it/en/the-route/\"}, {\"stage\": 17, \"day\": \"Wed\", \"date\": \"2026-05-27\", \"route\": \"Cassano d'Adda – Andalo\", \"distance_km\": 202.0, \"imatra_coin\": 11.53, \"official_url\": \"https://www.giroditalia.it/en/the-route/\", \"stage_label\": \"Stage 17 — Cassano d'Adda – Andalo\", \"livehub_url\": \"https://www.giroditalia.it/en/livehub/tappa/17/\", \"stage_result_url\": \"https://www.giroditalia.it/en/classifiche/di-tappa/17/\", \"route_url\": \"https://www.giroditalia.it/en/the-route/\"}, {\"stage\": 18, \"day\": \"Thu\", \"date\": \"2026-05-28\", \"route\": \"Fai della Paganella – Pieve di Soligo\", \"distance_km\": 171.0, \"imatra_coin\": 9.8, \"official_url\": \"https://www.giroditalia.it/en/the-route/\", \"stage_label\": \"Stage 18 — Fai della Paganella – Pieve di Soligo\", \"livehub_url\": \"https://www.giroditalia.it/en/livehub/tappa/18/\", \"stage_result_url\": \"https://www.giroditalia.it/en/classifiche/di-tappa/18/\", \"route_url\": \"https://www.giroditalia.it/en/the-route/\"}, {\"stage\": 19, \"day\": \"Fri\", \"date\": \"2026-05-29\", \"route\": \"Feltre – Alleghe (Piani di Pezzè)\", \"distance_km\": 151.0, \"imatra_coin\": 10.86, \"official_url\": \"https://www.giroditalia.it/en/the-route/\", \"stage_label\": \"Stage 19 — Feltre – Alleghe (Piani di Pezzè)\", \"livehub_url\": \"https://www.giroditalia.it/en/livehub/tappa/19/\", \"stage_result_url\": \"https://www.giroditalia.it/en/classifiche/di-tappa/19/\", \"route_url\": \"https://www.giroditalia.it/en/the-route/\"}, {\"stage\": 20, \"day\": \"Sat\", \"date\": \"2026-05-30\", \"route\": \"Gemona del Friuli 1976-2026 – Piancavallo\", \"distance_km\": 200.0, \"imatra_coin\": 11.68, \"official_url\": \"https://www.giroditalia.it/en/the-route/\", \"stage_label\": \"Stage 20 — Gemona del Friuli 1976-2026 – Piancavallo\", \"livehub_url\": \"https://www.giroditalia.it/en/livehub/tappa/20/\", \"stage_result_url\": \"https://www.giroditalia.it/en/classifiche/di-tappa/20/\", \"route_url\": \"https://www.giroditalia.it/en/the-route/\"}, {\"stage\": 21, \"day\": \"Sun\", \"date\": \"2026-05-31\", \"route\": \"Roma – Roma\", \"distance_km\": 131.0, \"imatra_coin\": 6.73, \"official_url\": \"https://www.giroditalia.it/en/the-route/\", \"stage_label\": \"Stage 21 — Roma – Roma\", \"livehub_url\": \"https://www.giroditalia.it/en/livehub/tappa/21/\", \"stage_result_url\": \"https://www.giroditalia.it/en/classifiche/di-tappa/21/\", \"route_url\": \"https://www.giroditalia.it/en/the-route/\"}]",
+                      "filters": [],
+                      "format": "table",
+                      "global_query_id": "",
+                      "parser": "uql",
+                      "query_mode": "standard",
+                      "root_selector": "",
+                      "source": "inline",
+                      "type": "json",
+                      "uql": "parse-json\n| order by \"stage\" asc\n| project \"Stage\"=\"stage\", \"Date\"=\"date\", \"Day\"=\"day\", \"Route\"=\"route\", \"Distance km\"=\"distance_km\", \"Imatra Coin\"=\"imatra_coin\", \"Official URL\"=\"official_url\"",
+                      "url": "",
+                      "url_options": {
+                        "body_content_type": "",
+                        "body_graphql_query": "",
+                        "body_graphql_variables": "",
+                        "body_type": "",
+                        "data": "",
+                        "headers": [],
+                        "method": "GET",
+                        "params": []
+                      }
+                    },
+                    "version": "v0"
+                  },
+                  "refId": "A"
+                }
+              }
+            ],
+            "queryOptions": {},
+            "transformations": []
+          }
+        },
+        "description": "Full Giro route schedule.",
+        "id": 301,
+        "links": [],
+        "title": "Full route schedule",
+        "vizConfig": {
+          "group": "table",
+          "kind": "VizConfig",
+          "spec": {
+            "fieldConfig": {
+              "defaults": {
+                "custom": {
+                  "align": "auto",
+                  "cellOptions": {
+                    "type": "auto"
+                  },
+                  "filterable": true,
+                  "inspect": false
+                },
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "options": {
+              "cellHeight": "sm",
+              "footer": {
+                "fields": "",
+                "reducer": [
+                  "sum"
+                ],
+                "show": false
+              },
+              "showHeader": true,
+              "sortBy": []
+            }
+          },
+          "version": "12.4.0"
+        }
+      }
+    },
+    "panel-302": {
+      "kind": "Panel",
+      "spec": {
+        "data": {
+          "kind": "QueryGroup",
+          "spec": {
+            "queries": [
+              {
+                "kind": "PanelQuery",
+                "spec": {
+                  "hidden": false,
+                  "query": {
+                    "datasource": {
+                      "name": "infinity"
+                    },
+                    "group": "yesoreyeram-infinity-datasource",
+                    "kind": "DataQuery",
+                    "spec": {
+                      "columns": [],
+                      "computed_columns": [],
+                      "data": "[{\"stage\": 1, \"day\": \"Fri\", \"date\": \"2026-05-08\", \"route\": \"Nessebar / Несебър – Burgas / Бургас\", \"distance_km\": 147.0, \"imatra_coin\": 7.24, \"official_url\": \"https://www.giroditalia.it/en/the-route/\", \"stage_label\": \"Stage 1 — Nessebar / Несебър – Burgas / Бургас\", \"livehub_url\": \"https://www.giroditalia.it/en/livehub/tappa/1/\", \"stage_result_url\": \"https://www.giroditalia.it/en/classifiche/di-tappa/1/\", \"route_url\": \"https://www.giroditalia.it/en/the-route/\"}, {\"stage\": 2, \"day\": \"Sat\", \"date\": \"2026-05-09\", \"route\": \"Burgas / Бургас – Veliko Tarnovo / Велико Търново\", \"distance_km\": 221.0, \"imatra_coin\": 11.78, \"official_url\": \"https://www.giroditalia.it/en/the-route/\", \"stage_label\": \"Stage 2 — Burgas / Бургас – Veliko Tarnovo / Велико Търново\", \"livehub_url\": \"https://www.giroditalia.it/en/livehub/tappa/2/\", \"stage_result_url\": \"https://www.giroditalia.it/en/classifiche/di-tappa/2/\", \"route_url\": \"https://www.giroditalia.it/en/the-route/\"}, {\"stage\": 3, \"day\": \"Sun\", \"date\": \"2026-05-10\", \"route\": \"Plovdiv / Пловдив – Sofia / София\", \"distance_km\": 175.0, \"imatra_coin\": 9.58, \"official_url\": \"https://www.giroditalia.it/en/the-route/\", \"stage_label\": \"Stage 3 — Plovdiv / Пловдив – Sofia / София\", \"livehub_url\": \"https://www.giroditalia.it/en/livehub/tappa/3/\", \"stage_result_url\": \"https://www.giroditalia.it/en/classifiche/di-tappa/3/\", \"route_url\": \"https://www.giroditalia.it/en/the-route/\"}, {\"stage\": 4, \"day\": \"Tue\", \"date\": \"2026-05-12\", \"route\": \"Catanzaro – Cosenza\", \"distance_km\": 138.0, \"imatra_coin\": 8.61, \"official_url\": \"https://www.giroditalia.it/en/the-route/\", \"stage_label\": \"Stage 4 — Catanzaro – Cosenza\", \"livehub_url\": \"https://www.giroditalia.it/en/livehub/tappa/4/\", \"stage_result_url\": \"https://www.giroditalia.it/en/classifiche/di-tappa/4/\", \"route_url\": \"https://www.giroditalia.it/en/the-route/\"}, {\"stage\": 5, \"day\": \"Wed\", \"date\": \"2026-05-13\", \"route\": \"Praia a Mare – Potenza\", \"distance_km\": 203.0, \"imatra_coin\": 11.93, \"official_url\": \"https://www.giroditalia.it/en/the-route/\", \"stage_label\": \"Stage 5 — Praia a Mare – Potenza\", \"livehub_url\": \"https://www.giroditalia.it/en/livehub/tappa/5/\", \"stage_result_url\": \"https://www.giroditalia.it/en/classifiche/di-tappa/5/\", \"route_url\": \"https://www.giroditalia.it/en/the-route/\"}, {\"stage\": 6, \"day\": \"Thu\", \"date\": \"2026-05-14\", \"route\": \"Paestum – Napoli\", \"distance_km\": 142.0, \"imatra_coin\": 7.05, \"official_url\": \"https://www.giroditalia.it/en/the-route/\", \"stage_label\": \"Stage 6 — Paestum – Napoli\", \"livehub_url\": \"https://www.giroditalia.it/en/livehub/tappa/6/\", \"stage_result_url\": \"https://www.giroditalia.it/en/classifiche/di-tappa/6/\", \"route_url\": \"https://www.giroditalia.it/en/the-route/\"}, {\"stage\": 7, \"day\": \"Fri\", \"date\": \"2026-05-15\", \"route\": \"Formia – Blockhaus\", \"distance_km\": 244.0, \"imatra_coin\": 13.45, \"official_url\": \"https://www.giroditalia.it/en/the-route/\", \"stage_label\": \"Stage 7 — Formia – Blockhaus\", \"livehub_url\": \"https://www.giroditalia.it/en/livehub/tappa/7/\", \"stage_result_url\": \"https://www.giroditalia.it/en/classifiche/di-tappa/7/\", \"route_url\": \"https://www.giroditalia.it/en/the-route/\"}, {\"stage\": 8, \"day\": \"Sat\", \"date\": \"2026-05-16\", \"route\": \"Chieti – Fermo\", \"distance_km\": 156.0, \"imatra_coin\": 9.23, \"official_url\": \"https://www.giroditalia.it/en/the-route/\", \"stage_label\": \"Stage 8 — Chieti – Fermo\", \"livehub_url\": \"https://www.giroditalia.it/en/livehub/tappa/8/\", \"stage_result_url\": \"https://www.giroditalia.it/en/classifiche/di-tappa/8/\", \"route_url\": \"https://www.giroditalia.it/en/the-route/\"}, {\"stage\": 9, \"day\": \"Sun\", \"date\": \"2026-05-17\", \"route\": \"Cervia – Corno alle Scale\", \"distance_km\": 184.0, \"imatra_coin\": 10.45, \"official_url\": \"https://www.giroditalia.it/en/the-route/\", \"stage_label\": \"Stage 9 — Cervia – Corno alle Scale\", \"livehub_url\": \"https://www.giroditalia.it/en/livehub/tappa/9/\", \"stage_result_url\": \"https://www.giroditalia.it/en/classifiche/di-tappa/9/\", \"route_url\": \"https://www.giroditalia.it/en/the-route/\"}, {\"stage\": 10, \"day\": \"Tue\", \"date\": \"2026-05-19\", \"route\": \"Viareggio – Massa TUDOR ITT\", \"distance_km\": 42.0, \"imatra_coin\": 1.9, \"official_url\": \"https://www.giroditalia.it/en/the-route/\", \"stage_label\": \"Stage 10 — Viareggio – Massa TUDOR ITT\", \"livehub_url\": \"https://www.giroditalia.it/en/livehub/tappa/10/\", \"stage_result_url\": \"https://www.giroditalia.it/en/classifiche/di-tappa/10/\", \"route_url\": \"https://www.giroditalia.it/en/the-route/\"}, {\"stage\": 11, \"day\": \"Wed\", \"date\": \"2026-05-20\", \"route\": \"Porcari (Paper District) – Chiavari\", \"distance_km\": 195.0, \"imatra_coin\": 11.07, \"official_url\": \"https://www.giroditalia.it/en/the-route/\", \"stage_label\": \"Stage 11 — Porcari (Paper District) – Chiavari\", \"livehub_url\": \"https://www.giroditalia.it/en/livehub/tappa/11/\", \"stage_result_url\": \"https://www.giroditalia.it/en/classifiche/di-tappa/11/\", \"route_url\": \"https://www.giroditalia.it/en/the-route/\"}, {\"stage\": 12, \"day\": \"Thu\", \"date\": \"2026-05-21\", \"route\": \"Imperia – Novi Ligure\", \"distance_km\": 175.0, \"imatra_coin\": 10.07, \"official_url\": \"https://www.giroditalia.it/en/the-route/\", \"stage_label\": \"Stage 12 — Imperia – Novi Ligure\", \"livehub_url\": \"https://www.giroditalia.it/en/livehub/tappa/12/\", \"stage_result_url\": \"https://www.giroditalia.it/en/classifiche/di-tappa/12/\", \"route_url\": \"https://www.giroditalia.it/en/the-route/\"}, {\"stage\": 13, \"day\": \"Fri\", \"date\": \"2026-05-22\", \"route\": \"Alessandria – Verbania\", \"distance_km\": 189.0, \"imatra_coin\": 9.86, \"official_url\": \"https://www.giroditalia.it/en/the-route/\", \"stage_label\": \"Stage 13 — Alessandria – Verbania\", \"livehub_url\": \"https://www.giroditalia.it/en/livehub/tappa/13/\", \"stage_result_url\": \"https://www.giroditalia.it/en/classifiche/di-tappa/13/\", \"route_url\": \"https://www.giroditalia.it/en/the-route/\"}, {\"stage\": 14, \"day\": \"Sat\", \"date\": \"2026-05-23\", \"route\": \"Aosta – Pila (Gressan)\", \"distance_km\": 133.0, \"imatra_coin\": 10.12, \"official_url\": \"https://www.giroditalia.it/en/the-route/\", \"stage_label\": \"Stage 14 — Aosta – Pila (Gressan)\", \"livehub_url\": \"https://www.giroditalia.it/en/livehub/tappa/14/\", \"stage_result_url\": \"https://www.giroditalia.it/en/classifiche/di-tappa/14/\", \"route_url\": \"https://www.giroditalia.it/en/the-route/\"}, {\"stage\": 15, \"day\": \"Sun\", \"date\": \"2026-05-24\", \"route\": \"Voghera – Milano\", \"distance_km\": 157.0, \"imatra_coin\": 6.57, \"official_url\": \"https://www.giroditalia.it/en/the-route/\", \"stage_label\": \"Stage 15 — Voghera – Milano\", \"livehub_url\": \"https://www.giroditalia.it/en/livehub/tappa/15/\", \"stage_result_url\": \"https://www.giroditalia.it/en/classifiche/di-tappa/15/\", \"route_url\": \"https://www.giroditalia.it/en/the-route/\"}, {\"stage\": 16, \"day\": \"Tue\", \"date\": \"2026-05-26\", \"route\": \"Bellinzona – Carì\", \"distance_km\": 113.0, \"imatra_coin\": 8.86, \"official_url\": \"https://www.giroditalia.it/en/the-route/\", \"stage_label\": \"Stage 16 — Bellinzona – Carì\", \"livehub_url\": \"https://www.giroditalia.it/en/livehub/tappa/16/\", \"stage_result_url\": \"https://www.giroditalia.it/en/classifiche/di-tappa/16/\", \"route_url\": \"https://www.giroditalia.it/en/the-route/\"}, {\"stage\": 17, \"day\": \"Wed\", \"date\": \"2026-05-27\", \"route\": \"Cassano d'Adda – Andalo\", \"distance_km\": 202.0, \"imatra_coin\": 11.53, \"official_url\": \"https://www.giroditalia.it/en/the-route/\", \"stage_label\": \"Stage 17 — Cassano d'Adda – Andalo\", \"livehub_url\": \"https://www.giroditalia.it/en/livehub/tappa/17/\", \"stage_result_url\": \"https://www.giroditalia.it/en/classifiche/di-tappa/17/\", \"route_url\": \"https://www.giroditalia.it/en/the-route/\"}, {\"stage\": 18, \"day\": \"Thu\", \"date\": \"2026-05-28\", \"route\": \"Fai della Paganella – Pieve di Soligo\", \"distance_km\": 171.0, \"imatra_coin\": 9.8, \"official_url\": \"https://www.giroditalia.it/en/the-route/\", \"stage_label\": \"Stage 18 — Fai della Paganella – Pieve di Soligo\", \"livehub_url\": \"https://www.giroditalia.it/en/livehub/tappa/18/\", \"stage_result_url\": \"https://www.giroditalia.it/en/classifiche/di-tappa/18/\", \"route_url\": \"https://www.giroditalia.it/en/the-route/\"}, {\"stage\": 19, \"day\": \"Fri\", \"date\": \"2026-05-29\", \"route\": \"Feltre – Alleghe (Piani di Pezzè)\", \"distance_km\": 151.0, \"imatra_coin\": 10.86, \"official_url\": \"https://www.giroditalia.it/en/the-route/\", \"stage_label\": \"Stage 19 — Feltre – Alleghe (Piani di Pezzè)\", \"livehub_url\": \"https://www.giroditalia.it/en/livehub/tappa/19/\", \"stage_result_url\": \"https://www.giroditalia.it/en/classifiche/di-tappa/19/\", \"route_url\": \"https://www.giroditalia.it/en/the-route/\"}, {\"stage\": 20, \"day\": \"Sat\", \"date\": \"2026-05-30\", \"route\": \"Gemona del Friuli 1976-2026 – Piancavallo\", \"distance_km\": 200.0, \"imatra_coin\": 11.68, \"official_url\": \"https://www.giroditalia.it/en/the-route/\", \"stage_label\": \"Stage 20 — Gemona del Friuli 1976-2026 – Piancavallo\", \"livehub_url\": \"https://www.giroditalia.it/en/livehub/tappa/20/\", \"stage_result_url\": \"https://www.giroditalia.it/en/classifiche/di-tappa/20/\", \"route_url\": \"https://www.giroditalia.it/en/the-route/\"}, {\"stage\": 21, \"day\": \"Sun\", \"date\": \"2026-05-31\", \"route\": \"Roma – Roma\", \"distance_km\": 131.0, \"imatra_coin\": 6.73, \"official_url\": \"https://www.giroditalia.it/en/the-route/\", \"stage_label\": \"Stage 21 — Roma – Roma\", \"livehub_url\": \"https://www.giroditalia.it/en/livehub/tappa/21/\", \"stage_result_url\": \"https://www.giroditalia.it/en/classifiche/di-tappa/21/\", \"route_url\": \"https://www.giroditalia.it/en/the-route/\"}]",
+                      "filters": [],
+                      "format": "table",
+                      "global_query_id": "",
+                      "parser": "uql",
+                      "query_mode": "standard",
+                      "root_selector": "",
+                      "source": "inline",
+                      "type": "json",
+                      "uql": "parse-json\n| order by \"distance_km\" desc\n| project \"Stage\"=\"stage_label\", \"Date\"=\"date\", \"Distance km\"=\"distance_km\", \"Imatra Coin\"=\"imatra_coin\"",
+                      "url": "",
+                      "url_options": {
+                        "body_content_type": "",
+                        "body_graphql_query": "",
+                        "body_graphql_variables": "",
+                        "body_type": "",
+                        "data": "",
+                        "headers": [],
+                        "method": "GET",
+                        "params": []
+                      }
+                    },
+                    "version": "v0"
+                  },
+                  "refId": "A"
+                }
+              }
+            ],
+            "queryOptions": {},
+            "transformations": []
+          }
+        },
+        "description": "Stages sorted by distance.",
+        "id": 302,
+        "links": [],
+        "title": "Stage distance ranking",
+        "vizConfig": {
+          "group": "table",
+          "kind": "VizConfig",
+          "spec": {
+            "fieldConfig": {
+              "defaults": {
+                "custom": {
+                  "align": "auto",
+                  "cellOptions": {
+                    "type": "auto"
+                  },
+                  "filterable": true,
+                  "inspect": false
+                },
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "options": {
+              "cellHeight": "sm",
+              "footer": {
+                "fields": "",
+                "reducer": [
+                  "sum"
+                ],
+                "show": false
+              },
+              "showHeader": true,
+              "sortBy": []
+            }
+          },
+          "version": "12.4.0"
+        }
+      }
+    },
+    "panel-303": {
+      "kind": "Panel",
+      "spec": {
+        "data": {
+          "kind": "QueryGroup",
+          "spec": {
+            "queries": [
+              {
+                "kind": "PanelQuery",
+                "spec": {
+                  "hidden": false,
+                  "query": {
+                    "datasource": {
+                      "name": "infinity"
+                    },
+                    "group": "yesoreyeram-infinity-datasource",
+                    "kind": "DataQuery",
+                    "spec": {
+                      "columns": [
+                        {
+                          "selector": "rank",
+                          "text": "Rank",
+                          "type": "number"
+                        },
+                        {
+                          "selector": "team",
+                          "text": "Team",
+                          "type": "string"
+                        },
+                        {
+                          "selector": "time",
+                          "text": "Time",
+                          "type": "string"
+                        },
+                        {
+                          "selector": "gap",
+                          "text": "Gap",
+                          "type": "string"
+                        }
+                      ],
+                      "computed_columns": [],
+                      "data": "[{\"rank\": 1, \"team\": \"EF EDUCATION - EASYPOST\", \"time\": \"48:57:03\", \"gap\": \"0:00\", \"source\": \"Official Giro classifications\"}, {\"rank\": 2, \"team\": \"TUDOR PRO CYCLING TEAM\", \"time\": \"48:57:03\", \"gap\": \"0:00\", \"source\": \"Official Giro classifications\"}, {\"rank\": 3, \"team\": \"MOVISTAR TEAM\", \"time\": \"48:57:03\", \"gap\": \"0:00\", \"source\": \"Official Giro classifications\"}, {\"rank\": 4, \"team\": \"RED BULL - BORA - HANSGROHE\", \"time\": \"48:57:03\", \"gap\": \"0:00\", \"source\": \"Official Giro classifications\"}, {\"rank\": 5, \"team\": \"LIDL-TREK\", \"time\": \"48:58:04\", \"gap\": \"01:01\", \"source\": \"Official Giro classifications\"}]",
+                      "filters": [],
+                      "format": "table",
+                      "global_query_id": "",
+                      "parser": "backend",
+                      "query_mode": "standard",
+                      "root_selector": "",
+                      "source": "inline",
+                      "type": "json",
+                      "url": "",
+                      "url_options": {
+                        "body_content_type": "",
+                        "body_graphql_query": "",
+                        "body_graphql_variables": "",
+                        "body_type": "",
+                        "data": "",
+                        "headers": [],
+                        "method": "GET",
+                        "params": []
+                      }
+                    },
+                    "version": "v0"
+                  },
+                  "refId": "A"
+                }
+              }
+            ],
+            "queryOptions": {},
+            "transformations": []
+          }
+        },
+        "description": "Top teams in team classification.",
+        "id": 303,
+        "links": [],
+        "title": "Team classification top 5",
+        "vizConfig": {
+          "group": "table",
+          "kind": "VizConfig",
+          "spec": {
+            "fieldConfig": {
+              "defaults": {
+                "custom": {
+                  "align": "auto",
+                  "cellOptions": {
+                    "type": "auto"
+                  },
+                  "filterable": true,
+                  "inspect": false
+                },
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "options": {
+              "cellHeight": "sm",
+              "footer": {
+                "fields": "",
+                "reducer": [
+                  "sum"
+                ],
+                "show": false
+              },
+              "showHeader": true,
+              "sortBy": []
+            }
+          },
+          "version": "12.4.0"
+        }
+      }
+    },
+    "panel-304": {
+      "kind": "Panel",
+      "spec": {
+        "data": {
+          "kind": "QueryGroup",
+          "spec": {
+            "queries": [
+              {
+                "kind": "PanelQuery",
+                "spec": {
+                  "hidden": false,
+                  "query": {
+                    "datasource": {
+                      "name": "infinity"
+                    },
+                    "group": "yesoreyeram-infinity-datasource",
+                    "kind": "DataQuery",
+                    "spec": {
+                      "columns": [
+                        {
+                          "selector": "rank",
+                          "text": "Rank",
+                          "type": "number"
+                        },
+                        {
+                          "selector": "rider",
+                          "text": "Rider",
+                          "type": "string"
+                        },
+                        {
+                          "selector": "team",
+                          "text": "Team",
+                          "type": "string"
+                        },
+                        {
+                          "selector": "points",
+                          "text": "Points",
+                          "type": "number"
+                        }
+                      ],
+                      "computed_columns": [],
+                      "data": "[{\"rank\": 1, \"rider\": \"Paul MAGNIER\", \"team\": \"SOUDAL QUICK-STEP\", \"points\": 105}, {\"rank\": 2, \"rider\": \"Jonathan MILAN\", \"team\": \"LIDL-TREK\", \"points\": 64}, {\"rank\": 3, \"rider\": \"Jhonatan NARVAEZ\", \"team\": \"UAE TEAM EMIRATES XRG\", \"points\": 50}, {\"rank\": 4, \"rider\": \"Tobias Lund ANDRESEN\", \"team\": \"DECATHLON CMA CGM TEAM\", \"points\": 42}, {\"rank\": 5, \"rider\": \"Giulio CICCONE\", \"team\": \"LIDL-TREK\", \"points\": 37}]",
+                      "filters": [],
+                      "format": "table",
+                      "global_query_id": "",
+                      "parser": "backend",
+                      "query_mode": "standard",
+                      "root_selector": "",
+                      "source": "inline",
+                      "type": "json",
+                      "url": "",
+                      "url_options": {
+                        "body_content_type": "",
+                        "body_graphql_query": "",
+                        "body_graphql_variables": "",
+                        "body_type": "",
+                        "data": "",
+                        "headers": [],
+                        "method": "GET",
+                        "params": []
+                      }
+                    },
+                    "version": "v0"
+                  },
+                  "refId": "A"
+                }
+              }
+            ],
+            "queryOptions": {},
+            "transformations": []
+          }
+        },
+        "description": "Points classification top five.",
+        "id": 304,
+        "links": [],
+        "title": "Points top 5",
+        "vizConfig": {
+          "group": "table",
+          "kind": "VizConfig",
+          "spec": {
+            "fieldConfig": {
+              "defaults": {
+                "custom": {
+                  "align": "auto",
+                  "cellOptions": {
+                    "type": "auto"
+                  },
+                  "filterable": true,
+                  "inspect": false
+                },
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "options": {
+              "cellHeight": "sm",
+              "footer": {
+                "fields": "",
+                "reducer": [
+                  "sum"
+                ],
+                "show": false
+              },
+              "showHeader": true,
+              "sortBy": []
+            }
+          },
+          "version": "12.4.0"
+        }
+      }
+    },
+    "panel-305": {
+      "kind": "Panel",
+      "spec": {
+        "data": {
+          "kind": "QueryGroup",
+          "spec": {
+            "queries": [
+              {
+                "kind": "PanelQuery",
+                "spec": {
+                  "hidden": false,
+                  "query": {
+                    "datasource": {
+                      "name": "infinity"
+                    },
+                    "group": "yesoreyeram-infinity-datasource",
+                    "kind": "DataQuery",
+                    "spec": {
+                      "columns": [
+                        {
+                          "selector": "rank",
+                          "text": "Rank",
+                          "type": "number"
+                        },
+                        {
+                          "selector": "rider",
+                          "text": "Rider",
+                          "type": "string"
+                        },
+                        {
+                          "selector": "team",
+                          "text": "Team",
+                          "type": "string"
+                        },
+                        {
+                          "selector": "points",
+                          "text": "Points",
+                          "type": "number"
+                        }
+                      ],
+                      "computed_columns": [],
+                      "data": "[{\"rank\": 1, \"rider\": \"Diego Pablo SEVILLA\", \"team\": \"TEAM POLTI VISITMALTA\", \"points\": 42}, {\"rank\": 2, \"rider\": \"Nelson OLIVEIRA\", \"team\": \"MOVISTAR TEAM\", \"points\": 18}, {\"rank\": 3, \"rider\": \"Manuele TAROZZI\", \"team\": \"BARDIANI CSF 7 SABER\", \"points\": 12}, {\"rank\": 4, \"rider\": \"Jonas VINGEGAARD\", \"team\": \"TEAM VISMA - LEASE A BIKE\", \"points\": 11}, {\"rank\": 5, \"rider\": \"Orluis AULAR\", \"team\": \"MOVISTAR TEAM\", \"points\": 8}]",
+                      "filters": [],
+                      "format": "table",
+                      "global_query_id": "",
+                      "parser": "backend",
+                      "query_mode": "standard",
+                      "root_selector": "",
+                      "source": "inline",
+                      "type": "json",
+                      "url": "",
+                      "url_options": {
+                        "body_content_type": "",
+                        "body_graphql_query": "",
+                        "body_graphql_variables": "",
+                        "body_type": "",
+                        "data": "",
+                        "headers": [],
+                        "method": "GET",
+                        "params": []
+                      }
+                    },
+                    "version": "v0"
+                  },
+                  "refId": "A"
+                }
+              }
+            ],
+            "queryOptions": {},
+            "transformations": []
+          }
+        },
+        "description": "Mountains classification top five.",
+        "id": 305,
+        "links": [],
+        "title": "Mountains top 5",
+        "vizConfig": {
+          "group": "table",
+          "kind": "VizConfig",
+          "spec": {
+            "fieldConfig": {
+              "defaults": {
+                "custom": {
+                  "align": "auto",
+                  "cellOptions": {
+                    "type": "auto"
+                  },
+                  "filterable": true,
+                  "inspect": false
+                },
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "options": {
+              "cellHeight": "sm",
+              "footer": {
+                "fields": "",
+                "reducer": [
+                  "sum"
+                ],
+                "show": false
+              },
+              "showHeader": true,
+              "sortBy": []
+            }
+          },
+          "version": "12.4.0"
+        }
+      }
+    },
+    "panel-306": {
+      "kind": "Panel",
+      "spec": {
+        "data": {
+          "kind": "QueryGroup",
+          "spec": {
+            "queries": [
+              {
+                "kind": "PanelQuery",
+                "spec": {
+                  "hidden": false,
+                  "query": {
+                    "datasource": {
+                      "name": "infinity"
+                    },
+                    "group": "yesoreyeram-infinity-datasource",
+                    "kind": "DataQuery",
+                    "spec": {
+                      "columns": [
+                        {
+                          "selector": "rank",
+                          "text": "Rank",
+                          "type": "number"
+                        },
+                        {
+                          "selector": "rider",
+                          "text": "Rider",
+                          "type": "string"
+                        },
+                        {
+                          "selector": "team",
+                          "text": "Team",
+                          "type": "string"
+                        },
+                        {
+                          "selector": "time",
+                          "text": "Time",
+                          "type": "string"
+                        },
+                        {
+                          "selector": "gap",
+                          "text": "Gap",
+                          "type": "string"
+                        }
+                      ],
+                      "computed_columns": [],
+                      "data": "[{\"rank\": 1, \"rider\": \"Jan CHRISTEN\", \"team\": \"UAE TEAM EMIRATES XRG\", \"time\": \"16:18:55\", \"gap\": \"0:00\"}, {\"rank\": 2, \"rider\": \"Giulio PELLIZZARI\", \"team\": \"RED BULL - BORA - HANSGROHE\", \"time\": \"16:18:57\", \"gap\": \"0:02\"}, {\"rank\": 3, \"rider\": \"Lennert VAN EETVELT\", \"team\": \"LOTTO INTERMARCHÉ\", \"time\": \"16:19:01\", \"gap\": \"0:06\"}, {\"rank\": 4, \"rider\": \"Markel BELOKI\", \"team\": \"EF EDUCATION - EASYPOST\", \"time\": \"16:19:01\", \"gap\": \"0:06\"}, {\"rank\": 5, \"rider\": \"Mathys RONDEL\", \"team\": \"TUDOR PRO CYCLING TEAM\", \"time\": \"16:19:01\", \"gap\": \"0:06\"}]",
+                      "filters": [],
+                      "format": "table",
+                      "global_query_id": "",
+                      "parser": "backend",
+                      "query_mode": "standard",
+                      "root_selector": "",
+                      "source": "inline",
+                      "type": "json",
+                      "url": "",
+                      "url_options": {
+                        "body_content_type": "",
+                        "body_graphql_query": "",
+                        "body_graphql_variables": "",
+                        "body_type": "",
+                        "data": "",
+                        "headers": [],
+                        "method": "GET",
+                        "params": []
+                      }
+                    },
+                    "version": "v0"
+                  },
+                  "refId": "A"
+                }
+              }
+            ],
+            "queryOptions": {},
+            "transformations": []
+          }
+        },
+        "description": "Youth classification top five.",
+        "id": 306,
+        "links": [],
+        "title": "Youth top 5",
+        "vizConfig": {
+          "group": "table",
+          "kind": "VizConfig",
+          "spec": {
+            "fieldConfig": {
+              "defaults": {
+                "custom": {
+                  "align": "auto",
+                  "cellOptions": {
+                    "type": "auto"
+                  },
+                  "filterable": true,
+                  "inspect": false
+                },
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "options": {
+              "cellHeight": "sm",
+              "footer": {
+                "fields": "",
+                "reducer": [
+                  "sum"
+                ],
+                "show": false
+              },
+              "showHeader": true,
+              "sortBy": []
+            }
+          },
+          "version": "12.4.0"
+        }
+      }
+    },
+    "panel-307": {
+      "kind": "Panel",
+      "spec": {
+        "data": {
+          "kind": "QueryGroup",
+          "spec": {
+            "queries": [
+              {
+                "kind": "PanelQuery",
+                "spec": {
+                  "hidden": false,
+                  "query": {
+                    "datasource": {
+                      "name": "infinity"
+                    },
+                    "group": "yesoreyeram-infinity-datasource",
+                    "kind": "DataQuery",
+                    "spec": {
+                      "columns": [],
+                      "computed_columns": [],
+                      "data": "",
+                      "filters": [],
+                      "format": "table",
+                      "global_query_id": "",
+                      "parser": "uql",
+                      "query_mode": "standard",
+                      "root_selector": "",
+                      "source": "url",
+                      "type": "json",
+                      "uql": "parse-json\n| scope \"timeline.meteo\"\n| project \"KM\"=\"km\", \"Location\"=\"location_name\", \"Weather\"=\"desc\", \"Temperature\"=\"temp\", \"Wind\"=\"wind\"\n",
+                      "url": "${giro_base}/livefeed/tappa/${stage}/",
+                      "url_options": {
+                        "body_content_type": "",
+                        "body_graphql_query": "",
+                        "body_graphql_variables": "",
+                        "body_type": "",
+                        "data": "",
+                        "headers": [
+                          {
+                            "key": "User-Agent",
+                            "value": "Grafana Infinity dashboard"
+                          }
+                        ],
+                        "method": "GET",
+                        "params": []
+                      }
+                    },
+                    "version": "v0"
+                  },
+                  "refId": "A"
+                }
+              }
+            ],
+            "queryOptions": {},
+            "transformations": []
+          }
+        },
+        "description": "Weather checkpoints returned by the official livefeed.",
+        "id": 307,
+        "links": [],
+        "title": "Stage weather checkpoints",
+        "vizConfig": {
+          "group": "table",
+          "kind": "VizConfig",
+          "spec": {
+            "fieldConfig": {
+              "defaults": {
+                "custom": {
+                  "align": "auto",
+                  "cellOptions": {
+                    "type": "auto"
+                  },
+                  "filterable": true,
+                  "inspect": false
+                },
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "options": {
+              "cellHeight": "sm",
+              "footer": {
+                "fields": "",
+                "reducer": [
+                  "sum"
+                ],
+                "show": false
+              },
+              "showHeader": true,
+              "sortBy": []
+            }
+          },
+          "version": "12.4.0"
+        }
+      }
+    },
+    "panel-308": {
+      "kind": "Panel",
+      "spec": {
+        "data": {
+          "kind": "QueryGroup",
+          "spec": {
+            "queries": [
+              {
+                "kind": "PanelQuery",
+                "spec": {
+                  "hidden": false,
+                  "query": {
+                    "datasource": {
+                      "name": "infinity"
+                    },
+                    "group": "yesoreyeram-infinity-datasource",
+                    "kind": "DataQuery",
+                    "spec": {
+                      "columns": [
+                        {
+                          "selector": "Endpoint",
+                          "text": "Endpoint",
+                          "type": "string"
+                        },
+                        {
+                          "selector": "Best for",
+                          "text": "Best for",
+                          "type": "string"
+                        },
+                        {
+                          "selector": "Refresh suggestion",
+                          "text": "Refresh suggestion",
+                          "type": "string"
+                        },
+                        {
+                          "selector": "Grafana use",
+                          "text": "Grafana use",
+                          "type": "string"
+                        },
+                        {
+                          "selector": "URL",
+                          "text": "URL",
+                          "type": "string"
+                        }
+                      ],
+                      "computed_columns": [],
+                      "data": "[{\"Endpoint\": \"/en/headlines/\", \"URL\": \"https://www.giroditalia.it/en/headlines/\", \"Best for\": \"Latest official news/headlines cards\", \"Refresh suggestion\": \"60s during stage\", \"Grafana use\": \"Table of latest updates, breaking flag, event feed\"}, {\"Endpoint\": \"/en/livefeed/tappa/${stage}/\", \"URL\": \"https://www.giroditalia.it/en/livefeed/tappa/${stage}/\", \"Best for\": \"Live stage metadata, groups, rider lists, weather, refresh interval\", \"Refresh suggestion\": \"Use header.time_refresh, normally 60000 ms\", \"Grafana use\": \"Stats, current front group, live riders, weather table\"}, {\"Endpoint\": \"/en/classifiche/\", \"URL\": \"https://www.giroditalia.it/en/classifiche/\", \"Best for\": \"Official GC, jerseys, points, mountains, youth, team standings\", \"Refresh suggestion\": \"2-5m during/after stage\", \"Grafana use\": \"Top 5 tables and leader KPIs\"}, {\"Endpoint\": \"/en/classifiche/di-tappa/${stage}/\", \"URL\": \"https://www.giroditalia.it/en/classifiche/di-tappa/${stage}/\", \"Best for\": \"Stage result after finish\", \"Refresh suggestion\": \"5-15m after expected finish\", \"Grafana use\": \"Stage result table/source inspection\"}]",
+                      "filters": [],
+                      "format": "table",
+                      "global_query_id": "",
+                      "parser": "backend",
+                      "query_mode": "standard",
+                      "root_selector": "",
+                      "source": "inline",
+                      "type": "json",
+                      "url": "",
+                      "url_options": {
+                        "body_content_type": "",
+                        "body_graphql_query": "",
+                        "body_graphql_variables": "",
+                        "body_type": "",
+                        "data": "",
+                        "headers": [],
+                        "method": "GET",
+                        "params": []
+                      }
+                    },
+                    "version": "v0"
+                  },
+                  "refId": "A"
+                }
+              }
+            ],
+            "queryOptions": {},
+            "transformations": []
+          }
+        },
+        "description": "Documented source matrix for this dashboard.",
+        "id": 308,
+        "links": [],
+        "title": "Official JSON/API endpoint matrix",
+        "vizConfig": {
+          "group": "table",
+          "kind": "VizConfig",
+          "spec": {
+            "fieldConfig": {
+              "defaults": {
+                "custom": {
+                  "align": "auto",
+                  "cellOptions": {
+                    "type": "auto"
+                  },
+                  "filterable": true,
+                  "inspect": false
+                },
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "options": {
+              "cellHeight": "sm",
+              "footer": {
+                "fields": "",
+                "reducer": [
+                  "sum"
+                ],
+                "show": false
+              },
+              "showHeader": true,
+              "sortBy": []
+            }
+          },
+          "version": "12.4.0"
+        }
+      }
+    },
+    "panel-309": {
+      "kind": "Panel",
+      "spec": {
+        "data": {
+          "kind": "QueryGroup",
+          "spec": {
+            "queries": [
+              {
+                "kind": "PanelQuery",
+                "spec": {
+                  "hidden": false,
+                  "query": {
+                    "datasource": {
+                      "name": "infinity"
+                    },
+                    "group": "yesoreyeram-infinity-datasource",
+                    "kind": "DataQuery",
+                    "spec": {
+                      "columns": [
+                        {
+                          "selector": "Purpose",
+                          "text": "Purpose",
+                          "type": "string"
+                        },
+                        {
+                          "selector": "Source",
+                          "text": "Source",
+                          "type": "string"
+                        },
+                        {
+                          "selector": "URL",
+                          "text": "URL",
+                          "type": "string"
+                        }
+                      ],
+                      "computed_columns": [],
+                      "data": "[{\"Source\": \"Official route\", \"URL\": \"https://www.giroditalia.it/en/the-route/\", \"Purpose\": \"Stage list, dates, route names, distance\"}, {\"Source\": \"Official classifications\", \"URL\": \"https://www.giroditalia.it/en/classifiche/\", \"Purpose\": \"GC and jersey standings\"}, {\"Source\": \"Official selected stage result\", \"URL\": \"https://www.giroditalia.it/en/classifiche/di-tappa/${stage}/\", \"Purpose\": \"Stage result page for selected stage\"}, {\"Source\": \"Official selected stage livehub\", \"URL\": \"https://www.giroditalia.it/en/livehub/tappa/${stage}/\", \"Purpose\": \"Live / stage update page for selected stage\"}, {\"Source\": \"ProCyclingStats 2026 Giro\", \"URL\": \"https://www.procyclingstats.com/race/giro-d-italia/2026\", \"Purpose\": \"Fallback/enrichment source\"}]",
+                      "filters": [],
+                      "format": "table",
+                      "global_query_id": "",
+                      "parser": "backend",
+                      "query_mode": "standard",
+                      "root_selector": "",
+                      "source": "inline",
+                      "type": "json",
+                      "url": "",
+                      "url_options": {
+                        "body_content_type": "",
+                        "body_graphql_query": "",
+                        "body_graphql_variables": "",
+                        "body_type": "",
+                        "data": "",
+                        "headers": [],
+                        "method": "GET",
+                        "params": []
+                      }
+                    },
+                    "version": "v0"
+                  },
+                  "refId": "A"
+                }
+              }
+            ],
+            "queryOptions": {},
+            "transformations": []
+          }
+        },
+        "description": "Useful links for route, standings and fallback checks.",
+        "id": 309,
+        "links": [],
+        "title": "External source links",
+        "vizConfig": {
+          "group": "table",
+          "kind": "VizConfig",
+          "spec": {
+            "fieldConfig": {
+              "defaults": {
+                "custom": {
+                  "align": "auto",
+                  "cellOptions": {
+                    "type": "auto"
+                  },
+                  "filterable": true,
+                  "inspect": false
+                },
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "options": {
+              "cellHeight": "sm",
+              "footer": {
+                "fields": "",
+                "reducer": [
+                  "sum"
+                ],
+                "show": false
+              },
+              "showHeader": true,
+              "sortBy": []
+            }
+          },
+          "version": "12.4.0"
+        }
+      }
+    }
+  },
+  "layout": {
+    "kind": "RowsLayout",
+    "spec": {
+      "rows": [
+        {
+          "kind": "RowsLayoutRow",
+          "spec": {
+            "collapse": false,
+            "layout": {
+              "kind": "GridLayout",
+              "spec": {
+                "items": [
+                  {
+                    "kind": "GridLayoutItem",
+                    "spec": {
+                      "element": {
+                        "kind": "ElementReference",
+                        "name": "panel-10"
+                      },
+                      "height": 4,
+                      "width": 4,
+                      "x": 0,
+                      "y": 0
+                    }
+                  },
+                  {
+                    "kind": "GridLayoutItem",
+                    "spec": {
+                      "element": {
+                        "kind": "ElementReference",
+                        "name": "panel-11"
+                      },
+                      "height": 4,
+                      "width": 4,
+                      "x": 4,
+                      "y": 0
+                    }
+                  },
+                  {
+                    "kind": "GridLayoutItem",
+                    "spec": {
+                      "element": {
+                        "kind": "ElementReference",
+                        "name": "panel-12"
+                      },
+                      "height": 4,
+                      "width": 4,
+                      "x": 8,
+                      "y": 0
+                    }
+                  },
+                  {
+                    "kind": "GridLayoutItem",
+                    "spec": {
+                      "element": {
+                        "kind": "ElementReference",
+                        "name": "panel-13"
+                      },
+                      "height": 4,
+                      "width": 4,
+                      "x": 12,
+                      "y": 0
+                    }
+                  },
+                  {
+                    "kind": "GridLayoutItem",
+                    "spec": {
+                      "element": {
+                        "kind": "ElementReference",
+                        "name": "panel-14"
+                      },
+                      "height": 4,
+                      "width": 4,
+                      "x": 16,
+                      "y": 0
+                    }
+                  },
+                  {
+                    "kind": "GridLayoutItem",
+                    "spec": {
+                      "element": {
+                        "kind": "ElementReference",
+                        "name": "panel-15"
+                      },
+                      "height": 4,
+                      "width": 4,
+                      "x": 20,
+                      "y": 0
+                    }
+                  },
+                  {
+                    "kind": "GridLayoutItem",
+                    "spec": {
+                      "element": {
+                        "kind": "ElementReference",
+                        "name": "panel-16"
+                      },
+                      "height": 8,
+                      "width": 18,
+                      "x": 0,
+                      "y": 4
+                    }
+                  },
+                  {
+                    "kind": "GridLayoutItem",
+                    "spec": {
+                      "element": {
+                        "kind": "ElementReference",
+                        "name": "panel-17"
+                      },
+                      "height": 8,
+                      "width": 6,
+                      "x": 18,
+                      "y": 4
+                    }
+                  }
+                ]
+              }
+            },
+            "title": "🚴 Live race now — what is happening right now"
+          }
+        },
+        {
+          "kind": "RowsLayoutRow",
+          "spec": {
+            "collapse": false,
+            "layout": {
+              "kind": "GridLayout",
+              "spec": {
+                "items": [
+                  {
+                    "kind": "GridLayoutItem",
+                    "spec": {
+                      "element": {
+                        "kind": "ElementReference",
+                        "name": "panel-101"
+                      },
+                      "height": 4,
+                      "width": 4,
+                      "x": 0,
+                      "y": 0
+                    }
+                  },
+                  {
+                    "kind": "GridLayoutItem",
+                    "spec": {
+                      "element": {
+                        "kind": "ElementReference",
+                        "name": "panel-102"
+                      },
+                      "height": 4,
+                      "width": 4,
+                      "x": 4,
+                      "y": 0
+                    }
+                  },
+                  {
+                    "kind": "GridLayoutItem",
+                    "spec": {
+                      "element": {
+                        "kind": "ElementReference",
+                        "name": "panel-103"
+                      },
+                      "height": 4,
+                      "width": 5,
+                      "x": 8,
+                      "y": 0
+                    }
+                  },
+                  {
+                    "kind": "GridLayoutItem",
+                    "spec": {
+                      "element": {
+                        "kind": "ElementReference",
+                        "name": "panel-104"
+                      },
+                      "height": 4,
+                      "width": 4,
+                      "x": 13,
+                      "y": 0
+                    }
+                  },
+                  {
+                    "kind": "GridLayoutItem",
+                    "spec": {
+                      "element": {
+                        "kind": "ElementReference",
+                        "name": "panel-105"
+                      },
+                      "height": 4,
+                      "width": 4,
+                      "x": 17,
+                      "y": 0
+                    }
+                  },
+                  {
+                    "kind": "GridLayoutItem",
+                    "spec": {
+                      "element": {
+                        "kind": "ElementReference",
+                        "name": "panel-106"
+                      },
+                      "height": 4,
+                      "width": 3,
+                      "x": 21,
+                      "y": 0
+                    }
+                  },
+                  {
+                    "kind": "GridLayoutItem",
+                    "spec": {
+                      "element": {
+                        "kind": "ElementReference",
+                        "name": "panel-107"
+                      },
+                      "height": 7,
+                      "width": 12,
+                      "x": 0,
+                      "y": 4
+                    }
+                  },
+                  {
+                    "kind": "GridLayoutItem",
+                    "spec": {
+                      "element": {
+                        "kind": "ElementReference",
+                        "name": "panel-108"
+                      },
+                      "height": 7,
+                      "width": 12,
+                      "x": 12,
+                      "y": 4
+                    }
+                  }
+                ]
+              }
+            },
+            "title": "🏆 Race leaders & overall standings"
+          }
+        },
+        {
+          "kind": "RowsLayoutRow",
+          "spec": {
+            "collapse": false,
+            "layout": {
+              "kind": "GridLayout",
+              "spec": {
+                "items": [
+                  {
+                    "kind": "GridLayoutItem",
+                    "spec": {
+                      "element": {
+                        "kind": "ElementReference",
+                        "name": "panel-201"
+                      },
+                      "height": 2,
+                      "width": 24,
+                      "x": 0,
+                      "y": 0
+                    }
+                  },
+                  {
+                    "kind": "GridLayoutItem",
+                    "spec": {
+                      "element": {
+                        "kind": "ElementReference",
+                        "name": "panel-202"
+                      },
+                      "height": 4,
+                      "width": 5,
+                      "x": 0,
+                      "y": 2
+                    }
+                  },
+                  {
+                    "kind": "GridLayoutItem",
+                    "spec": {
+                      "element": {
+                        "kind": "ElementReference",
+                        "name": "panel-203"
+                      },
+                      "height": 4,
+                      "width": 4,
+                      "x": 5,
+                      "y": 2
+                    }
+                  },
+                  {
+                    "kind": "GridLayoutItem",
+                    "spec": {
+                      "element": {
+                        "kind": "ElementReference",
+                        "name": "panel-204"
+                      },
+                      "height": 4,
+                      "width": 4,
+                      "x": 9,
+                      "y": 2
+                    }
+                  },
+                  {
+                    "kind": "GridLayoutItem",
+                    "spec": {
+                      "element": {
+                        "kind": "ElementReference",
+                        "name": "panel-205"
+                      },
+                      "height": 4,
+                      "width": 4,
+                      "x": 13,
+                      "y": 2
+                    }
+                  },
+                  {
+                    "kind": "GridLayoutItem",
+                    "spec": {
+                      "element": {
+                        "kind": "ElementReference",
+                        "name": "panel-206"
+                      },
+                      "height": 4,
+                      "width": 3,
+                      "x": 17,
+                      "y": 2
+                    }
+                  },
+                  {
+                    "kind": "GridLayoutItem",
+                    "spec": {
+                      "element": {
+                        "kind": "ElementReference",
+                        "name": "panel-207"
+                      },
+                      "height": 4,
+                      "width": 4,
+                      "x": 20,
+                      "y": 2
+                    }
+                  },
+                  {
+                    "kind": "GridLayoutItem",
+                    "spec": {
+                      "element": {
+                        "kind": "ElementReference",
+                        "name": "panel-208"
+                      },
+                      "height": 7,
+                      "width": 12,
+                      "x": 0,
+                      "y": 6
+                    }
+                  },
+                  {
+                    "kind": "GridLayoutItem",
+                    "spec": {
+                      "element": {
+                        "kind": "ElementReference",
+                        "name": "panel-209"
+                      },
+                      "height": 7,
+                      "width": 12,
+                      "x": 12,
+                      "y": 6
+                    }
+                  },
+                  {
+                    "kind": "GridLayoutItem",
+                    "spec": {
+                      "element": {
+                        "kind": "ElementReference",
+                        "name": "panel-210"
+                      },
+                      "height": 5,
+                      "width": 24,
+                      "x": 0,
+                      "y": 13
+                    }
+                  }
+                ]
+              }
+            },
+            "title": "🔎 INEOS / Netcompany Ineos focus"
+          }
+        },
+        {
+          "kind": "RowsLayoutRow",
+          "spec": {
+            "collapse": true,
+            "layout": {
+              "kind": "GridLayout",
+              "spec": {
+                "items": [
+                  {
+                    "kind": "GridLayoutItem",
+                    "spec": {
+                      "element": {
+                        "kind": "ElementReference",
+                        "name": "panel-301"
+                      },
+                      "height": 12,
+                      "width": 24,
+                      "x": 0,
+                      "y": 0
+                    }
+                  },
+                  {
+                    "kind": "GridLayoutItem",
+                    "spec": {
+                      "element": {
+                        "kind": "ElementReference",
+                        "name": "panel-302"
+                      },
+                      "height": 9,
+                      "width": 12,
+                      "x": 0,
+                      "y": 12
+                    }
+                  },
+                  {
+                    "kind": "GridLayoutItem",
+                    "spec": {
+                      "element": {
+                        "kind": "ElementReference",
+                        "name": "panel-303"
+                      },
+                      "height": 9,
+                      "width": 12,
+                      "x": 12,
+                      "y": 12
+                    }
+                  },
+                  {
+                    "kind": "GridLayoutItem",
+                    "spec": {
+                      "element": {
+                        "kind": "ElementReference",
+                        "name": "panel-304"
+                      },
+                      "height": 8,
+                      "width": 8,
+                      "x": 0,
+                      "y": 21
+                    }
+                  },
+                  {
+                    "kind": "GridLayoutItem",
+                    "spec": {
+                      "element": {
+                        "kind": "ElementReference",
+                        "name": "panel-305"
+                      },
+                      "height": 8,
+                      "width": 8,
+                      "x": 8,
+                      "y": 21
+                    }
+                  },
+                  {
+                    "kind": "GridLayoutItem",
+                    "spec": {
+                      "element": {
+                        "kind": "ElementReference",
+                        "name": "panel-306"
+                      },
+                      "height": 8,
+                      "width": 8,
+                      "x": 16,
+                      "y": 21
+                    }
+                  },
+                  {
+                    "kind": "GridLayoutItem",
+                    "spec": {
+                      "element": {
+                        "kind": "ElementReference",
+                        "name": "panel-307"
+                      },
+                      "height": 9,
+                      "width": 24,
+                      "x": 0,
+                      "y": 29
+                    }
+                  },
+                  {
+                    "kind": "GridLayoutItem",
+                    "spec": {
+                      "element": {
+                        "kind": "ElementReference",
+                        "name": "panel-308"
+                      },
+                      "height": 7,
+                      "width": 24,
+                      "x": 0,
+                      "y": 38
+                    }
+                  },
+                  {
+                    "kind": "GridLayoutItem",
+                    "spec": {
+                      "element": {
+                        "kind": "ElementReference",
+                        "name": "panel-309"
+                      },
+                      "height": 7,
+                      "width": 24,
+                      "x": 0,
+                      "y": 45
+                    }
+                  }
+                ]
+              }
+            },
+            "title": "📋 Details: route, full classifications, weather & sources"
+          }
+        }
+      ]
+    }
+  },
+  "links": [
+    {
+      "asDropdown": false,
+      "icon": "external link",
+      "includeVars": false,
+      "keepTime": false,
+      "tags": [],
+      "targetBlank": true,
+      "title": "Official Giro livefeed JSON",
+      "tooltip": "",
+      "type": "link",
+      "url": "https://www.giroditalia.it/en/livefeed/tappa/5/"
+    },
+    {
+      "asDropdown": false,
+      "icon": "external link",
+      "includeVars": false,
+      "keepTime": false,
+      "tags": [],
+      "targetBlank": true,
+      "title": "Official Giro headlines JSON",
+      "tooltip": "",
+      "type": "link",
+      "url": "https://www.giroditalia.it/en/headlines/"
+    },
+    {
+      "asDropdown": false,
+      "icon": "external link",
+      "includeVars": false,
+      "keepTime": false,
+      "tags": [],
+      "targetBlank": true,
+      "title": "Official classifications",
+      "tooltip": "",
+      "type": "link",
+      "url": "https://www.giroditalia.it/en/classifiche/"
+    }
+  ],
+  "liveNow": false,
+  "preload": false,
+  "tags": [
+    "giro-ditalia",
+    "cycling",
+    "infinity",
+    "live",
+    "ineos"
+  ],
+  "timeSettings": {
+    "autoRefresh": "1m",
+    "autoRefreshIntervals": [
+      "5s",
+      "10s",
+      "30s",
+      "1m",
+      "5m",
+      "15m",
+      "30m",
+      "1h",
+      "2h",
+      "1d"
+    ],
+    "fiscalYearStartMonth": 0,
+    "from": "now-3h",
+    "hideTimepicker": false,
+    "timezone": "browser",
+    "to": "now"
+  },
+  "title": "Giro d’Italia 2026 — Live Race & INEOS",
+  "variables": [
+    {
+      "kind": "DatasourceVariable",
+      "spec": {
+        "allowCustomValue": true,
+        "current": {
+          "text": "Infinity",
+          "value": "infinity"
+        },
+        "hide": "dontHide",
+        "includeAll": false,
+        "label": "Infinity datasource",
+        "multi": false,
+        "name": "DS_INFINITY",
+        "options": [],
+        "pluginId": "yesoreyeram-infinity-datasource",
+        "refresh": "onDashboardLoad",
+        "regex": "",
+        "skipUrlSync": false
+      }
+    },
+    {
+      "kind": "CustomVariable",
+      "spec": {
+        "allowCustomValue": true,
+        "current": {
+          "text": "5",
+          "value": "5"
+        },
+        "hide": "dontHide",
+        "includeAll": false,
+        "label": "Stage",
+        "multi": false,
+        "name": "stage",
+        "options": [
+          {
+            "selected": false,
+            "text": "1",
+            "value": "1"
+          },
+          {
+            "selected": false,
+            "text": "2",
+            "value": "2"
+          },
+          {
+            "selected": false,
+            "text": "3",
+            "value": "3"
+          },
+          {
+            "selected": false,
+            "text": "4",
+            "value": "4"
+          },
+          {
+            "selected": true,
+            "text": "5",
+            "value": "5"
+          },
+          {
+            "selected": false,
+            "text": "6",
+            "value": "6"
+          },
+          {
+            "selected": false,
+            "text": "7",
+            "value": "7"
+          },
+          {
+            "selected": false,
+            "text": "8",
+            "value": "8"
+          },
+          {
+            "selected": false,
+            "text": "9",
+            "value": "9"
+          },
+          {
+            "selected": false,
+            "text": "10",
+            "value": "10"
+          },
+          {
+            "selected": false,
+            "text": "11",
+            "value": "11"
+          },
+          {
+            "selected": false,
+            "text": "12",
+            "value": "12"
+          },
+          {
+            "selected": false,
+            "text": "13",
+            "value": "13"
+          },
+          {
+            "selected": false,
+            "text": "14",
+            "value": "14"
+          },
+          {
+            "selected": false,
+            "text": "15",
+            "value": "15"
+          },
+          {
+            "selected": false,
+            "text": "16",
+            "value": "16"
+          },
+          {
+            "selected": false,
+            "text": "17",
+            "value": "17"
+          },
+          {
+            "selected": false,
+            "text": "18",
+            "value": "18"
+          },
+          {
+            "selected": false,
+            "text": "19",
+            "value": "19"
+          },
+          {
+            "selected": false,
+            "text": "20",
+            "value": "20"
+          },
+          {
+            "selected": false,
+            "text": "21",
+            "value": "21"
+          }
+        ],
+        "query": "1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21",
+        "skipUrlSync": false,
+        "valuesFormat": "csv"
+      }
+    },
+    {
+      "kind": "CustomVariable",
+      "spec": {
+        "allowCustomValue": true,
+        "current": {
+          "text": "NCI — Netcompany Ineos",
+          "value": "NCI — Netcompany Ineos"
+        },
+        "hide": "dontHide",
+        "includeAll": false,
+        "label": "Watched team code",
+        "multi": false,
+        "name": "watched_team_code",
+        "options": [
+          {
+            "selected": true,
+            "text": "NCI",
+            "value": "NCI — Netcompany Ineos"
+          }
+        ],
+        "query": "NCI : NCI — Netcompany Ineos",
+        "skipUrlSync": false,
+        "valuesFormat": "csv"
+      }
+    },
+    {
+      "kind": "ConstantVariable",
+      "spec": {
+        "current": {
+          "text": "https://www.giroditalia.it/en",
+          "value": "https://www.giroditalia.it/en"
+        },
+        "hide": "hideVariable",
+        "label": "Giro base URL",
+        "name": "giro_base",
+        "query": "https://www.giroditalia.it/en",
+        "skipUrlSync": true
+      }
+    }
+  ]
+}
