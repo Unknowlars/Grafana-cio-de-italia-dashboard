@@ -289,6 +289,7 @@ def build() -> dict[str, Any]:
     front_groups = endpoint("/api/v1/stage/${stage}/front-groups")
     front_riders = endpoint("/api/v1/stage/${stage}/front-riders")
     ineos = endpoint("/api/v1/stage/${stage}/ineos?team=${watched_team_code}")
+    route_assets = endpoint("/api/v1/stage/${stage}/route-assets")
 
     add(
         "panel-1201",
@@ -303,9 +304,9 @@ def build() -> dict[str, Any]:
         "panel-1202",
         text_panel(
             1202,
-            "Race-control visual",
-            "Decorative generated race-control visual. It does not provide race facts.",
-            "![Generated Giro race-control visual](${giro_public_base}/assets/giro-control-room.svg)\n\nGenerated visual only. Race facts come from official Giro endpoints.",
+            "Route and progress visual",
+            "Self-hosted iframe from giro-data. Uses official Giro stage profile/map images, start/finish checkpoints and livefeed progress. It is not live rider GPS.",
+            '<iframe src="${giro_public_base}/embed/stage/${stage}/map" width="100%" height="520" frameborder="0"></iframe>',
         ),
     )
     add(
@@ -476,9 +477,9 @@ def build() -> dict[str, Any]:
         table_panel(
             1604,
             "Route/visual source notes",
-            "Route and visual metadata for the selected stage.",
+            "Route image, profile image and embedded visual metadata for the selected stage.",
             endpoint("/api/v1/stage/${stage}/visuals"),
-            'parse-json\n| project "Stage"="stage", "Route"="route", "Profile"="profile", "Hero SVG"="hero_svg", "Official route"="official_route_url", "Note"="note"',
+            'parse-json\n| project "Stage"="stage", "Route"="route", "Profile"="profile", "Profile image"="profile_image_url", "Map image"="map_image_url", "Embed"="embed_url", "Official route"="official_route_url", "Note"="note"',
             cell_height="md",
         ),
     )
@@ -493,6 +494,38 @@ def build() -> dict[str, Any]:
             cell_height="sm",
         ),
     )
+    add(
+        "panel-1606",
+        table_panel(
+            1606,
+            "Official route assets",
+            "Official stage-page assets parsed by the local service. Images are source-labeled and no route geometry is fabricated.",
+            route_assets,
+            'parse-json\n| project "Stage"="stage", "Route"="route", "Status"="status", "Type"="visual_type", "Profile image"="profile_image_url", "Map image"="map_image_url", "Start lat"="start_lat", "Start lon"="start_lon", "Finish lat"="finish_lat", "Finish lon"="finish_lon", "Official stage"="official_stage_url", "Error"="error"',
+            cell_height="md",
+        ),
+    )
+    add(
+        "panel-1607",
+        table_panel(
+            1607,
+            "Start / finish checkpoints",
+            "Start and finish coordinates parsed from official Giro stage pages. These are checkpoints, not rider GPS.",
+            endpoint("/api/v1/stage/${stage}/route-checkpoints"),
+            'parse-json\n| project "Order"="order", "Checkpoint"="checkpoint", "Route"="route", "Lat"="lat", "Lon"="lon", "Maps URL"="maps_url", "Source"="source", "Status"="status", "Error"="error"',
+            "Order",
+        ),
+    )
+    add(
+        "panel-1608",
+        table_panel(
+            1608,
+            "Official classification code inventory",
+            "Classification codes found on the official classification page, including the extra jerseys/awards beyond the five main dashboard standings.",
+            endpoint("/api/v1/classifications"),
+            'parse-json\n| project "Kind"="kind", "Code"="code", "Classification"="classification", "Source URL"="source_url"',
+        ),
+    )
 
     layout = {
         "kind": "RowsLayout",
@@ -503,15 +536,15 @@ def build() -> dict[str, Any]:
                     False,
                     [
                         item("panel-1201", 0, 0, 24, 3),
-                        item("panel-1202", 0, 3, 8, 7),
-                        item("panel-1203", 8, 3, 16, 3),
-                        item("panel-1204", 8, 6, 16, 4),
-                        item("panel-1205", 0, 10, 4, 4),
-                        item("panel-1206", 4, 10, 4, 4),
-                        item("panel-1207", 8, 10, 4, 4),
-                        item("panel-1208", 12, 10, 4, 4),
-                        item("panel-1209", 16, 10, 4, 4),
-                        item("panel-1210", 20, 10, 4, 4),
+                        item("panel-1202", 0, 3, 12, 10),
+                        item("panel-1203", 12, 3, 12, 3),
+                        item("panel-1204", 12, 6, 12, 4),
+                        item("panel-1205", 0, 13, 4, 4),
+                        item("panel-1206", 4, 13, 4, 4),
+                        item("panel-1207", 8, 13, 4, 4),
+                        item("panel-1208", 12, 13, 4, 4),
+                        item("panel-1209", 16, 13, 4, 4),
+                        item("panel-1210", 20, 13, 4, 4),
                     ],
                 ),
                 row(
@@ -554,6 +587,9 @@ def build() -> dict[str, Any]:
                         item("panel-1603", 12, 7, 12, 8),
                         item("panel-1604", 0, 15, 24, 5),
                         item("panel-1605", 0, 20, 24, 9),
+                        item("panel-1606", 0, 29, 24, 7),
+                        item("panel-1607", 0, 36, 12, 7),
+                        item("panel-1608", 12, 36, 12, 7),
                     ],
                 ),
             ]

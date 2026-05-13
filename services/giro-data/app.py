@@ -4,6 +4,7 @@ import json
 import os
 import re
 import time
+from html import escape
 from html import unescape
 from html.parser import HTMLParser
 from threading import Lock
@@ -27,6 +28,10 @@ CLASSIFICATION_CODES = {
     "points": ("CLPUNGEN", "Points classification"),
     "mountains": ("CLGPMGEN", "Mountains classification"),
     "youth": ("CLGENGIO", "Youth classification"),
+    "intermediate": ("CLPUIGEN", "Intermediate sprint classification"),
+    "red_bull_km": ("110KMGEN", "Red Bull KM classification"),
+    "combativity": ("CLCOMGEN", "Combativity classification"),
+    "fuga": ("CLFUGGEN", "Fuga classification"),
     "team": ("CLSQAGEN", "Super Team classification"),
 }
 
@@ -153,12 +158,183 @@ def _rider_name(rider: dict[str, Any]) -> str:
     return " ".join([str(rider.get("nome") or "").strip(), str(rider.get("cognome") or "").strip()]).strip()
 
 
+def _attr(tag: str, name: str) -> str:
+    match = re.search(rf'{re.escape(name)}="([^"]*)"', tag)
+    return unescape(match.group(1)) if match else ""
+
+
+def _first_image(html: str, alt_needles: tuple[str, ...]) -> str:
+    for tag in re.findall(r"<img\b[^>]+>", html, re.S):
+        src = _attr(tag, "src")
+        alt = _attr(tag, "alt").lower()
+        if src and all(needle in alt for needle in alt_needles):
+            return src
+    return ""
+
+
+def _hero_image(html: str) -> str:
+    match = re.search(r'<section class="tappa-body.*?<div class="wrapper-img">.*?<img[^>]+src="([^"]+)"', html, re.S)
+    return unescape(match.group(1)) if match else ""
+
+
+def _maps_coordinates(html: str) -> list[dict[str, Any]]:
+    coords = []
+    seen: set[tuple[float, float]] = set()
+    for match in re.finditer(r"https://www\.google\.com/maps\?q=(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)", html):
+        lat = float(match.group(1))
+        lon = float(match.group(2))
+        key = (lat, lon)
+        if key in seen:
+            continue
+        seen.add(key)
+        coords.append(
+            {
+                "order": len(coords) + 1,
+                "lat": lat,
+                "lon": lon,
+                "maps_url": match.group(0),
+            }
+        )
+    return coords
+
+
+def _technical_stage_info(html: str) -> dict[str, Any]:
+    section = re.search(r'<section class="tappa-body[^"]*"([^>]*)>', html)
+    difficulty = _int(_attr(section.group(1), "data-difficulty")) if section else 0
+    stage_type = _attr(section.group(1), "data-tipologia") if section else ""
+    km = ""
+    altitude_gain = ""
+    info = re.search(r'<span class="km">\s*([^<]+)</span>', html)
+    if info:
+        cleaned = _strip_html(info.group(1))
+        km_match = re.search(r"([0-9,.]+)\s*km", cleaned, re.I)
+        gain_match = re.search(r"Altitude Gain\s*([0-9,.]+)\s*m", cleaned, re.I)
+        km = km_match.group(1).replace(",", ".") if km_match else ""
+        altitude_gain = gain_match.group(1).replace(",", ".") if gain_match else ""
+    return {
+        "stage_type": stage_type,
+        "difficulty": difficulty,
+        "distance_km": _num(km),
+        "altitude_gain_m": _num(altitude_gain),
+    }
+
+
+def _stage_route_from_page(html: str) -> str:
+    headings = re.findall(r'<h2 class="is-pink is-uppercase"[^>]*>(.*?)</h2>', html, re.S)
+    parts = [_strip_html(part).strip(" -") for part in headings[:2]]
+    route = " - ".join([part for part in parts if part])
+    return route
+
+
+def _stage_assets_payload(stage: int) -> dict[str, Any]:
+    stage_meta = _stage_index().get(stage, {"stage": stage, "route": "", "date": "", "official_stage_url": ""})
+    try:
+        html, stage_url = _stage_page(stage)
+        coords = _maps_coordinates(html)
+        tech = _technical_stage_info(html)
+        status = "ok"
+        error = ""
+    except Exception as exc:
+        html = ""
+        stage_url = stage_meta.get("official_stage_url", "")
+        coords = []
+        tech = {"stage_type": "", "difficulty": 0, "distance_km": None, "altitude_gain_m": None}
+        status = "unavailable"
+        error = str(exc)
+
+    start = coords[0] if len(coords) > 0 else {}
+    finish = coords[1] if len(coords) > 1 else {}
+    page_route = _stage_route_from_page(html)
+    return {
+        "stage": stage,
+        "route": page_route or stage_meta.get("route", ""),
+        "date": stage_meta.get("date", ""),
+        "status": status,
+        "error": error,
+        "stage_type": tech.get("stage_type", ""),
+        "difficulty": tech.get("difficulty", 0),
+        "distance_km": tech.get("distance_km"),
+        "altitude_gain_m": tech.get("altitude_gain_m"),
+        "official_stage_url": stage_url,
+        "official_route_url": f"{GIRO_BASE}/the-route/",
+        "livehub_url": f"{GIRO_BASE}/livehub/tappa/{stage}/",
+        "livefeed_url": f"{GIRO_BASE}/livefeed/tappa/{stage}/",
+        "hero_image_url": _hero_image(html),
+        "profile_image_url": _first_image(html, ("profile", f"tappa {stage}")),
+        "map_image_url": _first_image(html, ("map", f"tappa {stage}")),
+        "start_image_url": _first_image(html, ("start", f"tappa {stage}")),
+        "finish_image_url": _first_image(html, ("finish", f"tappa {stage}")),
+        "climb_image_url": _first_image(html, ("climb", f"tappa {stage}")),
+        "last_km_image_url": _first_image(html, ("last km", f"tappa {stage}")),
+        "start_lat": start.get("lat"),
+        "start_lon": start.get("lon"),
+        "start_maps_url": start.get("maps_url", ""),
+        "finish_lat": finish.get("lat"),
+        "finish_lon": finish.get("lon"),
+        "finish_maps_url": finish.get("maps_url", ""),
+        "coordinate_count": len(coords),
+        "visual_type": "official stage images plus start/finish checkpoints",
+        "source": "Official Giro stage and route pages",
+    }
+
+
 def _livefeed(stage: int) -> dict[str, Any]:
     return _fetch_json(f"{GIRO_BASE}/livefeed/tappa/{stage}/", "official_livefeed")
 
 
 def _headlines() -> dict[str, Any]:
     return _fetch_json(f"{GIRO_BASE}/headlines/", "official_headlines")
+
+
+def _route_html() -> str:
+    return _fetch_text(f"{GIRO_BASE}/the-route/", "official_route")
+
+
+def _stage_index() -> dict[int, dict[str, Any]]:
+    html = _route_html()
+    stages: dict[int, dict[str, Any]] = {}
+    pattern = re.compile(
+        r'<a href="(?P<url>https://www\.giroditalia\.it/en/tappe/[^"]+/)">\s*'
+        r'<div class="stage-item[^"]*"[^>]*data-stage="(?P<stage>\d+)"[^>]*data-nometappa="(?P<name>[^"]*)">'
+        r'(?P<body>.*?)</a>',
+        re.S,
+    )
+    for match in pattern.finditer(html):
+        body = match.group("body")
+        date_match = re.search(r'<span class="label-4">([^<]+)</span>', body)
+        stage = int(match.group("stage"))
+        stages[stage] = {
+            "stage": stage,
+            "route": _strip_html(match.group("name")),
+            "date": _strip_html(date_match.group(1)) if date_match else "",
+            "official_stage_url": match.group("url"),
+            "source": "Official Giro route page",
+            "source_url": f"{GIRO_BASE}/the-route/",
+        }
+    for url in sorted(set(re.findall(r"https://www\.giroditalia\.it/en/tappe/stage-\d+-of-the-giro-ditalia-2026-[^\"' <]+/", html))):
+        match = re.search(r"/stage-(\d+)-of-the-giro-ditalia-2026-([^/]+)/", url)
+        if not match:
+            continue
+        stage = int(match.group(1))
+        if stage in stages:
+            continue
+        stages[stage] = {
+            "stage": stage,
+            "route": match.group(2).replace("-", " ").title(),
+            "date": "",
+            "official_stage_url": url,
+            "source": "Official Giro route page",
+            "source_url": f"{GIRO_BASE}/the-route/",
+        }
+    return stages
+
+
+def _stage_page(stage: int) -> tuple[str, str]:
+    stage_meta = _stage_index().get(stage)
+    if not stage_meta:
+        raise ValueError(f"Stage {stage} was not found on the official route page")
+    url = stage_meta["official_stage_url"]
+    return _fetch_text(url, f"official_stage_{stage}"), url
 
 
 def _groups(feed: dict[str, Any]) -> list[dict[str, Any]]:
@@ -328,9 +504,75 @@ def health() -> dict[str, Any]:
     return {"ok": True, "service": "giro-data", "time_ms": _now_ms()}
 
 
+@app.get("/api/v1/stages")
+def stages() -> list[dict[str, Any]]:
+    try:
+        return list(_stage_index().values())
+    except Exception as exc:
+        return [
+            {
+                "stage": 0,
+                "status": "unavailable",
+                "error": str(exc),
+                "source": "Official Giro route page",
+                "source_url": f"{GIRO_BASE}/the-route/",
+            }
+        ]
+
+
 @app.get("/api/v1/stage/{stage}/race-now")
 def race_now(stage: int) -> dict[str, Any]:
     return _race_now_payload(stage)
+
+
+@app.get("/api/v1/stage/{stage}/route-assets")
+def route_assets(stage: int) -> dict[str, Any]:
+    return _stage_assets_payload(stage)
+
+
+@app.get("/api/v1/stage/{stage}/route-checkpoints")
+def route_checkpoints(stage: int) -> list[dict[str, Any]]:
+    assets = _stage_assets_payload(stage)
+    rows = []
+    if assets.get("start_lat") is not None:
+        rows.append(
+            {
+                "order": 1,
+                "checkpoint": "Start",
+                "route": assets.get("route", ""),
+                "lat": assets.get("start_lat"),
+                "lon": assets.get("start_lon"),
+                "maps_url": assets.get("start_maps_url", ""),
+                "source": "Official Giro stage page",
+            }
+        )
+    if assets.get("finish_lat") is not None:
+        rows.append(
+            {
+                "order": 2,
+                "checkpoint": "Finish",
+                "route": assets.get("route", ""),
+                "lat": assets.get("finish_lat"),
+                "lon": assets.get("finish_lon"),
+                "maps_url": assets.get("finish_maps_url", ""),
+                "source": "Official Giro stage page",
+            }
+        )
+    if not rows:
+        rows.append(
+            {
+                "order": 0,
+                "checkpoint": "Unavailable",
+                "route": assets.get("route", ""),
+                "lat": None,
+                "lon": None,
+                "maps_url": "",
+                "source": "Official Giro stage page",
+                "status": assets.get("status", "unavailable"),
+                "error": assets.get("error", ""),
+            }
+        )
+    return rows
 
 
 @app.get("/api/v1/stage/{stage}/front-groups")
@@ -463,6 +705,20 @@ def standings(kind: str, limit: int = 5) -> list[dict[str, Any]]:
     return rows[: max(1, min(limit, 50))]
 
 
+@app.get("/api/v1/classifications")
+def classifications() -> list[dict[str, Any]]:
+    return [
+        {
+            "kind": kind,
+            "code": code,
+            "classification": label,
+            "source": "Official Giro classifications",
+            "source_url": f"{GIRO_BASE}/classifiche/?classifica={code}",
+        }
+        for kind, (code, label) in CLASSIFICATION_CODES.items()
+    ]
+
+
 @app.get("/api/v1/stage/{stage}/weather")
 def weather(stage: int) -> list[dict[str, Any]]:
     feed = _livefeed(stage)
@@ -484,6 +740,7 @@ def sources() -> list[dict[str, Any]]:
         ("official_livefeed", f"{GIRO_BASE}/livefeed/tappa/${{stage}}/"),
         ("official_headlines", f"{GIRO_BASE}/headlines/"),
         ("official_classifications", f"{GIRO_BASE}/classifiche/"),
+        ("official_route", f"{GIRO_BASE}/the-route/"),
         ("giro_data_service", "http://giro-data:8080"),
     ]
     rows = []
@@ -504,14 +761,105 @@ def sources() -> list[dict[str, Any]]:
 @app.get("/api/v1/stage/{stage}/visuals")
 def visuals(stage: int) -> dict[str, Any]:
     now = _race_now_payload(stage)
+    assets = _stage_assets_payload(stage)
     return {
         "stage": stage,
         "hero_svg": "/assets/giro-control-room.svg",
         "route": now.get("route"),
         "profile": now.get("profile"),
+        "profile_image_url": assets.get("profile_image_url", ""),
+        "map_image_url": assets.get("map_image_url", ""),
+        "embed_url": f"/embed/stage/{stage}/map",
         "official_route_url": f"{GIRO_BASE}/the-route/",
-        "note": "Generated visual is decorative. Official endpoints remain the source of truth.",
+        "note": "Embedded route visual uses official Giro stage images and start/finish checkpoints. It is not live rider GPS.",
     }
+
+
+@app.get("/embed/stage/{stage}/map")
+def embed_stage_map(stage: int) -> Response:
+    assets = _stage_assets_payload(stage)
+    try:
+        now = _race_now_payload(stage)
+    except Exception as exc:
+        now = {
+            "route": assets.get("route", ""),
+            "progress_pct": None,
+            "done_km": None,
+            "km_to_go": None,
+            "total_km": assets.get("distance_km"),
+            "state_label": "Livefeed unavailable",
+            "error": str(exc),
+        }
+
+    progress = now.get("progress_pct")
+    progress_value = float(progress) if progress is not None else 0.0
+    progress_value = max(0.0, min(100.0, progress_value))
+    marker_left = f"{progress_value:.1f}%"
+    profile_img = assets.get("profile_image_url") or assets.get("hero_image_url") or ""
+    map_img = assets.get("map_image_url") or ""
+    route = escape(str(now.get("route") or assets.get("route") or f"Stage {stage}"))
+    state = escape(str(now.get("state_label") or "Unknown"))
+    done = "" if now.get("done_km") is None else f"{float(now['done_km']):.1f} km done"
+    to_go = "" if now.get("km_to_go") is None else f"{float(now['km_to_go']):.1f} km to go"
+    total = assets.get("distance_km") or now.get("total_km")
+    total_label = "" if total is None else f"{float(total):.1f} km"
+    status_note = "Official stage image + livefeed progress. Not live rider GPS."
+    if assets.get("status") != "ok":
+        status_note = f"Official stage assets unavailable: {assets.get('error', '')}"
+
+    html = f"""<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root {{ color-scheme: dark; font-family: Inter, Arial, sans-serif; }}
+body {{ margin: 0; background: #11151c; color: #f7f7f8; }}
+.wrap {{ min-height: 100vh; display: grid; grid-template-columns: 1.3fr 0.7fr; gap: 14px; padding: 14px; box-sizing: border-box; }}
+.main, .side {{ border: 1px solid rgba(255,255,255,.12); background: #171c25; border-radius: 8px; overflow: hidden; }}
+.head {{ padding: 12px 14px; border-bottom: 1px solid rgba(255,255,255,.1); display: flex; justify-content: space-between; gap: 12px; align-items: baseline; }}
+h1 {{ margin: 0; font-size: 18px; line-height: 1.2; }}
+.badge {{ color: #11151c; background: #ff8abf; font-weight: 700; border-radius: 999px; padding: 4px 9px; font-size: 12px; white-space: nowrap; }}
+.imgbox {{ position: relative; background: #0b0f14; }}
+.imgbox img {{ display: block; width: 100%; max-height: 310px; object-fit: contain; background: #0b0f14; }}
+.progress {{ position: relative; margin: 16px 14px 14px; height: 16px; border-radius: 999px; background: #2a303b; overflow: visible; }}
+.fill {{ width: {marker_left}; height: 100%; border-radius: 999px; background: linear-gradient(90deg, #ff4fa3, #f3b13b); }}
+.marker {{ position: absolute; left: {marker_left}; top: -7px; width: 6px; height: 30px; margin-left: -3px; border-radius: 4px; background: #fff; box-shadow: 0 0 0 3px rgba(255,79,163,.35); }}
+.metrics {{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 0 14px 14px; }}
+.metric {{ background: #202735; border-radius: 6px; padding: 10px; min-height: 48px; }}
+.label {{ color: #aeb7c6; font-size: 11px; text-transform: uppercase; }}
+.value {{ margin-top: 4px; font-size: 16px; font-weight: 700; }}
+.side .block {{ padding: 12px 14px; border-bottom: 1px solid rgba(255,255,255,.1); }}
+.side .block:last-child {{ border-bottom: 0; }}
+.coord {{ font-size: 13px; color: #d5dae4; line-height: 1.5; }}
+.note {{ color: #aeb7c6; font-size: 12px; line-height: 1.4; }}
+a {{ color: #ff8abf; text-decoration: none; }}
+@media (max-width: 760px) {{ .wrap {{ grid-template-columns: 1fr; }} .metrics {{ grid-template-columns: 1fr; }} }}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <section class="main">
+    <div class="head"><h1>Stage {stage}: {route}</h1><span class="badge">{state}</span></div>
+    <div class="imgbox">{f'<img src="{escape(profile_img)}" alt="Official stage profile">' if profile_img else '<div class="block note">Official stage profile image unavailable.</div>'}</div>
+    <div class="progress" aria-label="Stage progress"><div class="fill"></div><div class="marker"></div></div>
+    <div class="metrics">
+      <div class="metric"><div class="label">Progress</div><div class="value">{progress_value:.1f}%</div></div>
+      <div class="metric"><div class="label">Distance</div><div class="value">{escape(total_label)}</div></div>
+      <div class="metric"><div class="label">Race clock</div><div class="value">{escape(done or to_go or 'Pending')}</div></div>
+    </div>
+  </section>
+  <aside class="side">
+    <div class="block"><div class="label">Visual type</div><div class="coord">Official route/profile images with livefeed progress marker.</div></div>
+    <div class="block"><div class="label">Start</div><div class="coord">{escape(str(assets.get('start_lat') or ''))}, {escape(str(assets.get('start_lon') or ''))}</div></div>
+    <div class="block"><div class="label">Finish</div><div class="coord">{escape(str(assets.get('finish_lat') or ''))}, {escape(str(assets.get('finish_lon') or ''))}</div></div>
+    <div class="block">{f'<img src="{escape(map_img)}" alt="Official stage map" style="width:100%;border-radius:6px;background:#0b0f14">' if map_img else '<div class="note">Official stage map image unavailable.</div>'}</div>
+    <div class="block note">{escape(status_note)} <a href="{escape(str(assets.get('official_stage_url') or assets.get('official_route_url') or ''))}" target="_blank">Official source</a></div>
+  </aside>
+</div>
+</body>
+</html>"""
+    return Response(content=html, media_type="text/html")
 
 
 @app.get("/assets/giro-control-room.svg")
